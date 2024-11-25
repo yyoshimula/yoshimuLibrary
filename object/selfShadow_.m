@@ -2,15 +2,15 @@
 % inputs
 % note
 % 全componentのメッシュに対して処理を行う
-% 影の処理関数(番目のfacetが影を作る方，番目のfacetは影が写る方)
+% 影の処理関数(j番目のfacetが影を作る方，i番目のfacetは影が写る方)
 % references
 % NA
 % revisions
+% 20241125 三角facetと四角facetの両方に対応
 % 20200811  y.yoshimura, y.yoshimula@gmail.com
 % See also q2zyx.
 
 function sat = selfShadow_(sat, sun) %#codegen
-sun(3) = 3;
 sun = sun(:); % column vector
 sun = sun ./ norm(sun);
 
@@ -27,18 +27,27 @@ pos = sat.pos(sunlitIndex,:);
 tmpFlag = ones(length(faces), 1); % initialization
 
 % use "for", if parallel toolbox is not installed
-for i = 1:length(faces)
-    tmpFlagI = 1; % 各iごとの一時フラグ
+parfor i = 1:length(faces)
+    tmpFlagI = 1; % 各iごとのtemporaryフラグ
     posI = pos(i,:);
     for j = 1:length(faces)
         if (j ~= i)
+
             vertJ = [sat.vertices(faces(j,1),:)
                 sat.vertices(faces(j,2),:)
-                sat.vertices(faces(j,3),:)]; % 3x3, coordinate of j-th facet            
-            
+                sat.vertices(faces(j,3),:)]; % 3x3, coordinate of j-th facet
             flag = calcSelfShadow_(sun, normal(j,:), vertJ, posI);
-            
             tmpFlagI = tmpFlagI * flag; % OR演算っぽく
+
+            % 四角facetでは2回計算 
+            if size(faces,2) == 4
+                vertJ = [sat.vertices(faces(j,3),:)
+                    sat.vertices(faces(j,4),:)
+                    sat.vertices(faces(j,1),:)] % 3x3, coordinate of j-th facet
+                flag = calcSelfShadow_(sun, normal(j,:), vertJ, posI);
+                tmpFlagI = tmpFlagI * flag; % OR演算っぽく
+            end
+
         else
             % do nothing when i == j
         end
