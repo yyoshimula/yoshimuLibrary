@@ -63,8 +63,6 @@ if (y ~= Inf) % observation updateする
 
     if(isnan(ye) || isinf(ye))
         disp('no observation update');
-        xEst = xEst;
-        p = diag(Pcov)';
 
     else %observation update
         % Calculate correlation
