@@ -1,4 +1,8 @@
-function B = normRow(A)
+function B = normRow(A, small)
+arguments
+    A
+    small = 1e-18;
+end
 % ----------------------------------------------------------------------
 %   Normalize row vectors of matrix A
 %    20190218  y.yoshimura
@@ -8,10 +12,15 @@ function B = normRow(A)
 %   note:
 %   cf:
 %   revisions;
-%   
+%
 %   (c) 2019 yasuhiro yoshimura
 %----------------------------------------------------------------------
+Anorm = vecnorm(A, 2, 2);
 
-B = A ./ vecnorm(A, 2, 2);
+if (Anorm > small)
+    B = A ./ Anorm;
+else
+    B = A;
+end
 
 end
