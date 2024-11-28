@@ -36,15 +36,15 @@ parfor i = 1:length(faces)
             vertJ = [sat.vertices(faces(j,1),:)
                 sat.vertices(faces(j,2),:)
                 sat.vertices(faces(j,3),:)]; % 3x3, coordinate of j-th facet
-            flag = calcSelfShadow_(sun, normal(j,:), vertJ, posI);
+            flag = calcSelfShadow_(sun', normal(j,:), vertJ, posI);
             tmpFlagI = tmpFlagI * flag; % OR演算っぽく
 
             % 四角facetでは2回計算 
-            if size(faces,2) == 4
+            if ~isnan(faces(1,4))
                 vertJ = [sat.vertices(faces(j,3),:)
                     sat.vertices(faces(j,4),:)
                     sat.vertices(faces(j,1),:)] % 3x3, coordinate of j-th facet
-                flag = calcSelfShadow_(sun, normal(j,:), vertJ, posI);
+                flag = calcSelfShadow_(sun', normal(j,:), vertJ, posI);
                 tmpFlagI = tmpFlagI * flag; % OR演算っぽく
             end
 
