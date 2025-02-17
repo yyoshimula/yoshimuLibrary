@@ -45,7 +45,7 @@ F0 = sat.F0;  % Nx1
 cd = 28 / 23 .* rho / pi .* (1 - F0) .* (1 - (1 - NS./2).^5) .* (1 - (1 - NV./2).^5);
 %[text] ## specular
 F = F0 + (1 - F0) .* (1 - VH).^5; % nFacetxM
-M = sqrt((nu + 1) .* (nv + 1)) ./ 8 ./ pi .* F ./ VH ./ max(NS, NV); % nFacetxM
+M = sqrt((sat.nu + 1) .* (sat.nv + 1)) ./ 8 ./ pi .* F ./ VH ./ max(NS, NV); % nFacetxM
 infIndex = isinf(M);
 M(infIndex) = 0; % M計算時にmax関数で0割によるinf発生を除去
 D = NH .^ ((sat.nu .* HU.^2 + sat.nv .* HV.^2) ./ (1 - NH.^2));
