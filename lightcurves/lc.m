@@ -53,7 +53,7 @@ obsB = qRotation(scalar, normRow(obsRelDir), q); % observer direction (unit) vec
 if strcmp(BRDF, 'simple')
     sat = lcSimple(sat, sunB, obsB);    
 elseif strcmp(BRDF, 'AS')        
-    [sat, ~, ~] = lcAS_mex(sat, sunB, obsB);    
+    [sat, ~, ~] = lcAS(sat, sunB, obsB);    
 elseif strcmp(BRDF, 'CT') % Cook–Torrance model
     sat = lcCT(sat, sunB, obsB);
 else

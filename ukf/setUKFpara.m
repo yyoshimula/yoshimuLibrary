@@ -55,12 +55,12 @@ else
 end
 
 
-disp('checking normalization:')
-disp('weights for mean')
-disp(ukfpara.w0m + 2 * n_ * ukfpara.wim)
-
-disp('weights for covariance')
-disp(ukfpara.w0c + 2 * n_ * ukfpara.wic)
+% disp('checking normalization:')
+% disp('weights for mean')
+% disp(ukfpara.w0m + 2 * n_ * ukfpara.wim)
+% 
+% disp('weights for covariance')
+% disp(ukfpara.w0c + 2 * n_ * ukfpara.wic)
 
 
 end
