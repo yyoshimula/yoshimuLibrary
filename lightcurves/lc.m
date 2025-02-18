@@ -25,21 +25,17 @@
 %[text] ## revisions
 %[text] 20200430  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also readSC, lcSimple, lcAS, lcCT, orbitConst.
-function [m, fObs] = lc(sat, scalar, q, satPos, obsPos, sunPos, nu, varargin)
-
-switch nargin %入力引数の数で場合わけ
-    case 7
-        BRDF = 'simple'; % Lambertian diffuse and mirror-like specular
-    case 8
-        if strcmp(varargin{:}, 'AS')
-            BRDF = 'AS'; %最後の引数にASという文字列を入れた場合Ashikhmin–Shirley model
-        elseif strcmp(varargin{:}, 'CT')
-            BRDF = 'CT';
-        else
-            BRDF = 'simple';
-        end
-    otherwise
-        error('invalid number of arguments')
+function [m, fObs] = lc(sat, scalar, q, satPos, obsPos, sunPos, nu, options)
+arguments
+    sat
+    scalar (1,1) {mustBeMember(scalar, [0, 4])}
+    q
+    satPos
+    obsPos
+    sunPos
+    nu
+    options.BRDF (1,1) string {mustBeMember(options.BRDF, ["simple", "CT", "AS"])} = "simple"
+    options.mex (1,1) string {mustBeMember(options.mex, ["on", "off"])} = "off"
 end
 
 %[text] ## Sun and observer relative position
@@ -50,12 +46,25 @@ sunB = qRotation(scalar, normRow(sunRelDir), q); % sun direction (unit) vector@b
 obsB = qRotation(scalar, normRow(obsRelDir), q); % observer direction (unit) vector@body-fixed frxame, Nx3 mat
 
 %% relative magnitude of light curves
-if strcmp(BRDF, 'simple')
-    sat = lcSimple(sat, sunB, obsB);    
-elseif strcmp(BRDF, 'AS')        
-    [sat, ~, ~] = lcAS(sat, sunB, obsB);    
-elseif strcmp(BRDF, 'CT') % Cook–Torrance model
-    sat = lcCT(sat, sunB, obsB);
+if strcmp(options.BRDF, 'simple')
+    if strcmp(options.mex, 'on')
+        sat = lcSimple_mex(sat, sunB, obsB);
+    else
+        sat = lcSimple(sat, sunB, obsB);
+    end
+
+elseif strcmp(options.BRDF, 'AS')
+    if strcmp(options.mex, 'on')
+        [sat, ~, ~] = lcAS_mex(sat, sunB, obsB);
+    else
+        [sat, ~, ~] = lcAS(sat, sunB, obsB);
+    end
+elseif strcmp(options.BRDF, 'CT') % Cook–Torrance model
+    if strcmp(options.mex, 'on')
+        sat = lcCT_mex(sat, sunB, obsB);
+    else
+        sat = lcCT(sat, sunB, obsB);
+    end
 else
     error('unavailable BRDF model')
 end
