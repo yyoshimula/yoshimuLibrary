@@ -1,4 +1,4 @@
-%[text] # Correlated covariances and Kalman gain for cubature Kalman filter
+%[text] # Correlated covariances and Kalman gain for cubature Kalman filter (CKF)
 %[text] ## input
 %[text] xEst: state vector: nx1 vector
 %[text] X: sigma cubature points: 2n x n matrix 
