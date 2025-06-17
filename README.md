@@ -3,19 +3,16 @@
 This repository contains MATLAB code and data for various simulations, estimation algorithms, and control models developed in the context of spacecraft engineering and orbital mechanics research.
 
 Main applications include:
-- Lightcurve-based attitude and deformation estimation
+- attitude representations and their transformation (e.g., Euler angles to quaternions)
+- Light curve-based attitude estimation
 - Solar sail dynamics modeling
-- Orbit estimation and filtering (e.g., Kalman Filter, UKF, IMM, etc.)
-- Control algorithms for space structures
+- Orbit estimation and filtering (e.g., Kalman Filter, UKF, CKF, etc.)
 
 ---
 
 ## Requirements
 
 - MATLAB R2024a or later
-- Optimization Toolbox
-- Aerospace Toolbox
-- Signal Processing Toolbox (optional)
 - Git LFS installed
 
 ---
