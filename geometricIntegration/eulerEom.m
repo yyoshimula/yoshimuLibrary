@@ -1,4 +1,4 @@
-function dxdt = eulerEom(t, x)
+function dxdt = eulerEom(t, x, MOI)
 % -------------------------------------------------------------------------------------
 %   Equations of motion for rigid body
 %   12ŒŽ 2, 2013 yasuhiro yoshimura
@@ -6,8 +6,6 @@ function dxdt = eulerEom(t, x)
 %   Output:
 %   related function files: used in eulerMain.m
 %-------------------------------------------------------------------------------------
-
-global MOI
 
 
 % state variables

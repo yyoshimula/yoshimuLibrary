@@ -47,14 +47,17 @@ sunPos = sunPos .* 10^3; % m
 satPos = r; % sat position @inertial frame, m
 obsPos = obsECI; % observer position @inertial frame, m
 
+options.BRDF = "AS";
+options.mex = "off";
+
 if (y ~= Inf) % observation updateする
     nu = 1; % earth shadowing, とりあえず
 
-    [mApp, ~] = lc(sat, 4, q0Sigma, satPos, obsPos, sunPos, nu, 'AS');
+    [mApp, ~] = lc(sat, 4, q0Sigma, satPos, obsPos, sunPos, nu, options);
     ye0 = mApp;
 
     for j = 1:2*n_
-        [mApp, ~] = lc(sat, 4, qSigma(j,:), satPos, obsPos, sunPos, nu, 'AS');
+        [mApp, ~] = lc(sat, 4, qSigma(j,:), satPos, obsPos, sunPos, nu, options);
         yez(j,1) = mApp;
     end
 

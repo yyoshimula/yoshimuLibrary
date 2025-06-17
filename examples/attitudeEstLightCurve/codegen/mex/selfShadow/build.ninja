@@ -1,0 +1,54 @@
+# CompilerName=clang
+# Mode=optim
+ninja_required_version = 1.3
+
+# Basic folders
+root = .
+builddir = $root/build/maca64
+matlabdir = /Applications/MATLAB_R2025a.app
+startdir = /Users/yyoshimula/Dropbox/MATLAB/yoshimuLibrary/examples/attitudeEstLightCurve
+
+# Toolchain information
+cc = /usr/bin/xcrun -sdk macosx15.5 clang
+cxx = /usr/bin/xcrun -sdk macosx15.5 clang++
+linker = /usr/bin/xcrun -sdk macosx15.5 clang
+linkerxx = /usr/bin/xcrun -sdk macosx15.5 clang++
+
+cflags =  -fno-common -arch arm64 -mmacosx-version-min=12.0 -fexceptions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -fwrapv -ffp-contract=off  -DMATLAB_MEX_FILE -O2 -DNDEBUG -std=c99 -I "$root" -I "$startdir" -I "$root/interface" -I "$matlabdir/extern/include" -I "." -DMODEL=selfShadow_mex -c -fPIC -Xpreprocessor -fopenmp -I "$matlabdir/toolbox/eml/externalDependency/omp/maca64/include" -DOpenMP_omp_LIBRARY="$matlabdir/sys/os/maca64/libiomp5.dylib" 
+
+cxxflags =  -fno-common -arch arm64 -mmacosx-version-min=12.0 -fexceptions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -fwrapv -ffp-contract=off  -fobjc-arc -std=c++14 -stdlib=libc++ -DMATLAB_MEX_FILE  -O2 -DNDEBUG -std=c++11 -I "$root" -I "$startdir" -I "$root/interface" -I "$matlabdir/extern/include" -I "." -DMODEL=selfShadow_mex -c -fPIC -Xpreprocessor -fopenmp -I "$matlabdir/toolbox/eml/externalDependency/omp/maca64/include" -DOpenMP_omp_LIBRARY="$matlabdir/sys/os/maca64/libiomp5.dylib" 
+
+ldflags =  -Wl,-twolevel_namespace  -arch arm64 -mmacosx-version-min=12.0 -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -bundle   -L"$matlabdir/bin/maca64" -weak-lmx -weak-lmex -weak-lmat -lc++  -Wl,-rpath,@loader_path -o selfShadow_mex.mexmaca64 -L"$matlabdir/bin/maca64" -L"$matlabdir/sys/os/maca64" -lmwblas -lemlrt -lcovrt -lut -lmwmathutil -lomp -fPIC -Wl,-exported_symbols_list,selfShadow.map
+
+ldxxflags =  -Wl,-twolevel_namespace  -arch arm64 -mmacosx-version-min=12.0 -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.5.sdk -framework Cocoa -bundle  -stdlib=libc++ -L"$matlabdir/bin/maca64" -weak-lmx -weak-lmex -weak-lmat -L"$matlabdir/extern/bin/maca64" -weak-lMatlabDataArray  -Wl,-rpath,@loader_path -o selfShadow_mex.mexmaca64 -L"$matlabdir/bin/maca64" -L"$matlabdir/sys/os/maca64" -lmwblas -lemlrt -lcovrt -lut -lmwmathutil -lomp -fPIC -Wl,-exported_symbols_list,selfShadow.map
+
+linkobjs = 
+
+# Build Rules
+rule cc
+    command = $cc $cflags $in -o $out
+
+rule cxx
+    command = $cxx $cxxflags $in -o $out
+
+rule link
+    command = $linker $in $linkobjs $ldflags
+
+rule linkxx
+    command = $linkerxx $in $linkobjs $ldxxflags
+
+# Build
+build $builddir/selfShadow_data.o : cc $root/selfShadow_data.c
+build $builddir/rt_nonfinite.o : cc $root/rt_nonfinite.c
+build $builddir/selfShadow_initialize.o : cc $root/selfShadow_initialize.c
+build $builddir/selfShadow_terminate.o : cc $root/selfShadow_terminate.c
+build $builddir/calcSelfShadow.o : cc $root/calcSelfShadow.c
+build $builddir/_coder_selfShadow_api.o : cc $root/interface/_coder_selfShadow_api.c
+build $builddir/_coder_selfShadow_mex.o : cc $root/interface/_coder_selfShadow_mex.c
+build $builddir/selfShadow.o : cc $root/selfShadow.c
+build $builddir/selfShadow_emxutil.o : cc $root/selfShadow_emxutil.c
+build $builddir/_coder_selfShadow_info.o : cc $root/interface/_coder_selfShadow_info.c
+build $builddir/c_mexapi_version.o : cc $matlabdir/extern/version/c_mexapi_version.c
+
+# Link
+build $root/selfShadow_mex.mexmaca64 : link $builddir/selfShadow_data.o $builddir/rt_nonfinite.o $builddir/selfShadow_initialize.o $builddir/selfShadow_terminate.o $builddir/calcSelfShadow.o $builddir/_coder_selfShadow_api.o $builddir/_coder_selfShadow_mex.o $builddir/selfShadow.o $builddir/selfShadow_emxutil.o $builddir/_coder_selfShadow_info.o $builddir/c_mexapi_version.o 
