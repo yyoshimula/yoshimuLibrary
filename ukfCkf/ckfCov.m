@@ -1,4 +1,4 @@
-%[text] # covariance using sigma cubature points
+%[text] # covariance using sigma cubature points for CKF
 %[text] ## input
 %[text] `xEst:` state vector: 1xn vector
 %[text] `X`, sigma cubature points: 2n x n matrix 
