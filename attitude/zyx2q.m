@@ -1,7 +1,7 @@
-%[text] # ZXZ Euler angle to quaternion
+%[text] # ZYX Euler angle to quaternion
 %[text] `phi`: rotation angle around Z-axis (1st rotation)
-%[text] `theta`: rotation angle around X-axis (2nd rotation)
-%[text] `psi`: rotation angle around Z-axis (3rd rotation)
+%[text] `theta`: rotation angle around Y-axis (2nd rotation)
+%[text] `psi`: rotation angle around X-axis (3rd rotation)
 %[text] `scalar:` specifies the definition of the quaternion 
 %[text] `scalar == 0`
 %[text] ${\\bf q} = \[q\_0,q\_1,q\_2,q\_3\]^T=\[\\cos(\\theta/2), {\\bf e}^T\\sin(\\theta/2)\]^T$
@@ -17,7 +17,7 @@
 %[text] ## revisions
 %[text] 20150101  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also qMult.
-function q = zxz2q(scalar, phi, theta, psi)
+function q = zyx2q(scalar, phi, theta, psi)
 % arguments
 %     scalar (1,1) {mustBeMember(scalar, [0, 4])}
 %     phi (:,1) {mustBeNumeric}
@@ -26,21 +26,22 @@ function q = zxz2q(scalar, phi, theta, psi)
 % end
 
 n = size(phi,1);
-%[text] ### each quaternion around Z-axis, X-axis, and Z-axis
-q1 = [zeros(n,2), sin(phi./2), cos(phi./2)]; % nx4 matrix
-q2 = [sin(theta./2), zeros(n,2), cos(theta./2)];
-q3 = [zeros(n,2), sin(psi./2), cos(psi./2)];
-tmp = qMult(4, 1, q3, qMult(4,1,q2,q1)); % nx4 matrix
+%[text] ### each quaternion around Z-axis, Y-axis, and X-axis
+%[text] q4: scalar partで計算
+qPhi = [zeros(n,2), sin(phi/2), cos(phi/2)];
+qTheta = [zeros(n,1), sin(theta/2), zeros(n,1), cos(theta/2)];
+qPsi = [sin(psi/2), zeros(n,2), cos(psi/2)];
+q = qMult(4,1, qPsi, qMult(4,1, qTheta, qPhi));
 %[text] ## quaternion
 if scalar == 0
-    q = [tmp(:,4), tmp(:,1:3)];
+    q = [q(:,4), q(:,1:3)];
 
 elseif scalar == 4
-    q = tmp;
+    % do nothing
 
 else
-    error('quaternion definition is unlcear')
-
+    error('quaternion definition is unclear')
+    
 end
 
 end

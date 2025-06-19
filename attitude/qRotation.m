@@ -26,8 +26,13 @@ n = size(q,1);
 rTmp = [zeros(n,1) r];
 
 % q0がスカラーの定義かつ \odot のクォータニオン積の定義で計算する
-q = (scalar == 0) .* q ...
-    + (scalar == 4) .* [q(:,4), q(:,1), q(:,2), q(:,3)];
+if scalar == 0
+    % do nothing
+elseif scalar == 4
+    q = [q(:,4), q(:,1), q(:,2), q(:,3)];
+else
+    error('quaternion definition is unclear')
+end  
 
 qInverse = qInv(0, q);
 
