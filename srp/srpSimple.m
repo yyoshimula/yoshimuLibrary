@@ -16,19 +16,17 @@
 %[text] NA
 %[text] See also readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpSimple(sat, sunB, d, const) %#codegen
-arguments (Input)
-    sat
-    sunB (:,3) {mustBeNumeric}
-    d (:,1) {mustBeNumeric}
-    const
-    NDF = 'Beckmann' % 現状Beckamnn distributionのみ対応
-    nMC = 10^3;
-end
-arguments (Output)
-    sat
-    srpCdOut (1,3)
-    srpCsOut (1,3)
-end
+% arguments (Input)
+%     sat
+%     sunB (:,3) {mustBeNumeric}
+%     d (:,1) {mustBeNumeric}
+%     const
+% end
+% arguments (Output)
+%     sat
+%     srpCdOut (1,3)
+%     srpCsOut (1,3)
+% end
 %[text] ## parameters
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
@@ -36,13 +34,13 @@ c = const.c; % light speed, m/s
 Bf = 2/3;
 kappa = sat.kappa; % thermal emissivityを考慮するときは変更
 
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 sunB = sunB(:); % column vector
 sunB = sunB ./ norm(sunB);
 
 coeff = -S0 / c / dAU^2;
 %[text] ## shadowing flag
-sunlitFlag = (sat.normal * sunB > 0); % nx1 matrix, 1: sunlit, 0: shade
+sunlitFlag = (sat.normal * sunB) > 0; % nx1 matrix, 1: sunlit, 0: shade
 ns = sat.normal * sunB; % nx1 matrix
 %[text] ## calculate
 %[text] satellite has $n$ facets
