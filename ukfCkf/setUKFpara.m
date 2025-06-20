@@ -1,57 +1,57 @@
-function ukfpara = setUKFpara(n_, ukfpara)
+function ukfPara = setUKFpara(n_, ukfPara)
 arguments
     n_
-    ukfpara
+    ukfPara
 end
 
 %% tuning parameters
-if isfield(ukfpara, 'alp')
+if isfield(ukfPara, 'alp')
     % as is
 else
-    ukfpara.alp = 1e-4;
+    ukfPara.alp = 1e-4;
 end
 
-if isfield(ukfpara, 'bet')
+if isfield(ukfPara, 'bet')
     % as is
 else
-    ukfpara.bet = 2;
+    ukfPara.bet = 2;
 end
 
-if isfield(ukfpara, 'kappa')
+if isfield(ukfPara, 'kappa')
     % as is
 else
-    ukfpara.kappa = 3 - n_;
+    ukfPara.kappa = 3 - n_;
 end
 
-if isfield(ukfpara, 'lambda')
+if isfield(ukfPara, 'lambda')
     % as is
 else
-    ukfpara.lambda = ukfpara.alp^2 * (n_ + ukfpara.kappa) - n_;
+    ukfPara.lambda = ukfPara.alp^2 * (n_ + ukfPara.kappa) - n_;
 end
 
 %% weights
-if isfield(ukfpara, 'w0m')
+if isfield(ukfPara, 'w0m')
     % as is
 else
-    ukfpara.w0m = ukfpara.lambda / (n_ + ukfpara.lambda); % for mean
+    ukfPara.w0m = ukfPara.lambda / (n_ + ukfPara.lambda); % for mean
 end
 
-if isfield(ukfpara, 'wim')
+if isfield(ukfPara, 'wim')
     % as is
 else
-    ukfpara.wim = 1 / (2 * (n_ + ukfpara.lambda));
+    ukfPara.wim = 1 / (2 * (n_ + ukfPara.lambda));
 end
 
-if isfield(ukfpara, 'w0c')
+if isfield(ukfPara, 'w0c')
     % as is
 else
-    ukfpara.w0c = ukfpara.lambda / (n_ + ukfpara.lambda) + (1 - ukfpara.alp^2 + ukfpara.bet); % for covariance
+    ukfPara.w0c = ukfPara.lambda / (n_ + ukfPara.lambda) + (1 - ukfPara.alp^2 + ukfPara.bet); % for covariance
 end
 
-if isfield(ukfpara, 'wic')
+if isfield(ukfPara, 'wic')
     % as is
 else
-    ukfpara.wic = ukfpara.wim;
+    ukfPara.wic = ukfPara.wim;
 end
 
 
