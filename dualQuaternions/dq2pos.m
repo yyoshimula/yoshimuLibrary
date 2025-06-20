@@ -18,20 +18,36 @@
 %[text] ## revisions
 %[text] 20231219  y.yoshimura
 %[text] See also dqMult, pos2dq.
-function [r, q] = dq2pos_(inertial, scalar, dq)
+function [r, q] = dq2pos(inertial, scalar, dq)
+% arguments
+%     inertial (1,1) {mustBeMember(inertial, [0, 1])}
+%     scalar (1,1) {mustBeMember(scalar, [0, 4])}
+%     dq (:,8) {mustBeNumeric}
+% end
 
 %[text] ### quaternion = real part
 q = dq(:,1:4);
 
 %[text] ### dual part
-tmpR = (inertial == 0) .* qMult_(scalar, 1, dq(:,5:8), qInv_(scalar,q)) ...
-    + (inertial == 1) .* qMult_(scalar, 1, qInv_(scalar, q), dq(:,5:8));
-tmpR = tmpR .* 2.0;
-
-r = (scalar == 0) .* tmpR(:,2:4) + (scalar == 4) .* tmpR(:,1:3);
-
+if inertial == 0
+    tmpR = qMult(scalar, 1, dq(:,5:8), qInv(scalar,q));
+elseif inertial == 1
+    tmpR = qMult(scalar, 1, qInv(scalar, q), dq(:,5:8));
+else
+    error('inertial definition error')
 end
 
+tmpR = tmpR .* 2.0;
+
+if scalar == 0
+    r = tmpR(:,2:4);
+elseif scalar == 4
+    r = tmpR(:,1:3);
+else
+    error('quaternion definition error')
+end
+
+end
 
 %[appendix]{"version":"1.0"}
 %---
