@@ -1,4 +1,4 @@
-function [Pest, xEst] = ukf(f, h, B, Q, R, lam, P, x, y, w0m, wim, w0c, wic)
+function [Pest, xEst] = ukf(f, h, B, Q, R, lam, P, x, y, wm, wc, wic)
 % ----------------------------------------------------------------------
 %   Unscented Kalman Filter
 %    20181210  y.yoshimura
@@ -22,31 +22,27 @@ function [Pest, xEst] = ukf(f, h, B, Q, R, lam, P, x, y, w0m, wim, w0c, wic)
 %   (c) 2018 yasuhiro yoshimura
 %----------------------------------------------------------------------
 % sigma points
-[X0, X] = ukfSigma(lam, P, x);
+X = ukfSigma(lam, P, x);
 
 % sigma point propagation
-X0 = f(X0');
 X = f(X');
 
-X0 = X0';
 X = X';
 % a priroi estimation, 1xn vector
-xEst = w0m .* X0 + wim .* sum(X,1);
+xEst = sum(wim .* X, 1);
 
 % covariance
-P = ukfCov(xEst, X0, X, w0c, wic, Q);
+P = ukfCov(xEst, X, wic, Q);
 
 % output sigma points
 Y = h(X);
-Y0 = h(X0);
 % a priori output estimation, mx1 vector
-yEst = w0m .* Y0 + wim .* sum(Y,1);
+yEst = sum(wm .* Y, 1);
 
 % Calculate correlation
-[Pyy, Pxy] = ukfCorr(xEst, X0, X, yEst, Y0, Y, w0c, wic,R);
+[Pyy, ~, K] = ukfCorrGain(xEst, X, yEst, Y, wc, R);
 
 % Gain and Update
-K = Pxy * Pyy^(-1);
 Pest = P - K * Pyy * K';
 xEst = xEst + (K * (y - yEst))';
 

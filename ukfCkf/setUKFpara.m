@@ -30,30 +30,21 @@ else
 end
 
 %% weights
-if isfield(ukfPara, 'w0m')
+if isfield(ukfPara, 'wm')
     % as is
 else
-    ukfPara.w0m = ukfPara.lambda / (n_ + ukfPara.lambda); % for mean
+    ukfPara.wm(1) = ukfPara.lambda / (n_ + ukfPara.lambda); % for mean
+    ukfPara.wm(2:(2*n_+1)) = 1 / (2 * (n_ + ukfPara.lambda));
 end
+ukfPara.wm = ukfPara.wm(:);
 
-if isfield(ukfPara, 'wim')
+if isfield(ukfPara, 'wc')
     % as is
 else
-    ukfPara.wim = 1 / (2 * (n_ + ukfPara.lambda));
+    ukfPara.wc(1) = ukfPara.lambda / (n_ + ukfPara.lambda) + (1 - ukfPara.alp^2 + ukfPara.bet); % for covariance
+    ukfPara.wc(2:(2*n_+1)) = ukfPara.wm(2:end);
 end
-
-if isfield(ukfPara, 'w0c')
-    % as is
-else
-    ukfPara.w0c = ukfPara.lambda / (n_ + ukfPara.lambda) + (1 - ukfPara.alp^2 + ukfPara.bet); % for covariance
-end
-
-if isfield(ukfPara, 'wic')
-    % as is
-else
-    ukfPara.wic = ukfPara.wim;
-end
-
+ukfPara.wc = ukfPara.wc(:);
 
 % disp('checking normalization:')
 % disp('weights for mean')
