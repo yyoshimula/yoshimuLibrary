@@ -8,32 +8,28 @@ srckf.wm = [2 / (n_ + 2)
 srckf.wc = srckf.wm;
 
 %% initial sigma points
-xx = srckfSigma(Pcov, xEst); % 2n x n
+xx = srckfSigma(Pcov, xEst); % (2n+1) x n
 
 % error quaternion sigma points
-qeSigma = grp2q(4, grp.f, grp.a, xx(:,1:3)); % 2n x 4
+qeSigma = grp2q(4, grp.f, grp.a, xx(:,1:3)); % (2n+1) x 4
 
 % global quaternion sigma points
-q0Sigma = qGlobal;
-qSigma = qMult(4, 1, qeSigma, repmat(qGlobal, length(xx),1)); % 2nx4
+qSigma = qMult(4, 1, qeSigma, repmat(qGlobal, length(xx),1)); % (2n+1)x4
 
 %[text] ### propagation step
-% X0
-tmp = qPropMat(4, dt_, w) * q0Sigma';  % discrete closed form
-q0Sigma = tmp';
 
 % X
-for j = 1:2*n_
+for j = 1:(2*n_+1)
     tmp = qPropMat(4,dt_, w) * qSigma(j,:)';
     qSigma(j,:) = tmp';
 
     % quaternion to error GRP
-    qeSigma(j,:) = qErr(4, qSigma(j,:), q0Sigma);
-    xx(j,1:3) = q2GRP(4, grp.f, grp.a, qeSigma(j,:)); % error GRP sigma point
+    qeSigma(j,:) = qErr(4, qSigma(j,:), qGlobal);
+    xx(j,1:3) = q2grp(4, grp.f, grp.a, qeSigma(j,:)); % error GRP sigma point
 end
 
 % mean and covariance
-xEst = sum(srckf.wm .* xx,1); % predicted state
+xEst = sum(srckf.wm .* xx, 1); % predicted state
 Pcov = srckfCov(xEst, xx, srckf.wc, 1.*Qest);
 
 % sigma point recalculation
@@ -51,23 +47,20 @@ options.mex = "off";
 if (y ~= Inf) % observation updateする
     nu = 1; % earth shadowing, とりあえず
 
-    [mApp, ~] = lc(sat, 4, q0Sigma, satPos, obsPos, sunPos, nu, options);
-    ye0 = mApp;
-
-    for j = 1:2*n_
+    for j = 1:(2*n_+1)
         [mApp, ~] = lc(sat, 4, qSigma(j,:), satPos, obsPos, sunPos, nu, options);
-        yez(j,1) = mApp;
+        yy(j,:) = mApp;
     end
    
     % predicted mean output 
-    yEst = sum(srckf.wm .* [ye0; yez]);
+    yEst = sum(srckf.wm .* yy, 1);
 
     if(isnan(yEst) || isinf(yEst))
         disp('no observation update');
 
     else %observation update
         % Calculate correlation
-        [Pyy, ~, K] = srckfCorrGain(xEst, xx, yEst, [ye0; yez], srckf.wc, Rest);
+        [Pyy, ~, K] = srckfCorrGain(xEst, xx, yEst, yy, srckf.wc, Rest);
 
         % Update
         Pcov = Pcov - K * Pyy * K';
@@ -83,7 +76,7 @@ end
 %% Global quaternion and reset error GRP
 % global quaternion
 qeTmp = grp2q(4, grp.f, grp.a, xEst(1,1:3));
-qOut = qMult(4, 1, qeTmp, q0Sigma);
+qOut = qMult(4, 1, qeTmp, qGlobal);
 
 Pout = Pcov;
 
