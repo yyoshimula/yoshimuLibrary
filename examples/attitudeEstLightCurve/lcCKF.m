@@ -10,13 +10,12 @@ xx = ckfSigma(Pcov, xEst); % 2n x n
 qeSigma = grp2q(4, grp.f, grp.a, xx(:,1:3)); % 2n x 4
 
 % global quaternion sigma points
-q0Sigma = qGlobal;
 qSigma = qMult(4, 1, qeSigma, repmat(qGlobal, length(xx),1)); % 2nx4
 
 %[text] ### propagation step
 % X0
-tmp = qPropMat(4, dt_, w) * q0Sigma';  % discrete closed form
-q0Sigma = tmp';
+tmp = qPropMat(4, dt_, w) * qGlobal';  % discrete closed form
+qGlobal = tmp';
 
 % X
 for j = 1:2*n_
@@ -24,11 +23,11 @@ for j = 1:2*n_
     qSigma(j,:) = tmp';
 
     % quaternion to error GRP
-    qeSigma(j,:) = qErr(4, qSigma(j,:), q0Sigma);
-    xx(j,1:3) = q2GRP(4, grp.f, grp.a, qeSigma(j,:)); % error GRP sigma point
+    qeSigma(j,:) = qErr(4, qSigma(j,:), qGlobal);
+    xx(j,1:3) = q2grp(4, grp.f, grp.a, qeSigma(j,:)); % error GRP sigma point
 end
 % mean and covariance
-xEst = mean(xx,1); % predicted state
+xEst = sum(xx,1) / (2 * n_); % predicted state
 Pcov = ckfCov(xEst, xx, 1.*Qest);
 
 % sigma point recalculation
@@ -48,18 +47,18 @@ if (y ~= Inf) % observation updateする
 
     for j = 1:2*n_
         [mApp, ~] = lc(sat, 4, qSigma(j,:), satPos, obsPos, sunPos, nu, options);
-        yez(j,1) = mApp;
+        yy(j,1) = mApp;
     end
    
     % predicted mean output 
-    yEst = mean(yez);
+    yEst = sum(yy, 1) / (2 * n_);
 
     if(isnan(yEst) || isinf(yEst))
         disp('no observation update');
 
     else %observation update
         % Calculate correlation
-        [Pyy, ~, K] = ckfCorrGain(xEst, xx, yEst, yez, Rest);
+        [Pyy, ~, K] = ckfCorrGain(xEst, xx, yEst, yy, Rest);
 
         % Update
         Pcov = Pcov - K * Pyy * K';
@@ -75,7 +74,7 @@ end
 %% Global quaternion and reset error GRP
 % global quaternion
 qeTmp = grp2q(4, grp.f, grp.a, xEst(1,1:3));
-qOut = qMult(4, 1, qeTmp, q0Sigma);
+qOut = qMult(4, 1, qeTmp, qGlobal);
 
 Pout = Pcov;
 
