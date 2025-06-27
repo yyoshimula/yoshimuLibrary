@@ -7,13 +7,14 @@
 %[text] ## revisions
 %[text] 20240823  y.yoshimura, y.yoshimula@gmail.com, major update
 %[text] See also fig4Presen.
-function fig4Paper(fig, nFig, contentType)
+function fig4Paper(fig, nFig, options)
 arguments
     fig = gcf
     nFig = 1;
-    contentType = 'vector'
+    options.contentType = 'vector'
+    options.asis = 0;
 end
- 
+
 % colorOrder = ...
 %     [216 82 25 % Red
 %     118 172 48 % Green
@@ -31,16 +32,21 @@ fig.PaperPositionMode = 'auto';
 adjustFont(fig)
 
 % optimize line width
-optimizeFig(fig)
+optimizeFig(fig, options.asis)
 
-[nRows,nCols] = detectLayout(fig);         % 行列数を自動取得
-[Wcm,Hcm]     = decideFigSize(nRows,nCols);
-set(fig,'Units','centimeters');
-fig.Position(3:4) = [Wcm Hcm];             % 幅・高さのみ更新
+if options.asis == 0
+    [nRows,nCols] = detectLayout(fig);         % 行列数を自動取得
+    [Wcm,Hcm]     = decideFigSize(nRows,nCols);
+    set(fig,'Units','centimeters');
+    fig.Position(3:4) = [Wcm Hcm];             % 幅・高さのみ更新
+else % asis == 1のときはfigure positionを変えない
+    % no change of fig.Position
+end
 
 % LaTeXラベルを適用
 applyLatexLabels(fig);
 set(fig,'DefaultTextInterpreter','latex')  % 以降は LaTeX が既定
+% set(fig,'DefaultLabelInterpreter','latex')  % 以降は LaTeX が既定
 set(fig,'DefaultAxesTickLabelInterpreter','latex')  % 目盛りも統一
 set(fig,'DefaultLegendInterpreter','latex')         % 凡例も統一
 
@@ -49,7 +55,7 @@ set(fig,'DefaultLegendInterpreter','latex')         % 凡例も統一
 timeStamp = datetime('now', 'Format', 'yyyyMdd-HHmmss');
 fName = strcat('fig', num2str(nFig), '_', string(timeStamp), '.pdf');
 
-exportgraphics(gcf, fName, 'ContentType', contentType, 'BackgroundColor', 'none', 'Resolution', 600);
+exportgraphics(gcf, fName, 'ContentType', options.contentType, 'BackgroundColor', 'none', 'Resolution', 600);
 
 end
 
@@ -102,7 +108,7 @@ end
 end
 
 %[text] ### 図の外観最適化
-function optimizeFig(fig)
+function optimizeFig(fig, asis)
 % 図の外観最適化
 
 axs = findall(fig, 'Type', 'Axes');
@@ -136,12 +142,17 @@ for i = 1:length(axs)
         colormap(ax, 'gray'); % または適切なカラーマップ
     end
 
-    % 凡例の位置最適化
-    lgs = findall(fig, 'Type', 'Legend');
-    for i = 1:length(lgs)
-        set(lgs(i), 'Box', 'on', 'Location', 'best');
+    if asis == 0
+        % 凡例の位置最適化
+        lgs = findall(fig, 'Type', 'Legend');
+        for i = 1:length(lgs)
+            set(lgs(i), 'Box', 'on', 'Location', 'best');
+        end
+    else
+        % do nothing
     end
 end
+
 end
 
 %[text] ### LaTeXインタープリターを適用
@@ -154,6 +165,7 @@ for i = 1:length(axs)
     % 軸ラベルとタイトル
     xlabel_h = get(ax, 'XLabel');
     ylabel_h = get(ax, 'YLabel');
+    zlabel_h = get(ax, 'ZLabel');
     title_h = get(ax, 'Title');
 
     if ~isempty(xlabel_h)
@@ -162,6 +174,11 @@ for i = 1:length(axs)
     if ~isempty(ylabel_h)
         set(ylabel_h, 'Interpreter', 'latex');
     end
+
+    if ~isempty(zlabel_h)
+        set(zlabel_h, 'Interpreter', 'latex');
+    end
+
     if ~isempty(title_h)
         set(title_h, 'Interpreter', 'latex');
     end
