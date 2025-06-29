@@ -56,6 +56,8 @@ __pycache__/
 # Research data directories (to be managed by LFS instead)
 data/
 results/
+**/codegen/
+**/archive/
 
 # Ignore large datasets except via LFS
 *.mat

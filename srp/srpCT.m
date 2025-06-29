@@ -18,19 +18,19 @@
 %[text] NA
 %[text] See also srpLps, readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
-arguments (Input)
-    sat
-    sunB (:,3) {mustBeNumeric}
-    d (:,1) {mustBeNumeric}
-    const
-    NDF = 'Beckmann' % 現状Beckamnn distributionのみ対応
-    nMC = 10^3;
-end
-arguments (Output)
-    sat
-    srpCdOut (1,3)
-    srpCsOut (1,3)
-end
+% arguments (Input)
+%     sat
+%     sunB (:,3) {mustBeNumeric}
+%     d (:,1) {mustBeNumeric}
+%     const
+%     NDF = 'Beckmann' % 現状Beckamnn distributionのみ対応
+%     nMC = 10^3;
+% end
+% arguments (Output)
+%     sat
+%     srpCdOut (1,3)
+%     srpCsOut (1,3)
+% end
 %[text] ## parameters
 dAU = km2AU(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
