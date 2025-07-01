@@ -8,7 +8,7 @@
 %[text]  `SPICE`: use SPICE, `on` or `off`
 %[text] ## `output`
 %[text] `aSun`: Sun's gravitational force, km/s^2, nx3 vector
-%[text] `sunIJK`: Sun's position at inertial frame, km, nx3 vector
+%[text] `sunI`: Sun's position at inertial frame (GCRF), km, nx3 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 
