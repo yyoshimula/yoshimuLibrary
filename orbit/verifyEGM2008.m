@@ -14,52 +14,52 @@ rVec = 8000 .* rand(1,3); % km
 %[text] ## read orbital constant and EGM2008 coefficients
 const = orbitConst; % orbital constants
 EGM.GEODEG = 8; % geoid degree
-[EGM.Cnm, EGM.Snm] = readEGM2008('EGM2008_to2190_TideFree.txt', EGM.GEODEG);
+EGM = readEGM2008(EGM, EGM.GEODEG);
 %[text] ## egm2008 function by y.yoshimura
 tic
 % at ECEF frame described with Cartesian coordinate
 acc = egm2008(rVec, EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % km/s^2
-toc %[output:1685a701]
+toc %[output:057c09f0]
 
 % The egm2008 function does not include two-body acceleration, so add the two-body acceleration.
 acc = acc + -const.GE / norm(rVec)^3 .* rVec; 
 %[text] $\\rm \nm/s^2$  to $\\rm \nkm/s^2$
-acc = acc .* 10^3 % m/s^2 %[output:0f840046]
+acc = acc .* 10^3 % m/s^2 %[output:2ec1d6dd]
 %[text] ## Aerospace toolbox
 %[text] deafultでEGM2008を使う
 tic
-[gx, gy, gz] = gravitysphericalharmonic(rVec .* 10^3, EGM.GEODEG) %[output:05d0eb9f] %[output:1d7155c0] %[output:22883e66]
-toc %[output:2c906555]
+[gx, gy, gz] = gravitysphericalharmonic(rVec .* 10^3, EGM.GEODEG) %[output:4f2e6e8a] %[output:4d2b1a6f] %[output:0467c6bd]
+toc %[output:28809712]
 
-absErr = abs(acc - [gx, gy, gz]) %[output:9da6ec71]
-relErr = absErr ./ abs(acc) .* 100 %[output:738e7657]
+absErr = abs(acc - [gx, gy, gz]) %[output:2a6704b3]
+relErr = absErr ./ abs(acc) .* 100 %[output:9b9defc0]
 
 %[appendix]{"version":"1.0"}
 %---
 %[metadata:view]
 %   data: {"layout":"onright","rightPanelPercent":40}
 %---
-%[output:1685a701]
-%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.000691 秒です。\n","truncated":false}}
+%[output:057c09f0]
+%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.010936 秒です。\n","truncated":false}}
 %---
-%[output:0f840046]
-%   data: {"dataType":"matrix","outputData":{"columns":3,"name":"acc","rows":1,"type":"double","value":[["-0.110331417751748","-2.623303332966638","-2.889199863131134"]]}}
+%[output:2ec1d6dd]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"name":"acc","rows":1,"type":"double","value":[["-4.104919010905021","-2.842008551067258","-0.439094230255747"]]}}
 %---
-%[output:05d0eb9f]
-%   data: {"dataType":"textualVariable","outputData":{"name":"gx","value":"  -0.110331417834787\n"}}
+%[output:4f2e6e8a]
+%   data: {"dataType":"textualVariable","outputData":{"name":"gx","value":"  -4.104919013994521\n"}}
 %---
-%[output:1d7155c0]
-%   data: {"dataType":"textualVariable","outputData":{"name":"gy","value":"  -2.623303334941023\n"}}
+%[output:4d2b1a6f]
+%   data: {"dataType":"textualVariable","outputData":{"name":"gy","value":"  -2.842008553206249\n"}}
 %---
-%[output:22883e66]
-%   data: {"dataType":"textualVariable","outputData":{"name":"gz","value":"  -2.889199865305642\n"}}
+%[output:0467c6bd]
+%   data: {"dataType":"textualVariable","outputData":{"name":"gz","value":"  -0.439094230586224\n"}}
 %---
-%[output:2c906555]
-%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.007210 秒です。\n","truncated":false}}
+%[output:28809712]
+%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.235778 秒です。\n","truncated":false}}
 %---
-%[output:9da6ec71]
-%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"-8","name":"absErr","rows":1,"type":"double","value":[["0.008303908949348","0.197438509985659","0.217450812911579"]]}}
+%[output:2a6704b3]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"-8","name":"absErr","rows":1,"type":"double","value":[["0.308950021121746","0.213899076229040","0.033047697911570"]]}}
 %---
-%[output:738e7657]
-%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"-7","name":"relErr","rows":1,"type":"double","value":[["0.752633213508756","0.752633168663648","0.752633335223544"]]}}
+%[output:9b9defc0]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"-7","name":"relErr","rows":1,"type":"double","value":[["0.752633658059993","0.752633471664661","0.752633390156863"]]}}
 %---
