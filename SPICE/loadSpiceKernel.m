@@ -3,7 +3,7 @@
 cspice_kclear;
 
 % Define the original directory path for your kernel library
-originalDir = '/Users/yyoshimula/Dropbox/MATLAB/libraries/mice/kernel/';
+originalDir = '/Users/yyoshimula/Dropbox/MATLAB/libraries/SPICE/mice/kernel/';
 
 % Load a leapseconds file
 cspice_furnsh(strcat(originalDir,'earth_assoc_itrf93.tf'));

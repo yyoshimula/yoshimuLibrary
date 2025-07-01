@@ -24,7 +24,7 @@ function sunPos = sun(jd, const, earthVSOP)
 tmp = au2km(sunAU, const) .* [cos(latS) .* cos(lonS), cos(latS) .* sin(lonS), sin(latS)];
 %[text] ## conversion
 %[text] ${\\bf r}\_{\\rm i, sun} = R\_{3}(-\\epsilon\_0) {\\bf r}\_{\\rm sun}\n$
-% moon position vector at inertial frame (J2000.0 fram), km
+% sun position vector at inertial frame (J2000.0 fram), km
 tmpQ = [sin(-const.EPS0/2) 0 0 cos(-const.EPS0/2)];
 tmpQ = repmat(tmpQ, size(tmp,1), 1);
 sunPos = qRotation(4, tmp, tmpQ); % nx3
