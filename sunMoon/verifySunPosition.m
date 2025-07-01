@@ -45,7 +45,7 @@ toc %[output:87e56b5c]
 
 %[text] ## SPICE Toolkit
 %[text] 光行差補正を行わないとMATLABとほぼ一致
-loadSpiceK
+loadSpiceKernel
 
 date = strcat(num2str(yy),'-', num2str(mm),'-',num2str(dd), 'T',...
     num2str(hh), ':', num2str(m),':', num2str(s));
@@ -53,33 +53,33 @@ date = strcat(num2str(yy),'-', num2str(mm),'-',num2str(dd), 'T',...
 % ephemeris time (ET = TDB)
 et = cspice_str2et( date ); % s
 
-jdSPICE = cspice_unitim(et, 'ET', 'JDTDT') %[output:45d61875]
+jdSPICE = cspice_unitim(et, 'ET', 'JDTDT') %[output:53aab568]
 
 tic
 % LT+Sは光行差補正, noneにもできる
 [sunSPICE, ~] = cspice_spkpos('SUN', et, 'J2000', 'none', 'EARTH');
 sunSPICE = sunSPICE'; % 1x3
-toc %[output:2ca33935]
+toc %[output:03455fd4]
 %[text] ## MATLAB Aerospace toolbox
 %[text] `planetEphemeris`を使用（アドオンでephemeris dataを追加する必要あり）
 tic
 mjdUTC = mjuliandate(yy, mm, dd, hh, m, s); % % modified Julian day, UTC
 dUT1 = deltaUT1(mjdUTC); % ΔUT1, s
 jdUT1 = jdUTC + s2day(dUT1); % JD w.r.t. UT1 (= UTC + dUT1)
-% jdTT = jdUT1 + s2day(ut2tt(jdUT1)); % JD w.r.t. Terrestrial time (TT = TDT)
+jdTT = jdUT1 + s2day(ut2tt(jdUT1)); % JD w.r.t. Terrestrial time (TT = TDT)
 
-sunMATLAB = planetEphemeris(jdTT, 'Earth', 'Sun')
-toc %[output:09179038]
+sunMATLAB = planetEphemeris(jdTT, 'Earth', 'Sun') %[output:012ab026]
+toc %[output:0de30bb7]
 
 %[text] ## error, km
-err1 = sunSPICE - sunMATLAB
-err2 = sunSPICE - sunY
-err3 = sunMATLAB - sunY
+err1 = sunSPICE - sunMATLAB %[output:21bb003e]
+err2 = sunSPICE - sunY %[output:2ecdb84a]
+err3 = sunMATLAB - sunY %[output:7bd7038b]
 
 % error norm
-norm(err1) %[output:3ec758b4]
-norm(err2) %[output:1cdde64c]
-norm(err3) %[output:05e317cc]
+norm(err1) %[output:181da97e]
+norm(err2) %[output:79829b5a]
+norm(err3) %[output:02a18020]
 
 %[appendix]{"version":"1.0"}
 %---
@@ -102,23 +102,35 @@ norm(err3) %[output:05e317cc]
 %   data: {"dataType":"textualVariable","outputData":{"header":"datetime","name":"TT","value":"   2010\/12\/19 00:01:06\n"}}
 %---
 %[output:87e56b5c]
-%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.002386 秒です。\n","truncated":false}}
+%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.003482 秒です。\n","truncated":false}}
 %---
-%[output:45d61875]
+%[output:53aab568]
 %   data: {"dataType":"textualVariable","outputData":{"name":"jdSPICE","value":"     2.455549500766018e+06\n"}}
 %---
-%[output:2ca33935]
-%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.002307 秒です。\n","truncated":false}}
+%[output:03455fd4]
+%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.000980 秒です。\n","truncated":false}}
 %---
-%[output:09179038]
-%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.230519 秒です。\n","truncated":false}}
+%[output:012ab026]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"8","name":"sunMATLAB","rows":1,"type":"double","value":[["-0.081914341369389","-1.348400955645031","-0.584557174683310"]]}}
 %---
-%[output:3ec758b4]
-%   data: {"dataType":"textualVariable","outputData":{"name":"ans","value":"   1.369649585262066\n"}}
+%[output:0de30bb7]
+%   data: {"dataType":"text","outputData":{"text":"経過時間は 0.039325 秒です。\n","truncated":false}}
 %---
-%[output:1cdde64c]
+%[output:21bb003e]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"name":"err1","rows":1,"type":"double","value":[["-0.655843310058117","0.488258361816406","-1.065824441611767"]]}}
+%---
+%[output:2ecdb84a]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"2","name":"err2","rows":1,"type":"double","value":[["0.655191783662885","-0.575454847514629","1.260287463739514"]]}}
+%---
+%[output:7bd7038b]
+%   data: {"dataType":"matrix","outputData":{"columns":3,"exponent":"2","name":"err3","rows":1,"type":"double","value":[["0.661750216763467","-0.580337431132793","1.270945708155632"]]}}
+%---
+%[output:181da97e]
+%   data: {"dataType":"textualVariable","outputData":{"name":"ans","value":"   1.343319923014865\n"}}
+%---
+%[output:79829b5a]
 %   data: {"dataType":"textualVariable","outputData":{"name":"ans","value":"     1.532562901210393e+02\n"}}
 %---
-%[output:05e317cc]
-%   data: {"dataType":"textualVariable","outputData":{"name":"ans","value":"     1.546189312617269e+02\n"}}
+%[output:02a18020]
+%   data: {"dataType":"textualVariable","outputData":{"name":"ans","value":"     1.545965030794528e+02\n"}}
 %---

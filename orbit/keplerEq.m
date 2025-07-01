@@ -17,6 +17,9 @@ function E = keplerEq(M, e, TOL)
 %     e (:,1)
 %     TOL = 1e-8
 % end
+if nargin < 3
+    TOL = 1e-8;
+end
 residual = 1;
 %[text] ## Kepler's equation
 %[text] $M=E-e\\sin{E}$
@@ -24,11 +27,11 @@ residual = 1;
 E = (M + 0.5 * e) .* (M < pi) + M - 0.5 * e .* (M > pi); % initial estimate
 
 while(abs(residual) > TOL)
-fE = E - e * sin(E) - M;
-dfE = 1 - e * cos(E);
+    fE = E - e * sin(E) - M;
+    dfE = 1 - e * cos(E);
 
-residual = fE ./ dfE;
-E = E - residual;
+    residual = fE ./ dfE;
+    E = E - residual;
 end
 
 %[text] `fsolve`を使った方法↓

@@ -65,7 +65,7 @@ function adjustFont(fig)
 % Times New Roman, 論文用に適切なサイズ
 
 % デフォルト図サイズに適したフォントサイズ
-targetFontSize = 12; % デフォルト図サイズ用
+targetFontSize = 16; % デフォルト図サイズ用
 
 % 軸の設定
 axs = findall(fig, 'Type', 'Axes');
@@ -97,13 +97,13 @@ end
 % テキストオブジェクト
 texts = findall(fig, 'Type', 'Text');
 for i = 1:length(texts)
-    set(texts(i), 'FontSize', targetFontSize, 'FontName', 'Times New Roman');
+    set(texts(i), 'FontSize', targetFontSize-4, 'FontName', 'Times New Roman');
 end
 
 % 凡例
 lgs = findall(fig, 'Type', 'Legend');
 for i = 1:length(lgs)
-    set(lgs(i), 'FontSize', targetFontSize - 1, 'FontName', 'Times New Roman');
+    set(lgs(i), 'FontSize', targetFontSize - 4, 'FontName', 'Times New Roman');
 end
 end
 
@@ -142,15 +142,15 @@ for i = 1:length(axs)
         colormap(ax, 'gray'); % または適切なカラーマップ
     end
 
-    if asis == 0
-        % 凡例の位置最適化
-        lgs = findall(fig, 'Type', 'Legend');
-        for i = 1:length(lgs)
-            set(lgs(i), 'Box', 'on', 'Location', 'best');
-        end
-    else
-        % do nothing
-    end
+    % if asis == 0
+    %     % 凡例の位置最適化
+    %     lgs = findall(fig, 'Type', 'Legend');
+    %     for i = 1:length(lgs)
+    %         set(lgs(i), 'Box', 'on', 'Location', 'best');
+    %     end
+    % else
+    %     % do nothing
+    % end
 end
 
 end
