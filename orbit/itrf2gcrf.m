@@ -1,5 +1,5 @@
 %[text] # rotation matrix from ITRF to GCRF (CIO approcach of　IAU-2006/2000 reduction)
-%[text] `utc`:  UTC, datetime format of MATLAB
+%[text] `jd`:  julian day
 %[text] `leapJD`: obtained from `leapS.mlx`
 %[text] ## note
 %[text] 位置座標の変換のみ．速度を変換する際は地球の自転速度を考慮した計算が必要
@@ -12,23 +12,17 @@
 %[text] ## revisions
 %[text] 20230612  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also gcrf2itrf, utc2tt.
-function dcm = itrf2gcrf(utc, leapJD, iau06, eopDataAll)
+function dcm = itrf2gcrf(jd, leapJD, iau06, eopDataAll)
 % arguments
-%     utc 
+%     jd 
 %     leapJD
 %     iau06
 %     eopDataAll
 % end
  
 %[text] ## time and EOP
-yy = year(utc);
-mm = month(utc);
-dd = day(utc);
-hh = hour(utc);
-m = minute(utc);
-s = second(utc);
-
-jd = gc2jd(yy, mm, dd, hh, m, s);
+[yy, mm, dd, hh, m, s] = jd2gc(jd);
+utc = datetime([yy mm dd hh m s]);
 
 deltaAT = dAT(jd, leapJD);
 eopData = eop(yy, mm, dd, eopDataAll);
