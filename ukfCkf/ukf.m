@@ -1,11 +1,10 @@
-function [Pest, xEst] = ukf(f, h, B, Q, R, lam, P, x, y, wm, wc, wic)
+function [Pest, xEst] = ukf(f, h, Q, R, lam, P, x, y, wm, wc, wic)
 % ----------------------------------------------------------------------
 %   Unscented Kalman Filter
 %    20181210  y.yoshimura
 %    Inputs: f, system descrete dynamics: x(k+1) = f(x(k)), nx1 vector
 %            h, observation: y(k) = h(x(k)), mx1 vector
-%            B, system noise sensitivity matrix, n x r matrix
-%            Q, system noise: rx1 vector
+%            Q, system noise: nxn matrix
 %            R, observation noise: mx1 vector
 %            lam, tuning parameter for UKF
 %            P, covariance matrix, nxn matrix
