@@ -8,44 +8,53 @@
 %[text] `GE`: gravitational constant of the Earth, m or km (unit must be unified with the position and velocity)
 %[text] ## outputs
 %[text] `azi`: -T軸方向からR軸への角度, nx1 vector, rad
-%[text] `ele`: R–T平面からN方向への角度, nx1 vector, rad 
+%[text] `ele`: R–T平面からN方向への角度, nx1 vector, rad
 %[text] ## note
 %[text] 重力定数と位置・速度は単位を合わせること
-%[text] ## references 
+%[text] ## references
 %[text] Sullivan, Joshua, Generalized Angles-Only Navigation Architecture for Autonomous Distributed Space Systems, Journal of Guidance, Control, and Dynamics.
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also roe2losApprox.
-function [azi, ele] = oe2los(chiefOE, deputyOE, flag, GE)
+function [azi, ele] = oe2los(chiefOE, deputyOE, anomalyFlag, GE, chiefQbi)
 % arguments
 %     chiefOE (:,6) {mustBeNumeric}
 %     deputyOE (:,6) {mustBeNumeric}
-%     flag (1,1) {mustBeMember(flag, [0, 1])}
+%     anomalyFlag (1,1) {mustBeMember(anomalyFlag, [0, 1])}
 %     GE (1,1) {mustBeNumeric}
+%     chiefQbi (1,4) {mustBeNumeric}
 % end
 %[text] ### calculating relative distance from absolute orbital elements
-[rC, ~] = oe2rv(chiefOE, flag, GE);
-[rD, ~] = oe2rv(deputyOE, flag, GE);
+[rC, ~] = oe2rv(chiefOE, anomalyFlag, GE);
+[rD, ~] = oe2rv(deputyOE, anomalyFlag, GE);
 
-if flag == 0
-    fC = trueAnomaly(chiefOE(:,1), chiefOE(:,2), chiefOE(:,6));
-else
-    fC = chiefOE(:,6);
+if (nargin < 5) % if chiefQbi is not provided, LOS is calculated in RTN frame
+
+    % DCM from inertial frame to RTN frame
+    if anomalyFlag == 0
+        fC = trueAnomaly(chiefOE(:,1), chiefOE(:,2), chiefOE(:,6));
+    else
+        fC = chiefOE(:,6);
+    end
+
+    fC = mod(fC, 2*pi);
+    incC = chiefOE(:,3);
+    raanC = chiefOE(:,4);
+    raanC = mod(raanC, 2*pi);
+    uC = chiefOE(:,5) + fC;
+    uC = mod(uC, 2*pi);
+    qIJK2rtn = zxz2q(4, raanC, incC, uC);
+    rel = qRotation(4, (rD - rC), qIJK2rtn); % realtive distance expressed with RTN frame
+
+else % if chiefQbi is provided, LOS is calculated in body-fixed frame of chief
+
+    rel = qRotation(4, (rD - rC), chiefQbi); % realtive distance expressed with body-fixed frame of chief
+
 end
-fC = mod(fC, 2*pi);
 
-incC = chiefOE(:,3);
-raanC = chiefOE(:,4);
-raanC = mod(raanC, 2*pi);
-uC = chiefOE(:,5) + fC;
-uC = mod(uC, 2*pi);
-
-% DCM from inertial frame to RTN frame
-qIjk2rtn = zxz2q(4, raanC, incC, uC);
-rtn = qRotation(4, (rD - rC), qIjk2rtn); % realtive distance expressed with RTN frame
 %[text] ## LOS
-azi = atan2(rtn(:,1), -rtn(:,2)); % -T軸方向からR軸への角度
-ele = atan2(rtn(:,3), vecnorm(rtn(:,1:2), 2 ,2)); % R–T平面からN方向への角度
+azi = atan2(rel(:,3), rel(:,2));
+ele = asin(rel(:,1) ./ vecnorm(rel, 2, 2));
 
 end
 

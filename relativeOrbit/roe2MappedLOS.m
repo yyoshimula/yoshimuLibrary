@@ -15,18 +15,29 @@
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also oe2roe.
-function [azi, ele] = roe2losApprox(roe, chiefOE, flag, GE)
+function [azi, ele] = roe2MappedLOS(roe, chiefOE, flag, GE, chiefQbo)
 % arguments
 %     roe (:,6) {mustBeNumeric}
 %     chiefOE (:,6) {mustBeNumeric}
 %     flag (1,1) {mustBeMember(flag, [1, 0])}
 %     GE (1,1) {mustBeNumeric}
+%     chiefQbo (1,4) {mustBeNumeric}
 % end
-%[text] ### mapping from ROE to RTN
-rtn = roe2rtn(roe, chiefOE, flag, GE); % 1x6 vector
 
-azi = atan2(rtn(:,1), -rtn(:,2)); % -T軸方向からR軸への角度
-ele = atan2(rtn(:,3), vecnorm(rtn(:,1:2), 2 ,2)); % R–T平面からN方向への角度
+%[text] ### mapping from ROE to RTN
+rel = roe2rtn(roe, chiefOE, flag, GE); % 1x6 vector
+
+if (nargin < 5) % if chiefQbo is not provided, LOS is calculated in RTN frame
+% do nothing
+
+else % if chiefQbo is provided, LOS is calculated in body-fixed frame of chief
+
+    rel = qRotation(4, rel, chiefQbo); % realtive distance expressed with body-fixed frame of chief
+
+end
+
+azi = atan2(rel(:,3), rel(:,2)); % T-N平面内の角度
+ele = asin(rel(:,1) ./ vecnorm(rel, 2, 2)); % T-N平面からR方向への角度
 
 end
 
