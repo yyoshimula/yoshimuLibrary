@@ -17,25 +17,30 @@
 %[text] ## revisions
 %[text] 20210209  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also orbitConst, mainATOM.
-function dxdt = eomGaussQ(t_, x_, jdIni, sat, const, EGM, earthVSOP, JB, coefs, ELP)
+function dxdt = eomGaussQ(t_, x_, para, sat, const, EGM, earthVSOP, JB, coefs, ELP, EOP)
 %[text] ## pre-allocation
 % pre-allocation
-aRSW = zeros(3,1); % translational acceleration at RSW frame
+aRTN = zeros(3,1); % translational acceleration at RSW frame
 trq = zeros(3,1); % control torque at body-fixed frame
-%[text] ## state variables
-jd = jdIni + s2day(t_); % Julian day, day
 
+anomalyFlag = para.anomalyFlag;
+jd = para.jd + s2day(t_);
+%[text] ## state variables
 %[text] ### orbit
 a = x_(1); % semi-major axis, km
 e = x_(2); % eccentricty
 inc = x_(3); % inclination, rad
 raan = x_(4); % right ascension of ascending node, rad
 ome = x_(5); % argument of perigee, rad
-f = x_(6); % true anomaly, rad
+if anomalyFlag == 1
+    f = x_(6); % true anomaly, rad
+else
+    f = trueAnomaly(a, e, x_(6));
+end
 
 p = a * (1 - e^2); % semi-latus rectum
 h = sqrt(const.GE * p); % orbital angular momentum
-%n = sqrt(const.GE / a^3); % mean motion
+n = sqrt(const.GE / a^3); % mean motion
 u = ome + f; % argument of latitude
 r = p / (1.0 + e * cos(f));
 
@@ -48,17 +53,12 @@ q1 = x_(7) / qNorm; % quaternion, vector part
 q2 = x_(8) / qNorm;
 q3 = x_(9) / qNorm;
 q4 = x_(10) / qNorm; % scalar part
-qv = [q1
-    q2
-    q3]; % vector part
-q = [qv
-    q4];
+qv = [q1; q2; q3]; % vector part
+q = [qv; q4];
 wx = x_(11); % angular rate, rad/s
 wy = x_(12);
 wz = x_(13);
-wVec = [wx
-    wy
-    wz];
+wVec = [wx; wy; wz];
 
 %[text] ### longitude, latitude
 rECEF = zyx2dcm(gmst(jd), 0, 0) * rVec; %km, position at ECEF frame, 3x1
@@ -66,52 +66,41 @@ lon = atan2(rECEF(2), rECEF(1)); % rad, longitude
 lat = atan(rECEF(3) / norm(rECEF(1:2))); % rad, latitude
 [geoLon, geoLat, geoH] = geocentric2Geodetic(rVec(1), rVec(2), rVec(3), const.RE, const.fE);
 %[text] ## DCM
-ijk2RSW = zxz2dcm(raan, inc, u);
-ijk2B = q2dcm(4, q'); % IJK to body-fixed frame
-ecef2NED = zyx2dcm(lon, -(pi/2 + lat), 0);
-ijk2ECEF = zyx2dcm(gmst(jd), 0, 0);
+Rbi = q2dcm(4, q');
+RiECEF = itrf2gcrf(jd, EOP); % dcm from ECEF to inertial frame (GCRF)
+Roi = zxz2dcm(raan, inc, u); % dcm from inertial to RTN frame
 %[text] ## Earth's gravitational potential
-dcmNutation = nutationDCM(jd,const);% nutation
-dcmPrecession = precessionDCM(const.J2000, jd, const); % precession 
-tmpDCM = dcmNutation * dcmPrecession;
-rsw2TOD = tmpDCM * ijk2RSW';
-tod2RSW = rsw2TOD';
+% dcmNutation = nutationDCM(jd,const);% nutation
+% dcmPrecession = precessionDCM(const.J2000, jd, const); % precession 
+% tmpDCM = dcmNutation * dcmPrecession;
+% rsw2TOD = tmpDCM * Roi';
+% tod2RSW = rsw2TOD';
 
-% 3-2-1 Euler angle(lam, -phi, 0)でTOD to PEFなので
-lam = atan2(tod2RSW(1,2), tod2RSW(1,1)); % azimuth, TOD frameにおけるR軸のazimuth
-phi = -1.0 * asin(-tod2RSW(1,3)); % elevation, TOD frameにおけるR軸のelevation
-
-% sez2TOD = ijk2SEZ(lam, phi)'; % SEZ to IJK(TOD) frame
-% lam = lam - gast(jd, const); % (local) longitude at ECEF, rad
-% lam = lam + (lam < 0.0) .* 2 * pi;
-
-tmp = egm2008(rVec, EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % at Cartesian coordinate
-% fSEZ = [-tmp(2); tmp(3); 0]; % South方向とspherical coordinateのphi方向は逆なので-1かける
-% fEarth = sez2TOD * fSEZ;
-fEarth = tod2RSW * tmp';
-aRSW = aRSW + fEarth;
+tmp = egm2008(rVec', EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % at Cartesian coordinate
+fEarth = RiECEF * tmp(:);
+aRTN = aRTN + Roi * fEarth;
 %[text] ## Sun's gravitational force
-[aSunIJK, sunIJK] = sunG(jd, rVec', const, earthVSOP);
-aSunIJK = aSunIJK(:);
-sunIJK = sunIJK(:); % sun position at inertial frame, km, 3x1
-aSun = ijk2RSW * aSunIJK; % acceleration by sun
-aRSW = aRSW + aSun;
+[aSunI, sunI] = sunG(jd, rVec', const, earthVSOP);
+aSunI = aSunI(:);
+sunI = sunI(:); % sun position at inertial frame, km, 3x1
+aSun = Roi * aSunI; % acceleration by sun
+aRTN = aRTN + aSun;
 %[text] ## Moon's gravitational force
 [aMoon, ~] = moonG(jd, rVec', const, ELP);
 aMoon = aMoon(:);
-aMoon = ijk2RSW * aMoon; % acceleration by moon
-aRSW = aRSW + aMoon;
+aMoon = Roi * aMoon; % acceleration by moon
+aRTN = aRTN + aMoon;
 
 %[text] ## SRP
-sunRelI = sunIJK - rVec; % 3x1 vector, from sat to sun vector at IJK, km
+sunRelI = sunI - rVec; % 3x1 vector, from sat to sun vector at IJK, km
 sunDist = norm(sunRelI); 
-sunRelB = ijk2B * sunRelI; % km, at body-fixed frame 
+sunRelB = Rbi * sunRelI; % km, at body-fixed frame 
 sat = srpSimple(sat, sunRelB./norm(sunRelB), sunDist.*10^3, const); % SRP 
 % sat = selfShadow(sat, sunRelB./norm(sunRelB)); % calc self-shadowing 
 fSRP = sum(sat.force,1)'; % N, 3x1 vector at body-fixed frame 
 tSRP = sum(sat.torque,1)'; % Nm, 3x1 vector at body-fixed frame
 
-aRSW = aRSW + ijk2RSW * ijk2B' * fSRP ./ sat.m ./ 10^3; 
+aRTN = aRTN + Roi * Rbi' * fSRP ./ sat.m ./ 10^3; 
 trq = trq + tSRP;
 %[text] ## air drag
 % Cd = 2.2; 
@@ -133,28 +122,40 @@ trq = trq + tSRP;
 % trq = trq + tAir;
 %[text] ## gravitational gradient torque
 %[text] earth directional (unit) vector, 3x1 vector at body-fixed frame
-nGG = ijk2B * (-rVec./norm(rVec)); 
+nGG = Rbi * (-rVec./norm(rVec)); 
 tGG = 3 * const.GEm / (r*10^3)^3 * cross(nGG, sat.J*nGG); % Nm
 
 trq = trq + tGG;
 %[text] ## remanent magnetic torques
-bNED = geodeticIGRF(jd, geoLat, geoLon, geoH, coefs)'; % 3x1, nT, at NED frame
-bIJK = ijk2ECEF' * ecef2NED' * bNED; % nT< at ECI frame
-bB = ijk2B * bIJK .* 10^(-9); % 3x1 vector, T, at body-fixed frame
-trq_mag = cross(sat.mag, bB); % Nm
+% bNED = geodeticIGRF(jd, geoLat, geoLon, geoH, coefs)'; % 3x1, nT, at NED frame
+% bI = RiECEF' * ecef2NED' * bNED; % nT< at ECI frame
+% bB = Rbi * bI .* 10^(-9); % 3x1 vector, T, at body-fixed frame
+% trq_mag = cross(sat.mag, bB); % Nm
+% trq = trq + trq_mag;
 
-trq = trq + trq_mag;
+
 %[text] ## Equations of motion
 %[text] Gauss
-Gauss = [2 * a * a / h * (e*sin(f)*aRSW(1) + p / r * aRSW(2))
-    p / h * (sin(f) * aRSW(1) + (cos(f) + (e + cos(f)) * r / p) * aRSW(2))
-    r * cos(u) / h * aRSW(3)
-    r * sin(u) / h / sin(inc) * aRSW(3)
-    -p/e/h * (cos(f)*aRSW(1) - sin(f)*(1 + r / p)*aRSW(2)) - cos(inc) * r / h  * sin(u)/sin(inc)*aRSW(3)
-    h / r^2 + p / e / h * (cos(f) * aRSW(1) - sin(f) * (1 + r / p) * aRSW(2))];
+% Gauss
+dOmedt = r * sin(u) / n / a^2 / sqrt(1 - e^2) / sin(inc) * aRTN(3);
+domedt = -sqrt(1 - e^2) / n / a / e * (cos(f) * aRTN(1) - (sin(f) + sin(f) / (1 + e * cos(f))) * aRTN(2)) - dOmedt * cos(inc);
+
+if anomalyFlag == 1    %  true anomaly used,   dfdt
+    tmp = h / r^2  - domedt - dOmedt * cos(inc);
+else % mean anomaly used, dmdt    
+    tmp = n + 1 / n / a^2 / e * ((p * cos(f) - 2 * e * r) * aRTN(1) ...
+        - (p + r) * sin(f) * aRTN(2));
+end
+
+Gauss = [2 / n / sqrt(1 - e^2) * (e * sin(f) * aRTN(1) + (1 + e * cos(f)) * aRTN(2))
+    sqrt(1 - e^(2)) / n / a * (sin(f) * aRTN(1) + (cos(f) + (e + cos(f)) / (1 + e * cos(f))) * aRTN(2))
+    r * cos(u) / (n * a^2 * sqrt(1 - e^2)) * aRTN(3)
+    dOmedt
+    domedt
+    tmp];
 
 % rotational motion
-rotDynamics = -sat.J^(-1) * cross(wVec, (sat.J * wVec)) + sat.J^(-1) * trq;
+rotDynamics = -sat.MOI^(-1) * cross(wVec, (sat.MOI * wVec)) + sat.MOI^(-1) * trq;
 qKinematics = qKine(4, q', wVec')';
 
 % do not rewrite the script below

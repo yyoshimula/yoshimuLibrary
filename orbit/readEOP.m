@@ -5,11 +5,17 @@
 %[text] ## revisions
 %[text] 20230608  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also leapS
-function eopDataAll = readEOP(fName)
+function EOP = readEOP(fName)
 
 %[text] ## read EOP dat
-eopDataAll = importdata(fName);
+if nargin < 1
+    fName = "EOP_20_C04_one_file_1962-now.txt";
+end
 
+EOP.dataAll = importdata(fName);
+
+EOP.iau06 = readIAU06;
+EOP.leapJD = leapS; % load database
 
 end
 

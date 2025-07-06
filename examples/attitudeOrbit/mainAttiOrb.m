@@ -18,6 +18,9 @@ earthVSOP = vsopConst;
 EGM.GEODEG = 8; % geoid degree %[control:editfield:3057]{"position":[14,15]}
 EGM = readEGM2008(EGM, EGM.GEODEG);
 
+% for ITRF and GCRF
+EOP = readEOP();
+
 % read ELP coefficients for Moon
 ELP = readELP();
 
@@ -67,15 +70,18 @@ oeIni = [tmp(1:2), iJ2000, OmeJ2000, wJ2000, tmp(6)]; % [a, e, inc, RAAN, w, f]
 %[text] `f:` true anomaly, rad
 %[text] `q:` quaternion, w.r.t. inertial frame, q4 is the scalar part
 %[text] `w:` angular rate w.r.t. inertial frame, rad/s
-jdIni = tle.jd; % Julian day, day
+
+para.jd = tle.jd; % Julian day, day
+para.anomalyFlag = 1; % flag for true anomaly
+
 tspan = [0    5.5654e+03 * 5]; % time span, s
 % tspan = [0 60];
 
 xIni = [oeIni, qIni, wIni];
 %%
 %[text] ## solve ODE
-option = odeset('Reltol',1e-10,'AbsTol',1e-10);
-[tOut, yOut] = ode45(@(t,x)eomGaussQ(t,x, jdIni, sat, const, EGM, earthVSOP, JB, coefs, ELP), tspan, xIni, option);
+option = odeset('Reltol',1e-8,'AbsTol',1e-8);
+[tOut, yOut] = ode45(@(t,x)eomGaussQ(t,x, para, sat, const, EGM, earthVSOP, JB, coefs, ELP, EOP), tspan, xIni, option);
 %%
 %[text] ## result
 time = tOut; % elapsed time, s
