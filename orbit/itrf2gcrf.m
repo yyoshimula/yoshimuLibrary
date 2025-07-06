@@ -4,32 +4,37 @@
 %[text] ## note
 %[text] 位置座標の変換のみ．速度を変換する際は地球の自転速度を考慮した計算が必要
 %[text] ## requirement
-%[text] `leapS.mlx`を実行し，その出力`leapJD`を用いる 
-%[text] `readIAU06.mlx`を実行し，その出力`iau06`を用いる （`iau06x.dat, iau06y.dat, iau06z.datを使用）`
-%[text] `readEOP.mlx`を実行し，その出力`eopDataAll`を用いる 
+%[text] `readEOP.m`を実行し，その出力EOP(EOP.dataAll, EOP.iau06, EOP.leapJDを含む)を用いる 
 %[text] ## references 
 %[text] Vallado, D. A., & McClain, W. D. (2001). Fundamentals of Astrodynamics and Applications. Springer Science & Business Media. 4th edition, p.220
 %[text] ## revisions
 %[text] 20230612  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also gcrf2itrf, utc2tt.
-function dcm = itrf2gcrf(jd, leapJD, iau06, eopDataAll)
+function dcm = itrf2gcrf(jd, EOP) %#codegen
 % arguments
 %     jd 
-%     leapJD
-%     iau06
-%     eopDataAll
+%     EOP
 % end
  
 %[text] ## time and EOP
 [yy, mm, dd, hh, m, s] = jd2gc(jd);
 utc = datetime([yy mm dd hh m s]);
 
-deltaAT = dAT(jd, leapJD);
-eopData = eop(yy, mm, dd, eopDataAll);
+deltaAT = dAT(jd, EOP.leapJD);
+eopData = eop(yy, mm, dd, EOP.dataAll);
 
 UT1 = utc + seconds(eopData.dUT1);
 
-jdUT1 = gc2jd(year(UT1), month(UT1), day(UT1), hour(UT1), minute(UT1), second(UT1));
+% datetime関数の代わりにdatevecを使用（codegen対応）
+ut1Vec = datevec(UT1);
+ut1yy = ut1Vec(1);
+ut1mm = ut1Vec(2);
+ut1dd = ut1Vec(3);
+ut1hh = ut1Vec(4);
+ut1min = ut1Vec(5);
+ut1sec = ut1Vec(6);
+
+jdUT1 = gc2jd(ut1yy, ut1mm, ut1dd, ut1hh, ut1min, ut1sec);
 
 jdTT = utc2tt(jd, deltaAT);
 tTT = jd2jdT(jdTT); % Julian century of TT
@@ -54,7 +59,7 @@ tirs2CIRS = dcm1axis(3, -thetaERA);
 % vCIRS = tirs2CIRS * (vTIRS + cross(we,rTIRS))
 
 %[text] ## precession and nutation (DCM from CIRS to GCRF)
-cirs2GCRF = precessionNutation(jdTT, iau06, eopData.dX, eopData.dY);
+cirs2GCRF = precessionNutation(jdTT, EOP.iau06, eopData.dX, eopData.dY);
 
 dcm = cirs2GCRF * tirs2CIRS * itrf2TIRS;
 
