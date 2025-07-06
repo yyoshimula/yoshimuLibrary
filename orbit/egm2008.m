@@ -26,13 +26,13 @@
 %[text] 20210419  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also readEGM2008, orbitConst, verifyEGM2008.
 function a = egm2008(rVec, deg, Cnm, Snm, const)
-arguments
-    rVec (1,3) {mustBeNumeric}
-    deg (1,1) {mustBeNumeric}
-    Cnm
-    Snm
-    const
-end
+% arguments
+%     rVec (1,3) {mustBeNumeric}
+%     deg (1,1) {mustBeNumeric}
+%     Cnm
+%     Snm
+%     const
+% end
 
 x = rVec(1);
 y = rVec(2);
