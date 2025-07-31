@@ -53,8 +53,8 @@ else % if chiefQbi is provided, LOS is calculated in body-fixed frame of chief
 end
 
 %[text] ## LOS
-azi = atan2(rel(:,3), rel(:,2));
-ele = asin(rel(:,1) ./ vecnorm(rel, 2, 2));
+azi = atan2(rel(:,2), rel(:,1));
+ele = asin(rel(:,3) ./ vecnorm(rel, 2, 2));
 
 end
 
