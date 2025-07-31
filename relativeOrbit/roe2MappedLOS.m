@@ -15,7 +15,7 @@
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also oe2roe.
-function [azi, ele] = roe2MappedLOS(roe, chiefOE, flag, GE, chiefQbo)
+function [azi, ele] = roe2mappedLOS(roe, chiefOE, flag, GE, chiefQbo)
 % arguments
 %     roe (:,6) {mustBeNumeric}
 %     chiefOE (:,6) {mustBeNumeric}
@@ -36,8 +36,8 @@ else % if chiefQbo is provided, LOS is calculated in body-fixed frame of chief
 
 end
 
-azi = atan2(rel(:,3), rel(:,2)); % T-N平面内の角度
-ele = asin(rel(:,1) ./ vecnorm(rel, 2, 2)); % T-N平面からR方向への角度
+azi = atan2(rel(:,2), rel(:,1)); % R-T平面内の角度
+ele = asin(rel(:,3) ./ vecnorm(rel, 2, 2)); % R-T平面からN方向への角度
 
 end
 
