@@ -33,7 +33,7 @@ rel.vNonlinRTN = rel.vNonlinRTN - cross(repmat([0, 0, chief.n], size(rel.rNonlin
 
 % ROE
 rel.roe = oe2roe(chief.oe, deputy.oe, anomalyFlag);
-rel.roe(:,2) = unwrap(rel.roe(:,2)); % unwrap angle (piと-piのジャンプを防ぐ  )
+rel.roe(:,2) = wrapToPi(rel.roe(:,2)); % wrap angle ( [-\pi, \pi) に変換 )
 
 % mapping from ROE to RTN frame
 rel.rMappedRTN = roe2rtn(rel.roe, chief.oe, anomalyFlag, const.GE); % km, RTN frame
