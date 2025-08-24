@@ -7,7 +7,7 @@
 %[text] See also orbitConst.
 function drawEarth(GMST, alpha, const)
 
-backColor = 'w';
+backColor = 'k';
 nPanels = 180;
 
 % Earth texture image
