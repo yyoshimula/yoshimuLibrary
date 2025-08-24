@@ -7,8 +7,8 @@
 %[text] `flag`: 1 = true anomaly, 0:= mean anomaly , scalar
 %[text] `GE`: gravitational constant of the Earth, m or km (unit must be unified with the position and velocity)
 %[text] ## outputs
-%[text] `azi`: -T軸方向からR軸への角度, nx1 vector, rad
-%[text] `ele`: R–T平面からN方向への角度, nx1 vector, rad
+%[text] `azi`: R-T平面のR軸からの角度, nx1 vector, rad
+%[text] `ele`: R-T平面からN方向への角度, nx1 vector, rad
 %[text] ## note
 %[text] 重力定数と位置・速度は単位を合わせること
 %[text] ## references
@@ -31,10 +31,10 @@ function [azi, ele] = oe2los(chiefOE, deputyOE, anomalyFlag, GE, chiefQbi)
 if (nargin < 5) % if chiefQbi is not provided, LOS is calculated in RTN frame
 
     % DCM from inertial frame to RTN frame
-    if anomalyFlag == 0
-        fC = trueAnomaly(chiefOE(:,1), chiefOE(:,2), chiefOE(:,6));
-    else
+    if anomalyFlag == 1
         fC = chiefOE(:,6);
+    else
+        fC = trueAnomaly(chiefOE(:,1), chiefOE(:,2), chiefOE(:,6));
     end
 
     fC = mod(fC, 2*pi);

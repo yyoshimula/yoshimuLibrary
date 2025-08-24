@@ -13,11 +13,11 @@
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also oe2roe.
-function deputyOE = roe2DeputyOE(roe, chiefOE, flag)
+function deputyOE = roe2DeputyOE(roe, chiefOE, anomalyFlag)
 % arguments
 %     roe (:,6) {mustBeNumeric}
 %     chiefOE (:,6) {mustBeNumeric}
-%     flag (1,1) {mustBeMember(flag, [0, 1])}
+%     anomalyFlag (1,1) {mustBeMember(anomalyFlag, [0, 1])}
 % end
 
 %[text] ## relative orbital elements
@@ -27,6 +27,7 @@ dEx = roe(:,3);
 dEy = roe(:,4);
 dIx = roe(:,5);
 dIy = roe(:,6);
+
 %[text] ## chief (absolute) orbital elements
 aC = chiefOE(:,1); % km
 eC = chiefOE(:,2);
@@ -35,12 +36,13 @@ raanC = chiefOE(:,4); % rad
 raanC = mod(raanC, 2*pi);
 wC = chiefOE(:,5); % rad
 wC = mod(wC, 2*pi);
-if flag == 1
+if anomalyFlag == 1
     mC = meanAnomaly(eC, chiefOE(:,6)); % rad
 else
     mC = chiefOE(:,6); % rad
 end
 mC = mod(mC, 2*pi);
+
 %[text] ## deputy (absolute) orbital elements
 %[text] $a\_{d} = a\\delta a + a \\\\\nu\_{d} = u + \\delta\\lambda - (\\Omega\_{d} - \\Omega)\\cos{i} \\\\\ne\_{d} = \\sqrt{(e\_{x}+\\delta e\_{x})^{2} + (e\_{y}+ \\delta e\_{y})^{2}} \\\\\ni\_{d} = i\_{c} + \\delta i\_{x} \\\\\n\\omega\_{d} = \\arctan{\\left(\\frac{e\_{y}+ \\delta e\_{y}}{e\_{x}+ \\delta e}\\right)} \\\\\n\\Omega\_{d} = \\Omega + \\frac{\\delta i\_{y}}{\\sin{i}}$
 a = aC * dA + aC; % km
@@ -54,7 +56,7 @@ w = mod(w, 2*pi);
 m = dLambda + wC + mC - (raan - raanC) .* cos(iC) - w;
 m = mod(m , 2*pi);
 
-if flag == 1 % true anomaly
+if anomalyFlag == 1 % true anomaly
     [f, ~] = trueAnomaly(a, e, m);
     deputyOE = [a, e, inc, raan, w, f];
 else
