@@ -7,12 +7,14 @@
 %[text] ## revisions
 %[text] 20240823  y.yoshimura, y.yoshimula@gmail.com, major update
 %[text] See also fig4Presen.
-function fig4Paper(fig, nFig, options)
-arguments
-    fig = gcf
+function fig4Paper(asis, fig, nFig, contentType)
+% 第3引数はオプション（既定は "vector"）
+if nargin < 1
+    fig = gcf;
+elseif nargin < 2
     nFig = 1;
-    options.contentType = 'vector'
-    options.asis = 0;
+elseif  nargin < 3 || isempty(contentType)
+    contentType = "vector";
 end
 
 % colorOrder = ...
@@ -32,9 +34,9 @@ fig.PaperPositionMode = 'auto';
 adjustFont(fig)
 
 % optimize line width
-optimizeFig(fig, options.asis)
+optimizeFig(fig)
 
-if options.asis == 0
+if asis == 0
     [nRows,nCols] = detectLayout(fig);         % 行列数を自動取得
     [Wcm,Hcm]     = decideFigSize(nRows,nCols);
     set(fig,'Units','centimeters');
@@ -55,7 +57,7 @@ set(fig,'DefaultLegendInterpreter','latex')         % 凡例も統一
 timeStamp = datetime('now', 'Format', 'yyyyMdd-HHmmss');
 fName = strcat('fig', num2str(nFig), '_', string(timeStamp), '.pdf');
 
-exportgraphics(gcf, fName, 'ContentType', options.contentType, 'BackgroundColor', 'none', 'Resolution', 600);
+exportgraphics(fig, fName, 'ContentType', contentType, 'BackgroundColor', 'none', 'Resolution', 600);
 
 end
 
@@ -108,7 +110,7 @@ end
 end
 
 %[text] ### 図の外観最適化
-function optimizeFig(fig, asis)
+function optimizeFig(fig)
 % 図の外観最適化
 
 axs = findall(fig, 'Type', 'Axes');
