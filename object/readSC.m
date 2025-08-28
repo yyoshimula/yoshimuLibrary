@@ -44,7 +44,7 @@ sat.m = 100;
 
 sat.sunlitFlag = ones(N,1);
 
-sat.forces = zeros(N,3);
+sat.force = zeros(N,3);
 sat.torque = zeros(N,3);
 
 disp('number of vertices:')
