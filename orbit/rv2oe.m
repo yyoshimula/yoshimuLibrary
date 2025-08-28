@@ -4,7 +4,7 @@
 %[text] `inc`: inclination, rad
 %[text] `raan`: longitude of the ascending node, rad
 %[text] `w`: argument of perigee, rad
-%[text] `f`: ture anomaly, rad
+%[text] `nu`: ture anomaly, rad
 %[text] `M`: mean anomaly at EPOCH, rad
 %[text] `mu`: Earth's gravitational constant, scalar
 %[text] ## note
@@ -15,13 +15,11 @@
 %[text] 20221110  y.yoshimura, y.yoshimula@gmail.com, y.yoshimura.a64@m.kyushu-u.ac.jp
 %[text] See also oe2rv.
 function oe = rv2oe(r, v, mu)
-arguments
-    r (:,3) {mustBeNumeric}
-    v (:,3) {mustBeNumeric}
-    mu
-end
-
-epsi = 1e-12;
+% arguments
+%     r (:,3) {mustBeNumeric}
+%     v (:,3) {mustBeNumeric}
+%     mu
+% end
 
 nt_ = size(r, 1); % data length
 
@@ -42,8 +40,8 @@ e = vecnorm(eVec,2,2);
 xi = vecnorm(v,2,2).^2 ./ 2 - mu ./ vecnorm(r,2,2);
 
 % semi-major axis
-paraInd = abs(xi) <= epsi; % index when e = 1
-a = (abs(xi) > epsi) .* (-mu / 2 ./ xi);
+paraInd = abs(xi) <= eps; % index when e = 1
+a = (abs(xi) > eps) .* (-mu / 2 ./ xi);
 a(paraInd) = Inf; % parabolic orbits
 
 % semi-latus rectum
@@ -60,9 +58,9 @@ inc = acos(h(:,3) ./ vecnorm(h,2,2));
 
 typeOrbit = ones(nt_,1); % elliptical and inclined
 for i = 1:nt_
-    if ( norm(eVec(i,:)) < epsi)
+    if ( norm(eVec(i,:)) < eps)
         % ----------------  circular equatorial ---------------
-        if  (inc(i)<epsi) || (abs(inc(i)-pi) < epsi)
+        if  (inc(i)<eps) || (abs(inc(i)-pi) < eps)
             typeOrbit(i) = 2;
         else
             % --------------  circular inclined ---------------
@@ -70,7 +68,7 @@ for i = 1:nt_
         end
     else
         % - elliptical, parabolic, hyperbolic equatorial --
-        if  (inc(i) < epsi) || (abs(inc(i) - pi) < epsi)
+        if  (inc(i) < eps) || (abs(inc(i) - pi) < eps)
             typeOrbit(i) = 4;
         end
     end
@@ -80,9 +78,9 @@ raan = acos(nVec(:,1) ./ vecnorm(nVec,2,2));
 raan = (nVec(:,2) >= 0.0) .* raan + (nVec(:,2) < 0.0) .* (2 * pi - raan);
 
 %[text] ### true anomaly
-f = dot(r, eVec, 2) ./ vecnorm(r,2,2) ./ e;
-f = acos(f);
-f = (dot(r,v,2) >= 0.0) .* f + (dot(r,v,2) < 0.0) .* (2 * pi - f);
+nu = dot(r, eVec, 2) ./ vecnorm(r,2,2) ./ e;
+nu = acos(nu);
+nu = (dot(r,v,2) >= 0.0) .* nu + (dot(r,v,2) < 0.0) .* (2 * pi - nu);
 
 %[text] ### argument of latitude for circular inlined and elliptical inclined orbits
 u = dot(r, nVec, 2) ./ vecnorm(r,2,2) ./ vecnorm(nVec,2,2);
@@ -97,7 +95,7 @@ for i = 1:nt_
         w = acos(w);
         w = (eVec(:,3) >= 0.0) .* w + (eVec(:,3) < 0.0) .* (2 * pi - w);
     elseif typeOrbit(i) == 4 % ellptical equatorial
-        wEE = (vecnorm(eVec,2,2) > epsi) .* acos(eVec(:,1) ./ vecnorm(eVec,2,2));
+        wEE = (vecnorm(eVec,2,2) > eps) .* acos(eVec(:,1) ./ vecnorm(eVec,2,2));
         wEE = (eVec(:,2) < 0.0) .* (2*pi - wEE) + (eVec(:,2) >= 0.0) .* wEE;
         wEE = (inc >= pi / 2) .* (2*pi - wEE) + (inc < pi / 2) .* wEE;
 
@@ -108,16 +106,16 @@ for i = 1:nt_
 end
 
 %[text] ### ture longitude for circular equatorial
-tmp = (vecnorm(r,2,2) > epsi) .* r(:,1) ./ vecnorm(r,2,2);
+tmp = (vecnorm(r,2,2) > eps) .* r(:,1) ./ vecnorm(r,2,2);
 trueLon = acos(tmp);
 trueLon = (r(:,2) >= 0.0) .* trueLon + (r(:,2) < 0.0) .* (2*pi - trueLon);
 trueLon = (inc < pi / 2) .* trueLon + (inc >= pi / 2) .* (2*pi - trueLon);
 
 %[text] ## mean anomaly
-M = meanAnomaly(e, f);
+M = meanAnomaly(e, nu);
 
 %[text] ## orbital elements
-oe = [a, e, inc, raan, w, f];%, u, M, trueLon];
+oe = [a, e, inc, raan, w, nu];%, u, M, trueLon];
 
 end
 
