@@ -7,7 +7,7 @@
 %[text] `Slm`: coefficients, S, (deg+1) x (deg+1) matrix
 %[text] ## note
 %[text] 引数で'normalized'を指定したときだけnormalized coefficientsを出力
-%[text] egm2008.mlxではunnormalized coefficientsを使用する
+%[text] egm2008.mではunnormalized coefficientsを使用する
 %[text] ## references 
 %[text] David A. Vallado, "Fundamentals of Astrodynamics and Applications, 4th edition, pp.538–550.
 %[text] Montenbruck  Oliver  & Eberhard Gill, Satellite Orbits. Springer Science & Business Media  2012., pp.61–67

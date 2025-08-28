@@ -25,7 +25,7 @@
 %[text] 20230119 arguments changed, y.yoshimura
 %[text] 20210419  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also readEGM2008, orbitConst, verifyEGM2008.
-function a = egm2008(rVec, deg, Cnm, Snm, const)
+function a = egm2008(rVec, deg, Cnm, Snm, const) %#codegen
 % arguments
 %     rVec (1,3) {mustBeNumeric}
 %     deg (1,1) {mustBeNumeric}
@@ -50,7 +50,13 @@ P = zeros(deg+1, deg+1); % matlabはindexが1始まりなので+1
 
 for i = 1:deg
     tmp = 0:i; % malabのlegendre functionは(-1)^mが付くため
-    P(i+1,1:i+1) = (-1).^tmp .* legendre(i, sp)';
+
+    % when MATLAB's legendre function is used
+    % P(i+1,1:i+1) = (-1).^tmp .* legendre(i, sp)';
+
+    % when yoshimuLibrary's legendre function is used
+    P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre(i, sp)';
+
 end
 P(1,:) = 0;
 P(2,:) = 0; % 2次以上（degree >=2）しか使わないので0にする．
