@@ -14,7 +14,7 @@
 %[text] 20231204 y.yoshimura, GEを直接引数として設定
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also roe2losApprox, trueAnomaly.
-function [r, v] = oe2rv(oe, flag, GE)
+function [r, v] = oe2rv(oe, flag, mu)
 % arguments
 %     oe (:,6) {mustBeNumeric}    
 %     flag (1,1) {mustBeMember(flag, [0, 1])}
@@ -22,7 +22,6 @@ function [r, v] = oe2rv(oe, flag, GE)
 % end
 %[text] ### orbital elements and constants
 small = 1.0e-10;
-mu = GE; % 地心重力定数 [km^3/s^2 or m^3/s^2]
 
 a = oe(:,1);
 e = oe(:,2);
