@@ -49,7 +49,11 @@ a = aC * dA + aC; % km
 e = sqrt((dEx + eC .* cos(wC)).^2 + (dEy + eC .* sin(wC)).^2);
 
 inc = iC + dIx;
-raan = raanC + dIy ./ sin(iC);
+if iC < eps
+    raan = raanC;
+else
+    raan = raanC + dIy ./ sin(iC);
+end
 raan = mod(raan, 2*pi);
 w = atan2(dEy + eC .* sin(wC), dEx + eC .* cos(wC));
 w = mod(w, 2*pi);
