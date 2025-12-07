@@ -9,11 +9,16 @@
 %[text] See also fig4Presen.
 function fig4Paper(asis, fig, nFig, contentType)
 % 第3引数はオプション（既定は "vector"）
-if nargin < 1
+if nargin < 2
     fig = gcf;
-elseif nargin < 2
     nFig = 1;
-elseif  nargin < 3 || isempty(contentType)
+    contentType = "vector";
+
+elseif nargin < 3
+    nFig = 1;
+    contentType = "vector";
+
+elseif  nargin < 4 || isempty(contentType)
     contentType = "vector";
 end
 
