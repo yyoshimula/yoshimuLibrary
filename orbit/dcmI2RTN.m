@@ -2,9 +2,9 @@
 % Input: raan, inc, w, f
 % Output: R
 
-function R = dcmI2RTN(raan, inc, w, f)
+function R = dcmI2RTN(raan, inc, w, nu)
 
-R = zxz2dcm(raan, inc, w + f);
+R = zxz2dcm(raan, inc, w + nu);
 
 end
 

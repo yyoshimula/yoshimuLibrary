@@ -14,7 +14,7 @@
 %[text] `srpCsOut`: total specular part of SRP, N, 1x3 vector
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] See also srpLps, readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
@@ -32,7 +32,7 @@ function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
 %     srpCsOut (1,3)
 % end
 %[text] ## parameters
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;
@@ -53,8 +53,8 @@ NS = sat.normal * sunB'; % nx1
 
 %[text] ## Monte-Carlo integration
 if strcmp(NDF, 'Beckmann')
-%[text] ## sampling for Beckmann distribution
-%[text] importance sampling for ${\\bf{h}} = \[\\cos\\phi\_h \\sin\\theta\_h, \\sin\\phi\_h \\sin\\theta\_h, \\cos\\theta\_h\]^T$
+    %[text] ## sampling for Beckmann distribution
+    %[text] importance sampling for ${\\bf{h}} = \[\\cos\\phi\_h \\sin\\theta\_h, \\sin\\phi\_h \\sin\\theta\_h, \\cos\\theta\_h\]^T$
     u1 = rand(nMC,1);
     thetaH = atan(sqrt(-sat.mCT.^2 .* log(u1'))); % nFacet x N
     phiH = 2 * pi .* rand(1, nMC); % 1xN

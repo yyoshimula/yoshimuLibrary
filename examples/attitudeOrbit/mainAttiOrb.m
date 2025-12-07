@@ -26,11 +26,11 @@ ELP = readELP();
 
 % read IGRF coeficients
 % coefsという構造体に係数が保存されている
-load('igrfcoefs.mat', 'coefs'); %[output:47c5e89f]
+load('igrfcoefs.mat', 'coefs');
 
 %[text] ### Atmospheric drag (Jaccia–Bowman 2008)
 % read coefficients for Jaccia–Bowman 2008
-SAT_Const % for JB20089 calculation
+SAT_Const % for JB20089 calculation %[output:999440a2]
 constants % for JB20089 calculation
 [JB.PC, JB.EOPdata, JB.SOLdata, JB.DTCdata] = readJB2008;
 
@@ -143,6 +143,6 @@ toc
 %[control:editfield:972b]
 %   data: {"defaultValue":"[0.1; 0.2; 0.3]","label":"remanent mag","run":"Nothing","valueType":"MATLAB code"}
 %---
-%[output:47c5e89f]
-%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"Error using <a href=\"matlab:matlab.lang.internal.introspective.errorDocCallback('load')\" style=\"font-weight:bold\">load<\/a>\nigrfcoefs.mat is not found in the current folder or on the MATLAB path, but exists in:\n    \/Users\/yyoshimula\/Dropbox\/MATLAB\/attitudeOrbit\n\n<a href = \"matlab:internal.matlab.desktop.commandwindow.executeCommandForUser('cd ''\/Users\/yyoshimula\/Dropbox\/MATLAB\/attitudeOrbit''')\">Change the MATLAB current folder<\/a> or <a href = \"matlab:internal.matlab.desktop.commandwindow.executeCommandForUser('addpath ''\/Users\/yyoshimula\/Dropbox\/MATLAB\/attitudeOrbit''')\">add its folder to the MATLAB path<\/a>."}}
+%[output:999440a2]
+%   data: {"dataType":"error","outputData":{"errorType":"runtime","text":"関数または変数 'SAT_Const' が認識されません。"}}
 %---
