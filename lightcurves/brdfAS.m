@@ -13,22 +13,17 @@
 %[text] where
 %[text] $F = F\_{0} + (1-F\_{0}) (1 - {\\bf{v}}^{T}{\\bf{h}})^{5} \\\\\n$
 %[text] $D({\\bf{h}}) = ({\\bf{n}}^{T}{\\bf{h}})^{n\_u\\cos^{2}{\\phi\_{h}} + n\_{v}\\sin^{2}{\\phi\_{h}}}$
-%[text] ## references 
+%[text] ## references
 %[text] Ashikhmin, Michael, & Shirley, Peter. “An Anisotropic Phong BRDF Model.” Journal of graphics tools, vol. 5, no. 2, 2000, pp. 25-32.
 %[text] ## revisions
 %[text] 20220317  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also srpAS, readSC.
-function [cd, cs, D] = brdfAS(sat, sunB, vB) 
+function [cd, cs, D] = brdfAS(sat, sunB, vB)
 sunB = sunB ./ vecnorm(sunB, 2, 2); %一応 normalize, Mx3
 vB = vB ./ vecnorm(vB, 2, 2);
 
 h = sunB + vB; % Mx3 matrix, bisector vector of sun and observer vectors
 h = h ./ vecnorm(h, 2, 2);
-
-[phiH, thetaH, ~] = cart2sph(h(:,1), h(:,2), h(:,3));
-thetaH = pi/2 - thetaH; % +z軸から測った角度にする
-phiH = phiH'; % row vector, 1xM
-% thetaH = thetaH'; % row vector, 1xM
 
 % sat.normal * sunB'は，faceの数 nFacet x 時間履歴の数 M のmatrixになる
 NS = sat.normal * sunB'; % nFacetxM
@@ -49,7 +44,7 @@ M(infIndex) = 0; % M計算時にmax関数で0割によるinf発生を除去
 
 %[text] when calculate using $\\left(\\bf{n}^{T}\\bf{h}\\right)^{\\frac{n\_{u}(\\bf{h}^{T}\\bf{u}\_{u})^{2} + n\_{v}(\\bf{h}^{T}\\bf{u}\_{v})^{2}}{1-(\\bf{h}^{T}\\bf{n})^{2}}} $
 hu = sat.uu * h'; % nSat x M
-hv = sat.uv * h'; 
+hv = sat.uv * h';
 D = NH.^((nu .* hu.^2 + nv .* hv.^2) ./ (1 - NH.^2));
 D(isnan(D))= 1;
 

@@ -45,6 +45,9 @@ Desktop.ini
 # VSCode settings (optional, if you use VSCode)
 .vscode/
 
+# reference
+000refs/
+
 # Jupyter Notebook (if used for documentation)
 .ipynb_checkpoints/
 

@@ -1,12 +1,12 @@
 %[text] # calculating light curves
 %[text] light curves for the object defined with sat
 %[text] `sat`: satellite configuration read with `readSC`
-%[text] `scalar:` specify the definition of the quaternion 
+%[text] `scalar:` specify the definition of the quaternion
 %[text]  `scalar == 0`
 %[text]  ${\\bf q} = \[q\_0,q\_1,q\_2,q\_3\]^T=\[\\cos(\\theta/2), {\\bf e}^T\\sin(\\theta/2)\]^T$
 %[text]  `scalar == 4`
 %[text]  ${\\bf q} = \[q\_1,q\_2,q\_3, q\_4\]^T=\[{\\bf e}^T\\sin(\\theta/2), \\cos(\\theta/2)\]^T$
-%[text] `q`: quaternions, nx4 vector 
+%[text] `q`: quaternions, nx4 vector
 %[text] `satPos:`  satellite position vector@inertial frame, m, nx3 matrix
 %[text] `obsPos:` observer position vector@inertial frame, m, nx3 matrix
 %[text] `sunPos: sun` position vector@inertial frame, m, nx3 matrix
@@ -19,24 +19,24 @@
 %[text] `m`: relative magnitude of light curves w.r.t. Sun
 %[text] $f\_{\\rm obs}\n$
 %[text] ## note
-%[text] 
-%[text] ## references 
-%[text] 
+%[text]
+%[text] ## references
+%[text]
 %[text] ## revisions
 %[text] 20200430  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also readSC, lcSimple, lcAS, lcCT, orbitConst.
 function [m, fObs] = lc(sat, scalar, q, satPos, obsPos, sunPos, nu, options)
-% arguments
-%     sat
-%     scalar (1,1) {mustBeMember(scalar, [0, 4])}
-%     q
-%     satPos
-%     obsPos
-%     sunPos
-%     nu
-%     options.BRDF string {mustBeMember(options.BRDF, ["simple", "CT", "AS"])} = "simple"
-%     options.mex string {mustBeMember(options.mex, ["on", "off"])} = "off"
-% end
+if nargin < 8
+    options.BRDF = 'simple';
+    options.mex = 'off';
+elseif ~isfield(options, 'BRDF') && ~isfield(options, 'mex')
+    options.BRDF = 'simple';
+    options.mex = 'off';
+elseif ~isfield(options, 'BRDF')
+    options.BRDF = 'simple';
+elseif ~isfield(options, 'mex')
+    options.mex = 'off';
+end
 
 %[text] ## Sun and observer relative position
 sunRelDir = sunPos - satPos; % m, relative direction from sat to sun@ECI
@@ -75,8 +75,8 @@ obs2Sun = normRow(sunPos - obsPos); % relative directional vector from obs to Su
 obs2Sat = normRow(satPos - obsPos); % relative directional vector from obs to sat
 
 fObs = fObs .* nu; % consider umbra, penumbra
-% fObs = fObs .* (dot(obs2Sun, normRow(obsPos),2) <= 0.0) % when observer cannot see Sun
-% fObs = fObs .* (dot(obs2Sat, normRow(obsPos),2) > 0.0); % when observer can see Satellite
+fObs = fObs .* (dot(obs2Sun, normRow(obsPos),2) <= 0.0); % when observer cannot see Sun
+fObs = fObs .* (dot(obs2Sat, normRow(obsPos),2) >= 0.0); % when observer can see target
 
 m = -26.7 - 2.5 * log10(fObs ./ vecnorm(obsRelDir,2,2).^2);
 
