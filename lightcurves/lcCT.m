@@ -77,8 +77,8 @@ G = min(1, temp1);
 G = min(G, temp2);
 
 temp1 = (g - VH).^2 ./ 2 ./ (g + VH).^2;
-temp2 = (1 + (VH .* (g + VH) - 1).^2 ./ (VH * (g - VH) + 1).^2);
-F = temp1 * temp2; % nFacet x M
+temp2 = (1 + (VH .* (g + VH) - 1).^2 ./ (VH .* (g - VH) + 1).^2);
+F = temp1 .* temp2; % nFacet x M
 
 cs = D .* G .* F ./ NS ./ NV ./ 4;
 
