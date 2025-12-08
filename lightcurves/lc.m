@@ -61,9 +61,9 @@ elseif strcmp(options.BRDF, 'AS')
     end
 elseif strcmp(options.BRDF, 'CT') % Cook–Torrance model
     if strcmp(options.mex, 'on')
-        sat = lcCT_mex(sat, sunB, obsB);
+        [sat, ~, ~, ~] = lcCT_mex(sat, sunB, obsB);
     else
-        sat = lcCT(sat, sunB, obsB);
+        [sat, ~, ~, ~] = lcCT(sat, sunB, obsB);
     end
 else
     error('unavailable BRDF model')
