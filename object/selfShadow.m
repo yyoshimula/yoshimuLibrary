@@ -3,12 +3,12 @@
 %[text] `sat`: satellite configuration
 %[text] `sun`: Sun directional vector w.r.t. body-fixed frame, 1x3
 %[text] ## note
-%[text] 全componentのメッシュに対して処理を行う 
+%[text] 全componentのメッシュに対して処理を行う
 %[text] 影の処理関数($j\n$番目のfacetが影を作る方，$i$番目のfacetは影が写る方)
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] ## revisions
-%[text] 20241125 と四角facetに対応 y.yoshimura
+%[text] 20241125 四角facetに対応 y.yoshimura
 %[text] 20200811  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also selfShadow.
 function sat = selfShadow(sat, sun) %#codegen
@@ -37,7 +37,7 @@ parfor i = 1:length(faces)
             vertJ = [sat.vertices(faces(j,1),:)
                 sat.vertices(faces(j,2),:)
                 sat.vertices(faces(j,3),:)]; % 3x3, coordinate of j-th facet
-            flag = calcSelfShadow(sun', normal(j,:), vertJ, posI);
+            flag = calcRayIntersect(sun', normal(j,:), vertJ, posI);
             tmpFlagI = tmpFlagI * flag; % OR演算っぽく
 
             % 四角facetでは2回計算
@@ -45,7 +45,7 @@ parfor i = 1:length(faces)
                 vertJ = [sat.vertices(faces(j,3),:)
                     sat.vertices(faces(j,4),:)
                     sat.vertices(faces(j,1),:)]; % 3x3, coordinate of j-th facet
-                flag = calcSelfShadow(sun', normal(j,:), vertJ, posI);
+                flag = calcRayIntersect(sun', normal(j,:), vertJ, posI);
                 tmpFlagI = tmpFlagI * flag; % OR演算っぽく
             end
 

@@ -1,7 +1,7 @@
-%[text] # calculating self-shadowing of spacecraft
+%[text] # calculating ray triangle intersection
 %[text] 読み込んだ衛星形状に対してself-shadowingを計算
 %[text] ## note
-%[text] calculate shadow if j-th face make the shadow on the i-th face 
+%[text] calculate shadow if j-th face make the shadow on the i-th face
 %[text] $j\n$番目のfacetが$i\n$番目のfacetに影を作るかを判定
 %[text] `satName` : satellite object file name, .obj file
 %[text] `sat`: 構造体satに各種データを格納
@@ -20,7 +20,7 @@
 %[text] 20241125 added arguments y.yoshimura
 %[text] 20200811  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also showSC
-function flag = calcSelfShadow(sun, nJ, vertJ, vertI) %#codegen
+function flag = calcRayIntersect(sun, nJ, vertJ, vertI) %#codegen
 % arguments
 %     sun (1,3) {mustBeNumeric}
 %     nJ (:,3) {mustBeNumeric}
@@ -47,15 +47,15 @@ if (inner > 0.0)
 
     %v2 = 3x3 vector 3点を順番につなぐベクトル
     v2 = [vertJ(2,:) - vertJ(1,:)
-          vertJ(3,:) - vertJ(2,:)
-          vertJ(1,:) - vertJ(3,:)]; % 3x3 matrix
+        vertJ(3,:) - vertJ(2,:)
+        vertJ(1,:) - vertJ(3,:)]; % 3x3 matrix
 
     % 外積v2×v1（= crossV）を求める //
     crossV = cross(v2, v1, 2); % 3x3
     D = [crossV(1,:) * crossV(2,:)'
         crossV(1,:) * crossV(3,:)'];
 
-    
+
     if(D(1) >= 0.0 && D(2) >= 0.0)
         flag = 0;
     else
