@@ -76,3 +76,86 @@ mtlファイルがある場合は，Ca, Cd, Csが自動的に読み込まれま�
 ### 衛星モデル作成
 
 [objファイル作成・読み込み](https://www.notion.so/obj-22b0a48416664f1081331654b3981a8a?pvs=21) 　を参照．
+
+---
+
+# English Description
+
+# abst.
+
+Functions for handling satellite shape models and their division into an arbitrary number of facets. It is assumed that 3D models are created using tools like Blender or Fusion, and loaded as exported `obj` files.
+
+If an mtl file exists, Ca, Cd, and Cs are automatically loaded.
+In the following case, `Ca = 0.960784, Cd = 0.960784, Cs = 0.964706`:
+> newmtl Aluminum_-_Polished
+> Kd 0.960784 0.960784 0.964706
+
+# note
+
+The structure configuration of `sat = readSC('satFileName.obj')` (e.g., sat.normal, sat.faces) is as follows:
+
+Let `N` be the number of facets. Note that units are basically ${\rm m, kg, kgm^{2}}$. When mexing functions that use `sat`, such as `selfShadow.mlx`, the order and size of fields are important (randomly swapping or deleting them will prevent mexing).
+
+| index | fields | size | Description | Unit |
+| --- | --- | --- | --- | --- |
+| 1 | vertices | (> N) x 3 | Vertex coordinates. Thus, more than the number of faces. <br>(e.g., if facets are triangles, 3 vertices are connected to form a face.) | ${\rm m}$ |
+| 2 | normal | N x 3 | Normal vector of the facet (outward). Unit vector. | - |
+| 3 | faces | N x 3 or N x 4 | Indices of `vertices` forming the facet. e.g., 1, 3, 5 means connecting the 1st, 3rd, and 5th vertices to form a face. | - |
+| 4 | area | N x 1 | Area of the facet | ${\rm m^{2}}$ |
+| 5 | pos | N x 3 | Geometric center position vector of the facet | ${\rm m}$ |
+| 6 | uu | N x 3 | Anisotropic basis vector when using Ashikhmin–Shirley model etc. | - |
+| 7 | uv | N x 3 | Anisotropic basis vector when using Ashikhmin–Shirley model etc. | - |
+| 8 | qlb | N x 4 | Quaternion from body-fixed frame to local frame with anisotropic basis vectors as x, y axes | - |
+| 9 | F0 | N x 1 | Fresnel reflection at normal incidence | - |
+| 10 | kappa | N x 1 | Thermal diffusion coefficient for SRP | - |
+| 11 | Ca | N x 1 | Absorption coefficient (automatically loaded if mtl file exists) | - |
+| 12 | Cd | N x 1 | Diffuse reflection coefficient (automatically loaded if mtl file exists) | - |
+| 13 | Cs | N x 1 | Specular reflection coefficient (automatically loaded if mtl file exists) | - |
+| 14 | nu | N x 1 | Anisotropic parameter for Ashikhmin–Shirley model | - |
+| 15 | nv | N x 1 | Anisotropic parameter for Ashikhmin–Shirley model | - |
+| 16 | mCT | N x 1 | Roughness parameter for Cook-Torrance model | - |
+| 17 | fObs | N x 1 | for light curve | - |
+| 18 | MOI | 3 x 3 | Inertia tensor | ${\rm kgm^{2}}$ |
+| 19 | m | 1 | Mass | ${\rm kg}$ |
+| 20 | sunlitFlag | N x 1 | Flag for self-shadowing. 0 means shadowed by self-shadowing. | - |
+| 21 | force | N x 3 | External force in body-fixed frame. e.g., SRP | N |
+| 22 | torque | N x 3 | External torque in body-fixed frame. e.g., SRP torque | Nm |
+
+
+# Functions
+
+The overview of each function is as follows:
+
+- `readSC.m`
+  Main function to load `obj` files and create the `sat` structure.
+  It calculates geometric information such as area and normal vectors, and also sets physical parameters (reflectivity, etc.).
+
+- `selfShadow.m`
+  Determines self-shadowing for each facet of the satellite.
+  Takes the sun direction vector as input, identifies faces occluded by others, and sets flags.
+
+- `showSC.m`
+  Displays the loaded satellite model (`sat` structure) in a 3D plot.
+  Useful for shape verification, including color-coding of faces and shadow visualization (reflecting `shadowFlag`).
+
+- `calcRayIntersect.m`
+  Calculation function for ray-triangle intersection testing.
+  Used internally by `selfShadow`, implementing a fast intersection algorithm.
+
+- `calcAreaObj.m`
+  Calculates the area and geometric center (centroid) of each facet.
+  Called internally by `readSC` to derive basic quantities required for physical calculations such as SRP and aerodynamics.
+
+- `calcLocalFrame.m`
+  Calculates the local coordinate system (basis vectors on the facet, etc.) for each face.
+  Required when using anisotropic reflection models (such as Ashikhmin-Shirley).
+
+- `drawEarth.m`
+  Draws the Earth in a 3D plot.
+  Maps a texture image (`earth.jpg`) and can display rotation according to GMST.
+
+# ref.
+
+### Satellite Model Creation
+
+Refer to [Creating and Loading obj files](https://www.notion.so/obj-22b0a48416664f1081331654b3981a8a?pvs=21).
