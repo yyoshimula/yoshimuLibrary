@@ -1,4 +1,4 @@
-%[text] # Reading .obj file 
+%[text] # Reading .obj file
 %[text] wavefront obj fileの読み込み
 %[text] `sat`: 構造体satに各種データを格納
 %[text] `sat.vertices`: vertex position, (x, y, z), m, Nx3 matrix, 面を構成する点の座標
@@ -15,7 +15,7 @@
 %[text] This function parses wavefront object data It reads the mesh vertices, texture coordinates, normal coordinates and face definitions(grouped by number of vertices) in a .obj file
 %[text] INPUT: fname - wavefront object file full path
 %[text] OUTPUT: obj.v - mesh vertices : obj.vt - texture coordinates : obj.vn - normal coordinates : obj.f - face definition assuming faces are made of of 3 vertices
-%[text] Bernard Abayowa, Tec^Edge 11/8/07 
+%[text] Bernard Abayowa, Tec^Edge 11/8/07
 %[text] ## revisions
 %[text] 20240729  modified by Yasuhiro Yoshimura
 %[text] See also showSC, readSC.
@@ -28,6 +28,11 @@ vn = [];
 f.v = [];
 f.vt = [];
 f.vn = [];
+obj.mtlFileName = '';
+obj.materialNames = {};
+obj.materialIndices = [];
+currentMaterialIndex = 1; % Default to 1 (which will map to default material)
+
 
 fid = fopen(fname);
 
@@ -41,6 +46,16 @@ while 1
     ln = sscanf(tline,'%s',1); % line type
     %disp(ln)
     switch ln
+        case 'mtllib' % material library
+            obj.mtlFileName = sscanf(tline(8:end),'%s');
+
+        case 'usemtl' % use material
+            matName = sscanf(tline(8:end),'%s');
+            if ~ismember(matName, obj.materialNames)
+                obj.materialNames{end+1} = matName;
+            end
+            [~, currentMaterialIndex] = ismember(matName, obj.materialNames);
+
         case 'v'   % mesh vertexs
             v = [v
                 sscanf(tline(2:end),'%f')'];
@@ -85,8 +100,13 @@ while 1
                 fvt = [fvt, NaN(1,length_NaN_vector)];
                 fvn = [fvn, NaN(1,length_NaN_vector)];
             end
-            
+
             f.v = [f.v; fv]; f.vt = [f.vt; fvt]; f.vn = [f.vn; fvn];
+
+            % Assign current material index to this face
+            obj.materialIndices = [obj.materialIndices; currentMaterialIndex];
+
+
     end
 end
 fclose(fid);
@@ -97,6 +117,8 @@ normalVec = vn(f.vn(:,1),:);
 obj.vertices = v; % coordinates of vertices
 obj.normal = normalVec; % normal vector of faces
 obj.faces = f.v; % face indices
+obj.materialIndices = obj.materialIndices;
+
 
 % obj.vt = vt; % for texture
 

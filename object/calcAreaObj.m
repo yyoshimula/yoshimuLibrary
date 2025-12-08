@@ -24,10 +24,9 @@ area = zeros(size(sat.faces, 1), 1);
 pos = zeros(size(sat.faces, 1), 3);
 
 for i = 1:size(sat.faces, 1)
-
-    if size(sat.faces(i,:), 2) == 3 | isnan(sat.faces(i,4))
+    if size(sat.faces(i,:), 2) == 3 | isnan(sat.faces(i,4)) % 3角メッシュ
         nPolygon = 3;
-    elseif size(sat.faces(i,:), 2) == ~isnan(sat.faces(i,4))
+    elseif size(sat.faces(i,:), 2) == 4 | ~isnan(sat.faces(i,4)) % 4角メッシュ
         nPolygon = 4;
     end
 
