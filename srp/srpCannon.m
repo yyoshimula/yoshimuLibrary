@@ -9,22 +9,27 @@
 %[text] `aSRP`: SRP acceleration w.r.t. inertial frame, $\\rm m/s^2$, nx3 matrix
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] Montenbruck, Oliver, & Eberhard Gill. Satellite Orbits. Springer Science & Business Media, 2012., p79
 %[text] ## revisions
 %[text] 20221010  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also readSC, orbitConst.
 function aSRP = srpCannon(satAm, sunRel, d, const, Cr)
-arguments (Input)
-    satAm
-    sunRel (:,3) {mustBeNumeric}
-    d (:,1) {mustBeNumeric}
-    const
-    Cr (1,1) {mustBeNumeric} = 1.2
+% arguments (Input)
+%     satAm
+%     sunRel (:,3) {mustBeNumeric}
+%     d (:,1) {mustBeNumeric}
+%     const
+%     Cr (1,1) {mustBeNumeric} = 1.2
+% end
+% arguments (Output)
+%     aSRP (:,3)
+% end
+
+if nargin < 5
+    Cr = 1.2;
 end
-arguments (Output)
-    aSRP (:,3)
-end
+
 %[text] ## parameters
 dAU = km2au(d ./ 10^3, const); % AU
 
