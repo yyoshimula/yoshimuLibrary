@@ -31,6 +31,14 @@ function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
 %     srpCdOut (1,3)
 %     srpCsOut (1,3)
 % end
+if nargin < 5
+    NDF = 'Beckmann';
+end
+
+if nargin < 6
+    nMC = 10^4;
+end
+
 %[text] ## parameters
 dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
@@ -39,7 +47,7 @@ coeff = -S0 / c / dAU^2;
 
 sunB = sunB ./ norm(sunB);
 %[text] ## diffuse (analytic)
-srpCd = 2 / 3 * sat.rho .* sat.normal; % nx3
+srpCd = 2 / 3 * sat.Cd .* sat.normal; % nx3
 %[text] ## speuclar (numerical)
 %[text] #### transform to local frame
 %[text] 法線ベクトルが${\\bf n} =\[0, 0, 1\]^T\n$になるlocal frameへ変換して計算する
