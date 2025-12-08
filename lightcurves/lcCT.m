@@ -39,6 +39,7 @@ switch nargin %入力引数の数で場合わけ
         NDF = 'Beckmann';
 end
 
+M = size(sunB, 1);
 sunB = sunB ./ vecnorm(sunB, 2, 2); %一応 normalize, Mx3
 obsB = obsB ./ vecnorm(obsB, 2, 2);
 h = sunB + obsB; % Mx3 matrix, bisector vector of sun and observer vectors
