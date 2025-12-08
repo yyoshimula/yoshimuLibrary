@@ -39,3 +39,47 @@
   基本的なSRP計算のデモンストレーションスクリプトです．
 - **`verifyImpSampling.m`**
   各モデル（CT, AS）におけるモンテカルロ積分の収束性や，重要サンプリング（Importance Sampling）と一様分布サンプリング（Uniform Sampling）の比較検証を行うためのスクリプトです．
+
+---
+
+# Solar Radiation Pressure (SRP) Calculation Functions
+
+A collection of functions for calculating forces and torques due to Solar Radiation Pressure (SRP) on a satellite.
+Using a satellite model (`sat` structure) loaded in the `object` folder, it performs physical calculations based on various BRDF (Bidirectional Reflectance Distribution Function) models.
+
+## Functions
+
+### Core SRP Models
+
+- **`srpSimple.m`**
+  SRP calculation function using a simplified model combining Lambertian diffuse reflection and Perfect Specular reflection.
+  - Analytical calculation is possible and fast.
+  - Inputs: Satellite model `sat`, Sun direction vector `sunB`, distance `d`, constant structure `const`
+  - Outputs: Force due to SRP `sat.force`, torque `sat.torque`
+
+- **`srpAS.m`**
+  SRP calculation function using the Ashikhmin-Shirley model. It can account for anisotropic reflection.
+  - The diffuse reflection component uses an analytical solution, while the specular reflection component is determined numerically by Monte Carlo integration using Importance Sampling.
+  - The number of samples can be specified with the `nMC` argument.
+
+- **`srpCT.m`**
+  SRP calculation function using the Cook-Torrance model. It allows for calculation considering the roughness of microfacets.
+  - Uses Monte Carlo integration with Importance Sampling.
+  - 'Beckmann' (default) or 'Gauss' can be selected as the Normal Distribution Function (NDF).
+
+- **`srpCannon.m`**
+  Simplified SRP acceleration calculation function using the Cannonball model.
+  - Calculates acceleration based on Area-to-Mass ratio and reflection coefficient (Cr) without considering detailed shape.
+
+### Variants (Sampling Methods)
+
+- **`srpCTuni.m`**, **`srpASuni.m`**
+  Old implementations or comparison functions for Cook-Torrance and Ashikhmin-Shirley models, respectively, using sampling from a Uniform distribution.
+  - Convergence is slower compared to Importance Sampling, so `srpCT.m` and `srpAS.m` are generally recommended.
+
+### Examples & Verification
+
+- **`exampleSRP.m`**
+  A demonstration script for basic SRP calculation.
+- **`verifyImpSampling.m`**
+  A script for verifying the convergence of Monte Carlo integration for each model (CT, AS) and comparing Importance Sampling with Uniform Sampling.
