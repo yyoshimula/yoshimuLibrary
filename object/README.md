@@ -30,12 +30,13 @@ mtlファイルがある場合は，Ca, Cd, Csが自動的に読み込まれま�
 | 13 | Cs | N x 1 | 鏡面反射率（mtlファイルがある場合は自動的に読み込まれる） | - |
 | 14 | nu | N x 1 | Ashikhmin–Shirleyモデルの異方性パラメータ | - |
 | 15 | nv | N x 1 | Ashikhmin–Shirleyモデルの異方性パラメータ | - |
-| 16 | fObs | N x 1 | for light curve | - |
-| 17 | MOI | 3 x 3 | 慣性テンソル | ${\rm kgm^{2}}$ |
-| 18 | m | 1 | 質量 | ${\rm kg}$ |
-| 19 | sunlitFlag | N x 1 | self-shadowingのflag．0の時self-shadowingで影になっている | - |
-| 20 | force | N x 3 | 機体固定座標系に対する外力．e.g., SRP | N |
-| 21 | torque | N x 3 | 機体固定座標系に対する外力トルク．e.g., SRP torque | Nm |
+| 16 | mCT | N x 1 | Cook-Torranceモデルのroughnessパラメータ | - |
+| 17 | fObs | N x 1 | for light curve | - |
+| 18 | MOI | 3 x 3 | 慣性テンソル | ${\rm kgm^{2}}$ |
+| 19 | m | 1 | 質量 | ${\rm kg}$ |
+| 20 | sunlitFlag | N x 1 | self-shadowingのflag．0の時self-shadowingで影になっている | - |
+| 21 | force | N x 3 | 機体固定座標系に対する外力．e.g., SRP | N |
+| 22 | torque | N x 3 | 機体固定座標系に対する外力トルク．e.g., SRP torque | Nm |
 
 
 # Functions

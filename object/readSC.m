@@ -101,8 +101,9 @@ if isfield(sat, 'mtlFileName') && ~isempty(sat.mtlFileName)
     end
 end
 
-sat.nu = ones(N,1) .* 800; % default value
-sat.nv = ones(N,1) .* 800; % default value
+sat.nu = ones(N,1) .* 800; % default value for Ashikhmin-Shirley model
+sat.nv = ones(N,1) .* 800; % default value for Ashikhmin-Shirley model
+sat.mCT = ones(N,1) .* 0.05; % default value for Cook-Torrance model
 sat.fObs = zeros(N,1);
 
 % physical (default values)
