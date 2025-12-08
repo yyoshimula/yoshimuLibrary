@@ -18,29 +18,35 @@
 %[text] where
 %[text] $F = F\_{0} + (1-F\_{0}) (1 - {\\bf{v}}^{T}{\\bf{h}})^{5} \\\\\n$
 %[text] $D({\\bf{h}}) = ({\\bf{n}}^{T}{\\bf{h}})^{n\_u\\cos^{2}{\\phi\_{h}} + n\_{v}\\sin^{2}{\\phi\_{h}}}$
-%[text] ## references 
+%[text] ## references
 %[text] Ashikhmin, Michael, & Shirley, Peter. “An Anisotropic Phong BRDF Model.” Journal of graphics tools, vol. 5, no. 2, 2000, pp. 25-32.
 %[text] See also srpLps, readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpASuni(sat, sunB, d, const, nMC)
-arguments (Input)
-    sat
-    sunB (:,3) {mustBeNumeric}
-    d (:,1) {mustBeNumeric}
-    const
-    nMC = 10^5
+% arguments (Input)
+%     sat
+%     sunB (:,3) {mustBeNumeric}
+%     d (:,1) {mustBeNumeric}
+%     const
+%     nMC = 10^5
+% end
+% arguments (Output)
+%     sat
+%     srpCdOut (1,3)
+%     srpCsOut (1,3)
+% end
+
+if nargin < 5
+    nMC = 10^5;
 end
-arguments (Output)
-    sat
-    srpCdOut (1,3)
-    srpCsOut (1,3)
-end
+
 %[text] ## parameters
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;
 
 sunB = sunB ./ norm(sunB); % normalize, 1x3
+NS = sat.normal * sunB'; % nFacetx1
 
 %% condition
 % nFacet = size(sat.normal,1);
@@ -56,18 +62,19 @@ h = sunB + v; % bisector
 h = h ./ vecnorm(h,2,2); % nMCx3
 
 NH = sat.normal * h'; % nFacet x nMC
-NS = sat.normal * sunB'; % nFacetx1
 VH = dot(v, h, 2)'; % 1xnMC
-NV = sat.normal * v'; % nFacet x nMC, 列方向に各reference vector, vの値
+NV = sat.normal * v'; % nFacet x nMC
+
 %[text] ## diffuse (analytic)
-cd1 = 28/23 .* sat.rho ./ pi .* (1 - sat.F0) .* (1 - (1 - NS / 2).^5);  %nFacetx1
+cd1 = 28/23 .* sat.Cd ./ pi .* (1 - sat.F0) .* (1 - (1 - NS / 2).^5);  %nFacetx1
 srpCd = [0, 0, sum(cd1,1)* 1573/2688 * pi];
 %[text] ## speuclar (numerical)
 %[text] $c\_{s} = \\frac{\\sqrt{\\left(n\_{u}+1\\right)\\left(n\_{v}+1\\right)}}{8\\pi} \\frac{F}{({\\bf{v}}^{T}{\\bf{h}}){\\rm max}({\\bf{n}}^{T}{\\bf{s}},{\\bf{n}}^{T}{\\bf{v}})} D({\\bf{h}})$
 %[text] $F = F\_{0} + (1-F\_{0}) (1 - {\\bf{v}}^{T}{\\bf{h}})^{5} \\\\\n$
 %[text] $D({\\bf{h}}) = ({\\bf{n}}^{T}{\\bf{h}})^{n\_u\\cos^{2}{\\phi\_{h}} + n\_{v}\\sin^{2}{\\phi\_{h}}} = ({\\bf n^T h})^{\\frac{n\_u(h^Tu\_u)^2+n\_v(h^T u\_v)^2}{1-(h^Tn)^2}}$
+
 F = sat.F0 + (1 - sat.F0) .* (1 - VH).^5; % nFacet x nMC
-k1 = sqrt((sat.nu+1) .* (sat.nv+1)) / 8 / pi; % nFacet x 1
+k1 = sqrt((sat.nu + 1) .* (sat.nv + 1)) / 8 / pi; % nFacet x 1
 M = 1 ./ VH ./ max(NS, NV); % nFacet x nMC
 M(isinf(M)) = 0; % Inf項を消す
 
