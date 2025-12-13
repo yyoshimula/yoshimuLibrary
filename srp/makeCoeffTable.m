@@ -70,11 +70,11 @@ end
 %% gradient of correction parameters
 nTheta = size(config.thetaICases, 2);
 for i = 1:size(config.mCases, 1)
-    gradDeltaS(i,2:nTheta-1) = (deltaS(i,3:nTheta) - deltaS(i,1:nTheta-2)) / deg2rad(config.dTheta); % 中心差分
-    gradDeltaN(i,2:nTheta-1) = (deltaN(i,3:nTheta) - deltaN(i,1:nTheta-2)) / deg2rad(config.dTheta); % 中心差分
+    gradDeltaS(i,2:nTheta-1) = (deltaS(i,3:nTheta) - deltaS(i,1:nTheta-2)) / (2 * deg2rad(config.dTheta)); % 中心差分
+    gradDeltaN(i,2:nTheta-1) = (deltaN(i,3:nTheta) - deltaN(i,1:nTheta-2)) / (2 * deg2rad(config.dTheta)); % 中心差分
 
-    gradDeltaS(i,1) = (-3*deltaS(i,1) + 4 * deltaS(i,2) - deltaS(i,3)) / deg2rad(config.dTheta); % 2次精度の片側差分
-    gradDeltaN(i,1) = (-3*deltaN(i,1) + 4 * deltaN(i,2) - deltaN(i,3)) / deg2rad(config.dTheta); % 2次精度の片側差分
+    gradDeltaS(i,1) = (-3*deltaS(i,1) + 4 * deltaS(i,2) - deltaS(i,3)) / (1 * deg2rad(config.dTheta)); % 2次精度の片側差分
+    gradDeltaN(i,1) = (-3*deltaN(i,1) + 4 * deltaN(i,2) - deltaN(i,3)) / (1 * deg2rad(config.dTheta)); % 2次精度の片側差分
 
     gradDeltaS(i,nTheta) = (3 * deltaS(i,nTheta) - 4 * deltaS(i,nTheta-1) + deltaS(i,nTheta-2)) / deg2rad(config.dTheta); % 2次精度の片側差分
     gradDeltaN(i,nTheta) = (3 * deltaN(i,nTheta) - 4 * deltaN(i,nTheta-1) + deltaN(i,nTheta-2)) / deg2rad(config.dTheta); % 2次精度の片側差分

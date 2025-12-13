@@ -16,11 +16,13 @@ function M = ctM(sat, v, sunB)
 
 n = sat.normal; % normal vectors, nx3 matrix
 
-NS = sat.normal * sunB';
-NV = sat.normal * v';
-% bisector vector, 3x1 vector
+% NS = sat.normal * sunB';
+% NV = sat.normal * v';
+
+% bisector vector
 h = v + sunB;
 h = h ./ norm(h);
+
 %[text] ## specular
 nest = (1 + sqrt(sat.F0)) ./ (1 - sqrt(sat.F0));
 g = sqrt(nest.^2 + dot(v, h).^2 - 1); % nx1
