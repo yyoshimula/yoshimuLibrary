@@ -18,14 +18,13 @@
 %[text] ## references
 %[text] NA
 %[text] See also srpLps, readSC, orbitConst.
-function [sat, srpCdOut, srpCsOut] = srpCTinterp(sat, sunB, d, const, correctionPara, mCase)
+function [sat, srpCdOut, srpCsOut] = srpCTinterp(sat, sunB, d, const, correctionPara)
 % arguments (Input)
 %     sat
 %     sunB (:,3) {mustBeNumeric}
 %     d (:,1) {mustBeNumeric}
 %     const
-%     NDF = 'Beckmann' % 現状Beckamnn distributionのみ対応
-%     nMC = 10^3;
+%     correctionPara
 % end
 % arguments (Output)
 %     sat
@@ -41,26 +40,46 @@ coeff = -S0 / c / dAU^2;
 sunB = sunB ./ norm(sunB);
 
 %[text] ## diffuse (analytic) and speuclar (corrected)
-thetaI = acos(sat.normal * sunB'); % nFacet x 1
-fSRP = (1 - deltaS(mCase,thetaI) * sat.Cs) .* sunB + (2/3*sat.Cd + 2 * NS * deltaN(i,j) * sat.Cs) .* sat.normal;
-fCorrected(j,:,i) = coeff * fCorrected(j,:,i);
-%[text] ## total SRP
-sunlitFlag = (NS > 0); % nFacet x 1 matrix, 1: sunlit, 0: shade
-tmp = (sunB + srpCd + srpCs);
-sat.force = sunlitFlag .* coeff .* sat.area .* NS .* tmp; % nx3 matrix
-sat.torque = cross(sat.pos, sat.force); % nx3 matrix
-%[text] ## for output variables
-%[text] diffuse part of SRP and specular part of SRP
-% Calculate the contribution of each facet to the solar radiation pressure coefficient
-tmp = coeff .* sat.area .* NS .* sunlitFlag .* srpCd; % nFacet x 3
-% Sum contributions across facets to get total for srpCd
-srpCdOut = sum(tmp,1); % 1x3
+NS = sat.normal * sunB'; % nFacet x 1
+thetaI = acos(NS); % nFacet x 1, clamped
 
-% Calculate the contribution of each facet to the solar radiation pressure coefficient for srpCs
-tmp = coeff .* sat.area .* NS .* sunlitFlag .* srpCs;
-% Sum contributions across facets to get total for srpCs
-srpCsOut = sum(tmp,1);
+% Interpolation
+deltaS = interp2(correctionPara.thetaIspan, correctionPara.mSpan, correctionPara.deltaS, thetaI, sat.mCT, 'linear', 1); % extrapolated values are 1 (standard) or clamp?
+deltaN = interp2(correctionPara.thetaIspan, correctionPara.mSpan, correctionPara.deltaN, thetaI, sat.mCT, 'linear', 1);
+
+% Fix NaN issues if thetaI or mCT are out of range (though interp2 should handle with extrapolation or NaN)
+% Use spline or pchip? Linear is requested.
+% If out of range, what to do? 'spline' might be better or closest.
+% For now 'linear' is fine. Using '1' as extrapolation value might be risky if deltaS/N are far from 1.
+% But deltaS/N -> 1 as m->0? No, deltaS/N are corrections.
+% Let's use nearest or keep NaNs and fix them?
+% Let's stick to default 'linear' (returns NaN) and fill? Or just linear with extrapolation?
+
+% Force calculation (per area unit, scaled by coeff)
+% Note: sunB is 1x3, others are Nx1. Broadcasting needed.
+fCorrected = (1 - deltaS .* sat.Cs) .* sunB + (2/3.*sat.Cd + 2 .* NS .* deltaN .* sat.Cs) .* sat.normal;
+
+%[text] ## total SRP
+sunlitFlag = double(NS > 0); % nFacet x 1 matrix, 1: sunlit, 0: shade
+sat.force = sunlitFlag .* coeff .* sat.area .* NS .* fCorrected; % nx3 matrix
+sat.torque = cross(sat.pos, sat.force); % nx3 matrix
+
+%[text] ## for output variables
+% Total SRP force
+srpTotal = sum(sat.force, 1);
+
+% Separation (Approximate)
+% Diffuse part (term with Cd)
+fDiffuse = sunlitFlag .* coeff .* sat.area .* NS .* ((2/3.*sat.Cd) .* sat.normal);
+srpCdOut = sum(fDiffuse, 1);
+
+srpImpinged = sunlitFlag .* coeff .* sat.area .* NS .* sunB;
+
+% Specular part (rest)
+srpCsOut = srpTotal - srpCdOut - srpImpinged;
+
 end
+
 
 %[appendix]{"version":"1.0"}
 %---
