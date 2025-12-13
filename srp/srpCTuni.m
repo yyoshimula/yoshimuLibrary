@@ -12,27 +12,35 @@
 %[text] `srpCsOut`: specular part of SRP
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] ## revisions
 %[text] 20220201  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also srpLps, readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCTuni(sat, sunB, d, const, NDF, nMC)
-arguments (Input)
-    sat
-    sunB (:,3) {mustBeNumeric}
-    d (:,1) {mustBeNumeric}
-    const
-    NDF = 'Beckmann' % Gaussという文字列を入れた場合Gaussian NDFを使う
+% arguments (Input)
+%     sat
+%     sunB (:,3) {mustBeNumeric}
+%     d (:,1) {mustBeNumeric}
+%     const
+%     NDF = 'Beckmann' % Gaussという文字列を入れた場合Gaussian NDFを使う
+%     nMC = 10^6;
+% end
+% arguments (Output)
+%     sat
+%     srpCdOut (1,3)
+%     srpCsOut (1,3)
+% end
+if nargin < 5
+    NDF = 'Beckmann';
+end
+if nargin < 6
     nMC = 10^6;
 end
-arguments (Output)
-    sat
-    srpCdOut (1,3)
-    srpCsOut (1,3)
-end
+
+
 %[text] ## parameters
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;
@@ -57,7 +65,7 @@ NV = sat.normal * v'; % nFacet x nMC, 列方向にreference vector, vの値
 NS = sat.normal * sunB'; % nFacet x 1
 NH = sat.normal * h'; % nFacet x nMC
 %[text] ## diffuse (analytic)
-srpCd = 2 / 3 * sat.rho .* sat.normal; % nFacet x 3
+srpCd = 2 / 3 * sat.Cd .* sat.normal; % nFacet x 3
 %[text] ## speuclar (numerical)
 if strcmp(NDF, 'Beckmann')
     D = exp(-(tan(thetaH')./sat.mCT).^2); % Beckmann distribution, nFacet x nMC
