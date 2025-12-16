@@ -26,7 +26,7 @@ git lfs pull
 
 ## ディレクトリ構成
 
-- **000refs**: 参考文献・資料。
+<!-- - **000refs**: 参考文献・資料。 -->
 - **50attitudeKnock**: 姿勢制御・推定の演習スクリプト集。
 - **50orbitKnock**: 軌道力学の演習スクリプト集。
 - **SPICE**: NASA SPICE Toolkit 関連スクリプト。
