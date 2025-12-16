@@ -8,19 +8,19 @@
 %[text] `flag`: 1 = true anomaly, 0:= mean anomaly , scalar
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also roe2DeputyOE.
 function roe = oe2roe(chief, deputy, anomalyFlag)
-% arguments   
+% arguments
 %     chief (:,6) {mustBeNumeric}
 %     deputy (:,6) {mustBeNumeric}
 %     anomalyFlag (1,1) {mustBeMember(anomalyFlag, [0, 1])}
 % end
 
-% range: [0, 2pi] for RAAN, w, f/M 
+% range: [0, 2pi] for RAAN, w, f/M
 chief(:,4:6) = mod(chief(:,4:6), 2*pi);
 deputy(:,4:6) = mod(deputy(:,4:6), 2*pi);
 
@@ -59,7 +59,7 @@ deltaEy = eyD - eyC;
 deltaIx = incD - incC;
 deltaIy = (raanD - raanC) .* sin(incC);
 
-deltaLambda = wrapToPi(deltaLambda); % wrap angle ( [-\pi, \pi) に変換 )
+deltaLambda = wrapPi(deltaLambda); % wrap angle ( [-\pi, \pi) に変換 )
 
 roe = [deltaA, deltaLambda, deltaEx, deltaEy, deltaIx, deltaIy];
 end

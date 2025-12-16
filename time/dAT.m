@@ -1,7 +1,7 @@
 %[text] # calculating ΔAT (= TAI - UTC)
 %[text] dATを計算
 %[text] ## note
-%[text] `dAT.mlxを使う前にleapS.mlxを実行し，その結果を引数leapJDに使う．`
+%[text] `dAT.mを使う前にleapS.mを実行し，その結果を引数leapJDに使う．`
 %[text] ## references 
 %[text] Vallado, D. A., & McClain, W. D. (2001). Fundamentals of Astrodynamics and Applications. Springer Science & Business Media. 4th edition.
 %[text] ## revisions
