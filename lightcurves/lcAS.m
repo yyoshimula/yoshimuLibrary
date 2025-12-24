@@ -50,6 +50,7 @@ tmp = cTotal .* sat.area .* NS.* NV;  % nFacetxM matrix
 cd = cd .* (NS > 0) .* (NV > 0);
 cs = cs .* (NS > 0) .* (NV > 0);
 sat.fObs = tmp .* (NS > 0) .* (NV > 0); % nFacetxM matrix
+
 end
 
 %[appendix]{"version":"1.0"}

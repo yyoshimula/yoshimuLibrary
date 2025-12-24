@@ -7,7 +7,7 @@
 %[text] `sunPos`: Sun position w.r.t. J2000.0 frame, km, nx3 matrix
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
@@ -18,6 +18,8 @@ function sunPos = sun(jd, const, earthVSOP)
 %     const
 %     earthVSOP
 % end
+
+jd = jd(:);  % column vector
 
 %[text] ## Sun geocentric longitude, latitude, and distance w.r.t. mean ecliptic and equinox of J2000.0 frame
 [lonS, latS, sunAU] = sunLonLatR(jd, const, earthVSOP);
