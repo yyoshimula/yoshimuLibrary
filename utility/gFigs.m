@@ -16,8 +16,12 @@ function gFigs(nDisp)
 %
 %  2025-07-25  y.yoshimura
 %
-arguments
-    nDisp (1,1) {mustBeInteger,mustBePositive} = 1
+% arguments
+%     nDisp (1,1) {mustBeInteger,mustBePositive} = 1
+% end
+
+if nDisp == 0
+    return
 end
 
 %%--- ディスプレイ情報
