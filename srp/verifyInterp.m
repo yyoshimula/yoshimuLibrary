@@ -1,14 +1,15 @@
-%% not yet completed
+%% verify interpolation of corrected HiFi SRP of Cook–Torrance model
 clc
 clear
 cls
 
 format long
 %% config
+config.gFigs = 0;
 config.phiI = deg2rad(360 * rand());
 config.phiI = deg2rad(-90);
 config.dTheta = 0.1;
-config.thetaIspan = deg2rad(0:config.dTheta:90);
+config.thetaIspan = deg2rad(0:config.dTheta:80);
 
 load('correctionPara.mat')
 
@@ -24,7 +25,8 @@ sat.kappa = 0 .* ones(nFacet, 1);
 sat.Cd = 0.5 .* ones(nFacet, 1);
 sat.Cs = sat.F0;
 sat.Ca = 0.0 .* ones(nFacet, 1);
-sat.mCT = 0.2 .* ones(nFacet, 1);
+
+sat.mCT = 0.05 .* ones(nFacet, 1);
 
 %% constants & parameters
 const = orbitConst;
@@ -69,16 +71,17 @@ figure
 tiledlayout(3,1)
 nexttile
 plot(rad2deg(config.thetaIspan), srpCsCT(:,1), 'b', 'DisplayName', 'True'), hold on
-plot(rad2deg(config.thetaIspan), srpCsApprox(:,1), 'r', 'DisplayName', 'Approximate')
+plot(rad2deg(config.thetaIspan), srpCsApprox(:,1), 'rs', 'DisplayName', 'Approximate')
 legend
 nexttile
 plot(rad2deg(config.thetaIspan), srpCsCT(:,2), 'b', 'DisplayName', 'True'), hold on
-plot(rad2deg(config.thetaIspan), srpCsApprox(:,2), 'r', 'DisplayName', 'Approximate')
+plot(rad2deg(config.thetaIspan), srpCsApprox(:,2), 'rs', 'DisplayName', 'Approximate')
 legend
 nexttile
 plot(rad2deg(config.thetaIspan), srpCsCT(:,3), 'b', 'DisplayName', 'True'), hold on
-plot(rad2deg(config.thetaIspan), srpCsApprox(:,3), 'r', 'DisplayName', 'Approximate')
+plot(rad2deg(config.thetaIspan), srpCsApprox(:,3), 'rs', 'DisplayName', 'Approximate')
 legend
+sgtitle('Specular part, N')
 
 % error
 absErr = abs(srpCsCT - srpCsApprox);
@@ -105,3 +108,5 @@ nexttile
 plot(rad2deg(config.thetaIspan), relErr(:,3), 'DisplayName', 'Relative Error (z)')
 ylim([0 100])
 sgtitle('relative error')
+
+gFigs(config.gFigs)

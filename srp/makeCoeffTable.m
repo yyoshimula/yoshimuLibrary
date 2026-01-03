@@ -1,3 +1,6 @@
+% makeCoeffTable.m
+% make correction parameters for SRP with Cook–Torrance model
+% あるgivenなF0の値に対してTableを作成する
 clc
 clear
 cls
@@ -5,8 +8,8 @@ cls
 format long
 
 %% configuration
-config.gFigs = 1;
-config.mSpan = [0.05, 0.145, 0.275, 0.45];
+config.gFigs = 0;
+config.mSpan = [0.02, 0.05, 0.145, 0.275, 0.45];
 config.dTheta = 3;
 config.thetaIspan = deg2rad(0:config.dTheta:90);
 [config.thetaICases, config.mCases] = meshgrid(config.thetaIspan, config.mSpan); % mSpan x thetaIspan
@@ -64,9 +67,17 @@ for i = 1:size(config.mCases, 1) % for each m
         deltaN(i,j) = (srpCsCT(j,:,i) * sunB' * NS - srpCsCT(j,:,i) * sat.normal') / (2 * sat.Cs * NS^3 - 2 * sat.Cs * NS);
         deltaN(i,j) = deltaN(i,j) / coeff;
 
+        if config.thetaICases(i,j) < deg2rad(1)
+            if sat.mCT < 0.045
+                sat.mCT = 1 - 0.0013 * sat.mCT - 1.9634 * sat.mCT^2;
+            end
+            tmp1 = expint(1/sat.mCT^2) + (4 + 4/sat.mCT^2) * expint(2/sat.mCT^2) - (5 + 4 /sat.mCT^2) * expint(4 / 3 /sat.mCT^2);
+            tmp2 = (3 + 6 / sat.mCT^2) * exp(-1/3/sat.mCT^2) - (2 + 4 / sat.mCT^2) * exp(-1/sat.mCT^2) - 1;
+            deltaS(i,j) = 2 * exp(1/sat.mCT^2)/sat.mCT^2 * tmp1 + tmp2;
+            deltaN(i,j) = deltaS(i,j);
+        end
     end
 end
-
 %% gradient of correction parameters
 nTheta = size(config.thetaICases, 2);
 for i = 1:size(config.mCases, 1)
@@ -155,4 +166,4 @@ correctionPara = struct('deltaS', deltaS, 'deltaN', deltaN, ...
     'mSpan', config.mSpan, 'thetaIspan', config.thetaIspan);
 save('correctionPara.mat', 'correctionPara');
 
-% gFigs(config.gFigs)
+gFigs(config.gFigs)

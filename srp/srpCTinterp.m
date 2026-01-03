@@ -44,19 +44,10 @@ NS = sat.normal * sunB'; % nFacet x 1
 thetaI = acos(NS); % nFacet x 1, clamped
 
 % Interpolation
-deltaS = interp2(correctionPara.thetaIspan, correctionPara.mSpan, correctionPara.deltaS, thetaI, sat.mCT, 'linear', 1); % extrapolated values are 1 (standard) or clamp?
+deltaS = interp2(correctionPara.thetaIspan, correctionPara.mSpan, correctionPara.deltaS, thetaI, sat.mCT, 'linear', 1); % extrapolat ed values are 1 (standard) or clamp?
 deltaN = interp2(correctionPara.thetaIspan, correctionPara.mSpan, correctionPara.deltaN, thetaI, sat.mCT, 'linear', 1);
 
-% Fix NaN issues if thetaI or mCT are out of range (though interp2 should handle with extrapolation or NaN)
-% Use spline or pchip? Linear is requested.
-% If out of range, what to do? 'spline' might be better or closest.
-% For now 'linear' is fine. Using '1' as extrapolation value might be risky if deltaS/N are far from 1.
-% But deltaS/N -> 1 as m->0? No, deltaS/N are corrections.
-% Let's use nearest or keep NaNs and fix them?
-% Let's stick to default 'linear' (returns NaN) and fill? Or just linear with extrapolation?
-
 % Force calculation (per area unit, scaled by coeff)
-% Note: sunB is 1x3, others are Nx1. Broadcasting needed.
 fCorrected = (1 - deltaS .* sat.Cs) .* sunB + (2/3.*sat.Cd + 2 .* NS .* deltaN .* sat.Cs) .* sat.normal;
 
 %[text] ## total SRP
