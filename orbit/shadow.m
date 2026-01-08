@@ -13,37 +13,49 @@
 %[text] 20231128 y.yoshimura: 引数を変更
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also vsopConst.
-function  nu = shadow(satI, sunI, rS, rE)
-% arguments
-%     satI (:,3) {mustBeNumeric}
-%     sunI (:,3) {mustBeNumeric}
-%     rS (1,1) {mustBeNumeric}
-%     rE (1,1) {mustBeNumeric}    
-% end
+function nu = shadow(satI, sunI, rS, rE)
 
 sunRel = sunI - satI;
 
-% apparent Sun disk radius
-a = asin(rS ./ vecnorm(sunRel,2,2)); % nx1 vector
+a = asin(rS ./ vecnorm(sunRel,2,2));  % Sun angular radius
+b = asin(rE ./ vecnorm(satI,2,2));    % Earth angular radius
+c = acos( dot(-satI, sunRel,2) ./ (vecnorm(satI,2,2).*vecnorm(sunRel,2,2)) ); % separation
 
-% apparent Earth disk radius
-b = asin(rE ./ vecnorm(satI, 2, 2));
+n = size(satI,1);
+nu = ones(n,1);
 
-% apparent separation of the two body centers
-c = acos(dot(-satI, sunRel,2) ./ vecnorm(satI,2,2) ./ vecnorm(sunRel,2,2));
+% total occultation (Sun fully covered): c <= b - a
+idx_total = (c <= (b - a));
+nu(idx_total) = 0;
 
-x = (c.^2 + a.^2 - b.^2) ./ (2.*c);
-y = sqrt(a.^2 - x.^2);
-% y = real(sqrt(complex(a.^2 - x.^2))); % avoid being complex number
+% annular-like (Earth fully inside Sun disk): c <= a - b
+idx_annular = (c <= (a - b)) & ~idx_total;
+nu(idx_annular) = 1 - (b(idx_annular).^2 ./ a(idx_annular).^2);
 
-% occulted area
-A = a.^2 .* acos(x./a) + b.^2 .* acos((c-x)./b) - c .* y; % avoid being complex number
+% partial overlap: |a-b| < c < a+b
+idx_part = (abs(a-b) < c) & (c < (a+b));
+if any(idx_part)
+    ai = a(idx_part); 
+    bi = b(idx_part); 
+    ci = c(idx_part);
 
-nu = (a + b <= c) .* 1 ... % no occultation
-    + (abs(a-b) < c) .* (c < a + b) .* (1 - A ./ pi ./ a.^2)... % partial
-    + (c < b - a) .* (b > a) .* 0 ... % total occulation
-    + (c < a - b) .* (a > b) .* (1 - b.^2 ./ a.^2); % total but maximum
+    u = (ci.^2 + ai.^2 - bi.^2) ./ (2*ci);
+    v = (ci.^2 + bi.^2 - ai.^2) ./ (2*ci);
+
+    % clip for numerical safety
+    t1 = max(-1, min(1, u./ai));
+    t2 = max(-1, min(1, v./bi));
+
+    w  = max(0, ai.^2 - u.^2);
+
+    A = ai.^2 .* acos(t1) + bi.^2 .* acos(t2) - ci .* sqrt(w);
+    nu(idx_part) = 1 - A ./ (pi*ai.^2);
 end
+
+% no overlap already nu=1: c >= a+b
+
+end
+
 
 %[appendix]{"version":"1.0"}
 %---
