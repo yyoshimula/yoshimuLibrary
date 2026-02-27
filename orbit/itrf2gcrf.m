@@ -4,18 +4,18 @@
 %[text] ## note
 %[text] 位置座標の変換のみ．速度を変換する際は地球の自転速度を考慮した計算が必要
 %[text] ## requirement
-%[text] `readEOP.m`を実行し，その出力EOP(EOP.dataAll, EOP.iau06, EOP.leapJDを含む)を用いる 
-%[text] ## references 
+%[text] `readEOP.m`を実行し，その出力EOP(EOP.dataAll, EOP.iau06, EOP.leapJDを含む)を用いる
+%[text] ## references
 %[text] Vallado, D. A., & McClain, W. D. (2001). Fundamentals of Astrodynamics and Applications. Springer Science & Business Media. 4th edition, p.220
 %[text] ## revisions
 %[text] 20230612  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also gcrf2itrf, utc2tt.
 function dcm = itrf2gcrf(jd, EOP) %#codegen
 % arguments
-%     jd 
+%     jd
 %     EOP
 % end
- 
+
 %[text] ## time and EOP
 [yy, mm, dd, hh, m, s] = jd2gc(jd);
 utc = datetime([yy mm dd hh m s]);

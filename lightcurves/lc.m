@@ -75,8 +75,8 @@ obs2Sun = normRow(sunPos - obsPos); % relative directional vector from obs to Su
 obs2Sat = normRow(satPos - obsPos); % relative directional vector from obs to sat
 
 fObs = fObs .* nu; % consider umbra, penumbra
-fObs = fObs .* (dot(obs2Sun, normRow(obsPos),2) <= 0.0); % when observer cannot see Sun
-fObs = fObs .* (dot(obs2Sat, normRow(obsPos),2) >= 0.0); % when observer can see target
+% fObs = fObs .* (dot(obs2Sun, normRow(obsPos),2) <= 0.0); % when observer cannot see Sun
+% fObs = fObs .* (dot(obs2Sat, normRow(obsPos),2) >= 0.0); % when observer can see target
 
 m = -26.7 - 2.5 * log10(fObs ./ vecnorm(obsRelDir,2,2).^2);
 
