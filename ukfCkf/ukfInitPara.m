@@ -4,6 +4,8 @@ function ukf_ = ukfInitPara(n_, ukf_)
 %     ukf_
 % end
 
+ukf_.n_ = n_;
+
 %% tuning parameters
 if isfield(ukf_, 'alp')
     % as is
