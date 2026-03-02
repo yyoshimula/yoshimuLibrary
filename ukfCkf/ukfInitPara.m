@@ -1,4 +1,4 @@
-function ukf_ = setUKFpara(n_, ukf_)
+function ukf_ = ukfInitPara(n_, ukf_)
 % arguments
 %     n_
 %     ukf_
@@ -49,7 +49,7 @@ ukf_.wc = ukf_.wc(:);
 % disp('checking normalization:')
 % disp('weights for mean')
 % disp(ukf_.w0m + 2 * n_ * ukf_.wim)
-% 
+%
 % disp('weights for covariance')
 % disp(ukf_.w0c + 2 * n_ * ukf_.wic)
 
