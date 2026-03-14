@@ -109,3 +109,5 @@ git lfs pull
 - **ukfCkf**: Unscented / Cubature Kalman Filter implementations.
 - **utility**: General utility scripts (plotting, figure saving, etc.).
 
+This repository uses Earth imagery from NASA's Blue Marble dataset.
+Credit: NASA / Earth Observatory.
