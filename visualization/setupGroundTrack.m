@@ -6,7 +6,7 @@ function setupGroundTrack()
 
 libPath = '/Users/yyoshimula/Dropbox/MATLAB/yoshimuLibrary';
 
-earthImg = imread(fullfile(libPath, 'object', 'earth.jpg'));
+earthImg = imread(fullfile(libPath, 'visualization', 'naturalEarth.jpg'));
 imagesc([-180, 180], [90, -90], earthImg);
 set(gca, 'YDir', 'normal');
 hold on;

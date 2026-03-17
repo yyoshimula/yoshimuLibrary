@@ -25,7 +25,7 @@ set(earthSurf, 'Parent', hEarthTransform);
 set(hEarthTransform, 'Matrix', makehgtform('zrotate', GMST0));
 
 % テクスチャ
-earthImg = imread(fullfile(libPath, 'object', 'earth.jpg'));
+earthImg = imread(fullfile(libPath, 'visualization', 'naturalEarth.jpg'));
 set(earthSurf, 'FaceColor', 'texturemap', 'CData', earthImg, 'EdgeColor', 'none');
 
 % 影オーバーレイ（慣性座標系に固定）

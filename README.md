@@ -111,3 +111,4 @@ git lfs pull
 
 This repository uses Earth imagery from NASA's Blue Marble dataset.
 Credit: NASA / Earth Observatory.
+This repository uses Earth texture data from Natural Earth. https://www.naturalearthdata.com/
