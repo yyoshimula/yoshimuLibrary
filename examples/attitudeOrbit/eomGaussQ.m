@@ -2,17 +2,17 @@
 %[text] 姿勢・軌道計算のための運動方程式
 %[text] ## state variables
 %[text] ${\\bf x}=\[a,e,i,\\Omega, w, f, {\\bf q}^T, {\\bf \\omega}^T\]^T$
-%[text] `a`: semi-major axis, km 
-%[text] `e`: eccentricity 
-%[text] `inc`: inclination, rad 
-%[text] `raan`: right ascension of ascending node, rad 
+%[text] `a`: semi-major axis, km
+%[text] `e`: eccentricity
+%[text] `inc`: inclination, rad
+%[text] `raan`: right ascension of ascending node, rad
 %[text] `ome`: argument of perigee, rad
-%[text] `f`: true anomaly, rad 
-%[text] `q`: quaternion where q(4) is the scalar part 
+%[text] `f`: true anomaly, rad
+%[text] `q`: quaternion where q(4) is the scalar part
 %[text] `w`: angular rate, rad/s
 %[text] ## note
 %[text] NA
-%[text] ## references 
+%[text] ## references
 %[text] NA
 %[text] ## revisions
 %[text] 20210209  y.yoshimura, y.yoshimula@gmail.com
@@ -71,12 +71,12 @@ RiECEF = itrf2gcrf(jd, EOP); % dcm from ECEF to inertial frame (GCRF)
 Roi = zxz2dcm(raan, inc, u); % dcm from inertial to RTN frame
 %[text] ## Earth's gravitational potential
 % dcmNutation = nutationDCM(jd,const);% nutation
-% dcmPrecession = precessionDCM(const.J2000, jd, const); % precession 
+% dcmPrecession = precessionDCM(const.J2000, jd, const); % precession
 % tmpDCM = dcmNutation * dcmPrecession;
 % rsw2TOD = tmpDCM * Roi';
 % tod2RSW = rsw2TOD';
 
-tmp = egm2008(rVec', EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % at Cartesian coordinate
+tmp = egm2008(rECEF', EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % at Cartesian coordinate
 fEarth = RiECEF * tmp(:);
 aRTN = aRTN + Roi * fEarth;
 %[text] ## Sun's gravitational force
@@ -93,36 +93,36 @@ aRTN = aRTN + aMoon;
 
 %[text] ## SRP
 sunRelI = sunI - rVec; % 3x1 vector, from sat to sun vector at IJK, km
-sunDist = norm(sunRelI); 
-sunRelB = Rbi * sunRelI; % km, at body-fixed frame 
-sat = srpSimple(sat, sunRelB./norm(sunRelB), sunDist.*10^3, const); % SRP 
-% sat = selfShadow(sat, sunRelB./norm(sunRelB)); % calc self-shadowing 
-fSRP = sum(sat.force,1)'; % N, 3x1 vector at body-fixed frame 
+sunDist = norm(sunRelI);
+sunRelB = Rbi * sunRelI; % km, at body-fixed frame
+sat = srpSimple(sat, sunRelB./norm(sunRelB), sunDist.*10^3, const); % SRP
+% sat = selfShadow(sat, sunRelB./norm(sunRelB)); % calc self-shadowing
+fSRP = sum(sat.force,1)'; % N, 3x1 vector at body-fixed frame
 tSRP = sum(sat.torque,1)'; % Nm, 3x1 vector at body-fixed frame
 
-aRTN = aRTN + Roi * Rbi' * fSRP ./ sat.m ./ 10^3; 
+aRTN = aRTN + Roi * Rbi' * fSRP ./ sat.m ./ 10^3;
 trq = trq + tSRP;
 %[text] ## air drag
-% Cd = 2.2; 
+% Cd = 2.2;
 % [~, rho] = jacciaBowman(jd, geoLon, geoLat, geoH, const, JB);
-% vRel = [h / e * sin(f) / p 
-%     h / r - const.WE * r * ijk2RSW(3,3) 
-%     const.WE * r * ijk2RSW(2,3)]; % relative velocity at RSW 
-% vRel = ijk2B * ijk2RSW' * vRel; % relative velocity at body-fixed 
-% tmp = sat.normal * (vRel ./ norm(vRel)); 
-% ampF = -0.5 .* Cd .* sat.area .* tmp ./ sat.m .* rho .* norm(vRel).^2; % scalar, at body-fixed 
-% ampF = ampF .* (tmp > 0); % Nx1 
-% fAirB = ampF .* (vRel ./ norm(vRel))'; % Nx3 matrix for each facet 
-% tAir = cross(sat.pos, fAirB); % Nx3 matrix for each facet 
+% vRel = [h / e * sin(f) / p
+%     h / r - const.WE * r * ijk2RSW(3,3)
+%     const.WE * r * ijk2RSW(2,3)]; % relative velocity at RSW
+% vRel = ijk2B * ijk2RSW' * vRel; % relative velocity at body-fixed
+% tmp = sat.normal * (vRel ./ norm(vRel));
+% ampF = -0.5 .* Cd .* sat.area .* tmp ./ sat.m .* rho .* norm(vRel).^2; % scalar, at body-fixed
+% ampF = ampF .* (tmp > 0); % Nx1
+% fAirB = ampF .* (vRel ./ norm(vRel))'; % Nx3 matrix for each facet
+% tAir = cross(sat.pos, fAirB); % Nx3 matrix for each facet
 % tAir = sum(tAir, 1)'; % 3x1 vector at body-fixed
-% fAirB = sum(fAirB, 1); % 1x3 vector at body-fixed 
+% fAirB = sum(fAirB, 1); % 1x3 vector at body-fixed
 % fAir = ijk2RSW * ijk2B' * fAirB'; % 3x1 air drag at RSW
-% 
-% aRSW = aRSW + fAir; 
+%
+% aRSW = aRSW + fAir;
 % trq = trq + tAir;
 %[text] ## gravitational gradient torque
 %[text] earth directional (unit) vector, 3x1 vector at body-fixed frame
-nGG = Rbi * (-rVec./norm(rVec)); 
+nGG = Rbi * (-rVec./norm(rVec));
 tGG = 3 * const.GEm / (r*10^3)^3 * cross(nGG, sat.J*nGG); % Nm
 
 trq = trq + tGG;
@@ -142,7 +142,7 @@ domedt = -sqrt(1 - e^2) / n / a / e * (cos(f) * aRTN(1) - (sin(f) + sin(f) / (1 
 
 if anomalyFlag == 1    %  true anomaly used,   dfdt
     tmp = h / r^2  - domedt - dOmedt * cos(inc);
-else % mean anomaly used, dmdt    
+else % mean anomaly used, dmdt
     tmp = n + 1 / n / a^2 / e * ((p * cos(f) - 2 * e * r) * aRTN(1) ...
         - (p + r) * sin(f) * aRTN(2));
 end
@@ -163,7 +163,7 @@ qKinematics = qKine(4, q', wVec')';
 dxdt = [Gauss
     qKinematics
     rotDynamics];
-   
+
 end
 
 %[appendix]{"version":"1.0"}
