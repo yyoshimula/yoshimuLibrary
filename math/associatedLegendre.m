@@ -1,7 +1,7 @@
 %[text] # Associated Legendre多項式
 %[text] P\_l^m(x) を計算する複数の方法を実装
 %[text] ### 正規化されたAssociated Legendre多項式（全位数）
-function [P, m_values] = associatedLegendre(l, x)
+function [P, m_values] = associatedLegendre(l, x) %#codegen
     % 全ての位数 m = 0, 1, ..., l に対してP_l^m(x)を計算
     % 入力:
     %   l: 次数 (非負整数)

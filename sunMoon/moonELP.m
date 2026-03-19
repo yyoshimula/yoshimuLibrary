@@ -13,7 +13,7 @@
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also sun.
-function [lon, lat, r] = moonELP(jd, ELP)
+function [lon, lat, r] = moonELP(jd, ELP) %#codegen
 % arguments
 %     jd (:,1) {mustBeNumeric}
 %     ELP

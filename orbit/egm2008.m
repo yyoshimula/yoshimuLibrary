@@ -55,7 +55,11 @@ for i = 1:deg
     % P(i+1,1:i+1) = (-1).^tmp .* legendre(i, sp)';
 
     % when yoshimuLibrary's legendre function is used
-    P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre(i, sp)';
+    if exist('associatedLegendre_mex', 'file')
+        P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre_mex(i, sp)';
+    else
+        P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre(i, sp)';
+    end
 
 end
 P(1,:) = 0;

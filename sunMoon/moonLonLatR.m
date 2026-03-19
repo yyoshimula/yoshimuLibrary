@@ -22,7 +22,11 @@ function [lonM, latM, rM] = moonLonLatR(jd, const, ELP)
 % end
 
 %[text] ## moon position w.r.t. ELP 2000 frame
-  [lon, lat, rM] = moonELP(jd, ELP);
+  if exist('moonELP_mex', 'file')
+      [lon, lat, rM] = moonELP_mex(jd, ELP);
+  else
+      [lon, lat, rM] = moonELP(jd, ELP);
+  end
 
   [~, ~, ~, eta, Pi_, p] = precession(const.J2000, jd, const);
 

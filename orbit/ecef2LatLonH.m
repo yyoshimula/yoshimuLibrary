@@ -2,7 +2,7 @@
 %[text] `r`: satellite position vector@ECEF, km, nx3 matrix
 %[text] `lat`: geodetic latitude, rad, nx1 vector
 %[text] `lon`: longitude, rad, nx1 vector
-%[text] `h`: height above mean sea level
+%[text] `h`: height above reference ellipsoid
 %[text] ## note
 %[text] NA
 %[text] ## references 
@@ -13,7 +13,7 @@
 %[text] See also orbitConst.
 function [lat, lon, h] = ecef2LatLonH(r, const)
 
-e2 = 0.006694385000; % e^2
+e2 = 0.00669437999014; % e^2
 
 small = 1e-6; % tolerance
 iterMax = 10; % itermation max
