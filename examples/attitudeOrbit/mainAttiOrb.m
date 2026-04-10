@@ -30,9 +30,9 @@ load('igrfcoefs.mat', 'coefs');
 
 %[text] ### Atmospheric drag (Jaccia–Bowman 2008)
 % read coefficients for Jaccia–Bowman 2008
-SAT_Const % for JB20089 calculation %[output:999440a2]
-constants % for JB20089 calculation
-[JB.PC, JB.EOPdata, JB.SOLdata, JB.DTCdata] = readJB2008;
+% SAT_Const % for JB20089 calculation %[output:999440a2]
+% constants % for JB20089 calculation
+% [JB.PC, JB.EOPdata, JB.SOLdata, JB.DTCdata] = readJB2008;
 
 %[text] ### Satellite model
 sat = readSC('boxWing.obj'); % satellite shape and optical parameters
@@ -74,14 +74,14 @@ oeIni = [tmp(1:2), iJ2000, OmeJ2000, wJ2000, tmp(6)]; % [a, e, inc, RAAN, w, f]
 para.jd = tle.jd; % Julian day, day
 para.anomalyFlag = 1; % flag for true anomaly
 
-tspan = [0    5.5654e+03 * 5]; % time span, s
+tspan = [0    5.5654e+03 * 2]; % time span, s
 % tspan = [0 60];
 
 xIni = [oeIni, qIni, wIni];
 %%
 %[text] ## solve ODE
 option = odeset('Reltol',1e-8,'AbsTol',1e-8);
-[tOut, yOut] = ode45(@(t,x)eomGaussQ(t,x, para, sat, const, EGM, earthVSOP, JB, coefs, ELP, EOP), tspan, xIni, option);
+[tOut, yOut] = ode45(@(t,x)eomGaussQ(t,x, para, sat, const, EGM, earthVSOP, coefs, ELP, EOP), tspan, xIni, option);
 %%
 %[text] ## result
 time = tOut; % elapsed time, s
@@ -102,6 +102,12 @@ wz = yOut(:,13);
 
 % position and veloctiy at Cartesian, km, km/s 
 [r, v] = oe2rv([a, e, inc, raan, ome, f], 1, const.GE); 
+
+%% save to csv
+oeTable = table(time, a, e, inc, raan, ome, f, ...
+    'VariableNames', {'time_s', 'a_km', 'e', 'inc_rad', 'raan_rad', 'ome_rad', 'f_rad'});
+writetable(oeTable, 'attitudeOrbit.csv');
+fprintf('Saved orbit to attitudeOrbit.csv\n');
 %%
 %[text] ## show figs
 figure

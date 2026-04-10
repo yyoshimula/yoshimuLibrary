@@ -17,7 +17,7 @@
 %[text] ## revisions
 %[text] 20210209  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also orbitConst, mainATOM.
-function dxdt = eomGaussQ(t_, x_, para, sat, const, EGM, earthVSOP, JB, coefs, ELP, EOP)
+function dxdt = eomGaussQ(t_, x_, para, sat, const, EGM, earthVSOP, coefs, ELP, EOP)
 %[text] ## pre-allocation
 % pre-allocation
 aRTN = zeros(3,1); % translational acceleration at RSW frame
