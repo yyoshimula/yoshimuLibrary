@@ -48,6 +48,19 @@ sp = sin(phi);
 %[text] $P\_{n,m}(x)=(-1)^{m}(1-x^{2})^{m/2}\\frac{\\mathrm{d}^{m}}{\\mathrm{d}x^{m}}P\_{n}(x)$
 P = zeros(deg+1, deg+1); % matlabはindexが1始まりなので+1
 
+% mexの有無はセッション内で不変なので一度だけ判定してキャッシュする．
+% exist(...,'file')はパス検索が走り，ODEのRHSで毎回呼ぶと支配的コストになるため．
+% codegen時は生成コードからmexを呼べないため，coder.targetで分岐を定数化して
+% mex枝をデッドコードにする（こうしないとcodegenが失敗する）．
+persistent useLegendreMexCache
+useLegendreMex = false;
+if coder.target('MATLAB')
+    if isempty(useLegendreMexCache)
+        useLegendreMexCache = logical(exist('associatedLegendre_mex', 'file'));
+    end
+    useLegendreMex = useLegendreMexCache;
+end
+
 for i = 1:deg
     tmp = 0:i; % malabのlegendre functionは(-1)^mが付くため
 
@@ -55,7 +68,7 @@ for i = 1:deg
     % P(i+1,1:i+1) = (-1).^tmp .* legendre(i, sp)';
 
     % when yoshimuLibrary's legendre function is used
-    if exist('associatedLegendre_mex', 'file')
+    if useLegendreMex
         P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre_mex(i, sp)';
     else
         P(i+1,1:i+1) = (-1).^tmp .* associatedLegendre(i, sp)';

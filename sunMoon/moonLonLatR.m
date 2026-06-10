@@ -22,7 +22,9 @@ function [lonM, latM, rM] = moonLonLatR(jd, const, ELP)
 % end
 
 %[text] ## moon position w.r.t. ELP 2000 frame
-  if exist('moonELP_mex', 'file')
+  % codegen時は生成コードからmexを呼べないため，coder.targetで分岐を定数化して
+  % mex枝をデッドコードにする（こうしないとcodegenが失敗する）．
+  if coder.target('MATLAB') && exist('moonELP_mex', 'file')
       [lon, lat, rM] = moonELP_mex(jd, ELP);
   else
       [lon, lat, rM] = moonELP(jd, ELP);
