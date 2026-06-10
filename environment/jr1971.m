@@ -50,7 +50,9 @@ function result = jr1971(jd, phi_gd, lambda, h, F10, F10a, Kp)
 %   [4] Long, A. C. et al. (1989). GTDS Mathematical Theory (Revision 1).
 
     % == Constants =============================================================
-    C = jr1971_constants();
+    persistent C_cached
+    if isempty(C_cached), C_cached = jr1971_constants(); end
+    C = C_cached;
 
     Rstar = C.Rstar;
     Av    = C.Av;

@@ -64,7 +64,7 @@ srpCd = [0, 0, sum(cd1, 1) * 1573/2688 * pi];
 nFacet = size(sat.normal,1); % # of facet
 
 % sun vector and normal vectors at local frame (normal vector is along z-axis)
-sLocal = qRotation(4, repmat(sunB, nFacet,1), sat.qlb); % nFacet x 3
+sLocal = qRotation(4, repmat(sunB, nFacet, 1), sat.qlb); % nFacet x 3
 % nLocal = qRotation(4, sat.normal, sat.qlb); % (for debug), nFacet x 3
 
 %[text] ## sampling
