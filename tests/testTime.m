@@ -14,6 +14,41 @@ classdef testTime < matlab.unittest.TestCase
     % chained conversions are compared with AbsTol 1e-8 day (~1 ms); values
     % that are exact in binary use 1e-9 or exact comparison.
 
+    properties (Constant)
+        % official IERS TAI-UTC history since 1972
+        % (https://hpiers.obspm.fr/iers/bul/bulc/TimeSteps.history):
+        % [year month day] on which the new TAI-UTC takes effect (00:00 UTC,
+        % i.e. the day after the leap-second insertion), and TAI-UTC [s]
+        iersTaiUtc = [ ...
+            1972  7  1  11
+            1973  1  1  12
+            1974  1  1  13
+            1975  1  1  14
+            1976  1  1  15
+            1977  1  1  16
+            1978  1  1  17
+            1979  1  1  18
+            1980  1  1  19
+            1981  7  1  20
+            1982  7  1  21
+            1983  7  1  22
+            1985  7  1  23
+            1988  1  1  24
+            1990  1  1  25
+            1991  1  1  26
+            1992  7  1  27
+            1993  7  1  28
+            1994  7  1  29
+            1996  1  1  30
+            1997  7  1  31
+            1999  1  1  32
+            2006  1  1  33
+            2009  1  1  34
+            2012  7  1  35
+            2015  7  1  36
+            2017  1  1  37];
+    end
+
     methods (TestClassSetup)
         function addLibraryToPath(testCase) %#ok<MANU>
             root = fileparts(fileparts(mfilename('fullpath')));
@@ -117,18 +152,20 @@ classdef testTime < matlab.unittest.TestCase
         end
 
         function testLeapSecondTableFormat(testCase)
-            % leapS returns [JD of leap-second day, cumulative leap seconds]
+            % leapS returns [JD from which the cumulative TAI-UTC applies
+            % (00:00 UTC on the day AFTER the insertion), cumulative leap
+            % seconds]; both columns must match the IERS history.
             leapJD = leapS();
-            testCase.verifySize(leapJD, [size(leapJD, 1), 2]);
-            testCase.verifyGreaterThanOrEqual(size(leapJD, 1), 27);
-            % first leap second: 1972-06-30, cumulative 1 s
-            testCase.verifyEqual(leapJD(1, 1), gc2jd(1972, 6, 30, 0, 0, 0), ...
-                'AbsTol', 1e-9);
-            testCase.verifyEqual(leapJD(1, 2), 1, 'AbsTol', 0);
-            % 27th leap second: 2016-12-31 (effective 2017-01-01)
-            testCase.verifyEqual(leapJD(27, 1), gc2jd(2016, 12, 31, 0, 0, 0), ...
-                'AbsTol', 1e-9);
-            testCase.verifyEqual(leapJD(27, 2), 27, 'AbsTol', 0);
+            tbl = testTime.iersTaiUtc;
+            nEntries = size(tbl, 1);
+            z = zeros(nEntries, 1);
+            expectedJD = gc2jd(tbl(:,1), tbl(:,2), tbl(:,3), z, z, z);
+            testCase.verifySize(leapJD, [nEntries 2], ...
+                'leapS must return one row per IERS leap second');
+            testCase.verifyEqual(leapJD(:,1), expectedJD, 'AbsTol', 1e-9, ...
+                'leap-second effective dates must match IERS');
+            testCase.verifyEqual(leapJD(:,2) + 10, tbl(:,4), ...
+                'cumulative leap seconds must match IERS TAI-UTC');
             % strictly increasing dates and cumulative seconds
             testCase.verifyGreaterThan(diff(leapJD(:, 1)), 0);
             testCase.verifyGreaterThan(diff(leapJD(:, 2)), 0);
@@ -154,6 +191,82 @@ classdef testTime < matlab.unittest.TestCase
                 'AbsTol', 0);
             testCase.verifyEqual(dAT(gc2jd(2020, 1, 1, 0, 0, 0), leapJD), 37, ...
                 'AbsTol', 0);
+        end
+
+        function testDeltaATAtAllIERSTransitions(testCase)
+            % for every IERS entry: the previous TAI-UTC must hold through
+            % the leap-second day itself (effective JD - 0.5 = 12:00 UTC on
+            % the insertion day), and the new value from 00:00 UTC onward
+            leapJD = leapS();
+            tbl = testTime.iersTaiUtc;
+            for k = 1:size(tbl, 1)
+                effJD = gc2jd(tbl(k,1), tbl(k,2), tbl(k,3), 0, 0, 0);
+                if k == 1
+                    prevTaiUtc = 10;
+                else
+                    prevTaiUtc = tbl(k-1, 4);
+                end
+                tag = sprintf('entry %d (effective %04d-%02d-%02d)', ...
+                    k, tbl(k,1), tbl(k,2), tbl(k,3));
+
+                testCase.verifyEqual(dAT(effJD - 0.5, leapJD), ...
+                    prevTaiUtc, ['noon of leap-second day, ' tag]);
+                testCase.verifyEqual(dAT(effJD, leapJD), ...
+                    tbl(k,4), ['start of effective day, ' tag]);
+                testCase.verifyEqual(dAT(effJD + 0.5, leapJD), ...
+                    tbl(k,4), ['noon of effective day, ' tag]);
+            end
+        end
+
+        function testDeltaATBoundary2016to2017(testCase)
+            % leap second inserted at 2016-12-31 23:59:60 UTC -> 37 s from
+            % 2017-01-01 00:00 UTC, 36 s throughout 2016-12-31
+            leapJD = leapS();
+            testCase.verifyEqual(dAT(gc2jd(2016, 12, 30, 12, 0, 0), leapJD), 36, ...
+                'day before the leap-second day');
+            testCase.verifyEqual(dAT(gc2jd(2016, 12, 31, 12, 0, 0), leapJD), 36, ...
+                'noon of the leap-second day');
+            testCase.verifyEqual(dAT(gc2jd(2016, 12, 31, 23, 59, 59), leapJD), 36, ...
+                'last second of the leap-second day');
+            testCase.verifyEqual(dAT(gc2jd(2017, 1, 1, 0, 0, 0), leapJD), 37, ...
+                'start of the day after');
+            testCase.verifyEqual(dAT(gc2jd(2017, 1, 1, 12, 0, 0), leapJD), 37, ...
+                'noon of the day after');
+        end
+
+        function testDeltaATBoundary2005to2006(testCase)
+            % leap second inserted at 2005-12-31 23:59:60 UTC -> 33 s from
+            % 2006-01-01 00:00 UTC, 32 s throughout 2005-12-31
+            leapJD = leapS();
+            testCase.verifyEqual(dAT(gc2jd(2005, 12, 31, 12, 0, 0), leapJD), 32, ...
+                'noon of the leap-second day');
+            testCase.verifyEqual(dAT(gc2jd(2005, 12, 31, 23, 59, 59), leapJD), 32, ...
+                'last second of the leap-second day');
+            testCase.verifyEqual(dAT(gc2jd(2006, 1, 1, 0, 0, 0), leapJD), 33, ...
+                'start of the day after');
+        end
+
+        function testDeltaATVectorInput(testCase)
+            % dAT must accept a jd column vector (documented jd (:,1)) and
+            % return elementwise results matching the scalar calls
+            leapJD = leapS();
+            jd = [gc2jd(1971,  6, 30, 12, 0, 0)
+                  gc2jd(2005, 12, 31, 12, 0, 0)
+                  gc2jd(2006,  1,  1,  0, 0, 0)
+                  gc2jd(2016, 12, 31, 12, 0, 0)
+                  gc2jd(2017,  1,  1,  0, 0, 0)
+                  gc2jd(2020,  1,  1, 12, 0, 0)];
+            expected = [10; 32; 33; 36; 37; 37];
+
+            actual = dAT(jd, leapJD);
+            testCase.verifySize(actual, size(jd), ...
+                'deltaAT must have the same size as jd');
+            testCase.verifyEqual(actual, expected);
+
+            for k = 1:numel(jd)
+                testCase.verifyEqual(dAT(jd(k), leapJD), expected(k), ...
+                    'vector result must match the scalar call');
+            end
         end
 
         function testUtc2ttOffsetRelation(testCase)
