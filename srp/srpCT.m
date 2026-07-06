@@ -5,7 +5,7 @@
 %[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 vector
 %[text] `d`: distance between satellite and Sun, m
 %[text] `const`: orbital constants
-%[text] NDF: (optional) NDF distribution function, default: Beckamnn distribution
+%[text] NDF: (optional) NDF distribution function, default: Beckamnn distribution, or Gauss distribution if specified
 %[text] `nMC`: (optional) number of random numbers for integration
 %[text] ## output
 %[text] `sat.force`: SRP force at each facet expressed with body-fixed frame, N, nx3 matrix
@@ -23,7 +23,7 @@ function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
 %     sunB (:,3) {mustBeNumeric}
 %     d (:,1) {mustBeNumeric}
 %     const
-%     NDF = 'Beckmann' % 現状Beckamnn distributionのみ対応
+%     NDF = 'Beckmann' % Gaussという文字列を入れた場合Gaussian NDFを使う
 %     nMC = 10^3;
 % end
 % arguments (Output)
@@ -83,9 +83,10 @@ else % for Gauss distribution
     hz = sLocal(:,3) + vz; % nFacet x nMC
 
     % Normalize the half vectors
-    hx = hx ./ sqrt(hx.^2 + hy.^2 + hz.^2);
-    hy = hy ./ sqrt(hx.^2 + hy.^2 + hz.^2);
-    hz = hz ./ sqrt(hx.^2 + hy.^2 + hz.^2);
+    hNorm = sqrt(hx.^2 + hy.^2 + hz.^2);
+    hx = hx ./ hNorm;
+    hy = hy ./ hNorm;
+    hz = hz ./ hNorm;
 
     thetaH = acos(hz);
 
@@ -114,7 +115,14 @@ temp2 = (1 + (VH .* (g + VH) - 1).^2 ./ (VH .* (g - VH) + 1).^2);
 F = temp1 .* temp2; % nFacet x N
 
 % weight
-W = abs(SH) .* G ./ NS ./ NH; % nFacet x N
+if strcmp(NDF, 'Beckmann')
+    % h is importance-sampled with pdf D(thetaH)*cos(thetaH), so D cancels
+    W = abs(SH) .* G ./ NS ./ NH; % nFacet x N
+else
+    % v is sampled uniformly in (thetaR, phiR) with pdf 1/pi^2, so D and
+    % the sin(thetaR) Jacobian remain in the weight (cf. srpCTuni)
+    W = pi^2 / 4 .* D .* G .* sin(thetaR) ./ NS; % nFacet x N
+end
 tmp = W .* F; % nFacet x N
 tmp(isnan(tmp)) = 0; % NaNを0にする
 

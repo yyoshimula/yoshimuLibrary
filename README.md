@@ -47,6 +47,7 @@ git lfs pull
 - **sphericalGaussian**: 球面ガウス関数 (Spherical Gaussian)。
 - **srp**: 太陽輻射圧 (SRP) モデル（Analytical, Cannonballなど）。
 - **sunMoon**: 太陽・月の位置計算、エフェメリス。
+- **tests**: `matlab.unittest` によるユニットテスト。`tests/runAllTests.m` で全実行。`tests/manual/` には目視確認用の verify スクリプト群（プロット比較）。
 - **time**: 時間系変換（JD, MJD, UTC, TTなど）。
 - **ukfCkf**: Unscented / Cubature Kalman Filter 実装。
 - **utility**: 汎用ユーティリティ（プロット, 図保存など）。
@@ -105,6 +106,7 @@ git lfs pull
 - **sphericalGaussian**: Spherical Gaussian functions.
 - **srp**: Solar Radiation Pressure (SRP) models (Analytical, Cannonball, etc.).
 - **sunMoon**: Sun and Moon position calculations, ephemeris.
+- **tests**: Unit tests based on `matlab.unittest`; run all with `tests/runAllTests.m`. `tests/manual/` holds plot-based verification scripts for visual inspection.
 - **time**: Time system conversions (JD, MJD, UTC, TT, etc.).
 - **ukfCkf**: Unscented / Cubature Kalman Filter implementations.
 - **utility**: General utility scripts (plotting, figure saving, etc.).
