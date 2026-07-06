@@ -95,6 +95,94 @@ classdef testOrbitElements < matlab.unittest.TestCase
             end
         end
 
+        function testRv2oeCircularEquatorialHandBuilt(testCase)
+            % Regression: circular orbits used to error with
+            % "Unrecognized function or variable 'w'" because the
+            % typeOrbit 2/3 branch never assigned w.
+            % For a hand-built circular equatorial state the convention is
+            % w = 0, raan = 0, nu = true longitude (angle of r from +x).
+            const = orbitConst();
+            a = 7000; % km
+            vc = sqrt(const.GE / a); % km/s
+            % state at the +x axis (the reported failing input)
+            oe = rv2oe([a, 0, 0], [0, vc, 0], const.GE);
+            testCase.verifyEqual(oe, [a, 0, 0, 0, 0, 0], 'AbsTol', 1e-9);
+            % state at true longitude 2.0 rad
+            th = 2.0;
+            oe = rv2oe(a*[cos(th), sin(th), 0], vc*[-sin(th), cos(th), 0], ...
+                const.GE);
+            testCase.verifyEqual(oe(1), a, 'RelTol', 1e-12);
+            testCase.verifyEqual(oe(2), 0, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(3:5), [0, 0, 0], 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(6), th, 'AbsTol', 1e-9);
+        end
+
+        function testRv2oeCircularPolarHandBuilt(testCase)
+            % Circular polar orbit crossing the north pole: raan = 0,
+            % w = 0, nu = argument of latitude = pi/2 (exact geometry:
+            % r along +z, node line along +x).
+            const = orbitConst();
+            a = 7000; % km
+            vc = sqrt(const.GE / a); % km/s
+            oe = rv2oe([0, 0, a], [-vc, 0, 0], const.GE);
+            testCase.verifyEqual(oe(1), a, 'RelTol', 1e-12);
+            testCase.verifyEqual(oe(2), 0, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(3), pi/2, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(4), 0, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(5), 0, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe(6), pi/2, 'AbsTol', 1e-9);
+        end
+
+        function testRv2oeOe2rvRoundTripCircularInclined(testCase)
+            % oe -> (r, v) -> oe for a circular inclined orbit: rv2oe
+            % returns w = 0 and nu = argument of latitude. With w = 0 in
+            % the input, the angle from the ascending node equals nu, so
+            % [a, 0, inc, raan, 0, nu] must be recovered exactly.
+            const = orbitConst();
+            oe0 = [7000, 0, deg2rad(51.6), 1.0, 0, 2.5];
+            [r, v] = oe2rv(oe0, 1, const.GE);
+            oe1 = rv2oe(r, v, const.GE);
+            testCase.verifyEqual(oe1(1), oe0(1), 'RelTol', 1e-9);
+            testCase.verifyEqual(oe1(2), 0, 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe1(3:6), oe0(3:6), 'AbsTol', 1e-9);
+        end
+
+        function testRv2oeOe2rvRoundTripEllipticEquatorial(testCase)
+            % Elliptical equatorial orbit (typeOrbit 4): raan used to come
+            % back NaN (zero node vector). Convention: raan = 0 and w is
+            % the true longitude of perigee.
+            const = orbitConst();
+            oe0 = [8000, 0.1, 0, 0, 1.2, 0.7];
+            [r, v] = oe2rv(oe0, 1, const.GE);
+            oe1 = rv2oe(r, v, const.GE);
+            testCase.verifyEqual(oe1(1), oe0(1), 'RelTol', 1e-9);
+            testCase.verifyEqual(oe1(2), oe0(2), 'AbsTol', 1e-12);
+            testCase.verifyEqual(oe1(3:6), oe0(3:6), 'AbsTol', 1e-9);
+        end
+
+        function testRv2oeVectorizedMixedTypes(testCase)
+            % One call with four stacked states, one of each orbit type,
+            % must recover every row (the old per-type loop overwrote w
+            % for all rows on each iteration).
+            const = orbitConst();
+            oeSet = [8000, 0.1, 0.5,            1.0, 2.0, 3.0;  % elliptical inclined
+                     7000, 0,   0,              0,   0,   2.0;  % circular equatorial
+                     7000, 0,   deg2rad(51.6),  1.0, 0,   2.5;  % circular inclined
+                     8000, 0.1, 0,              0,   1.2, 0.7]; % elliptical equatorial
+            n = size(oeSet, 1);
+            r = zeros(n, 3); v = zeros(n, 3);
+            for k = 1:n
+                [r(k,:), v(k,:)] = oe2rv(oeSet(k,:), 1, const.GE);
+            end
+            oe1 = rv2oe(r, v, const.GE);
+            testCase.verifyEqual(oe1(:,1), oeSet(:,1), 'RelTol', 1e-9, ...
+                'semi-major axis a not recovered');
+            testCase.verifyEqual(oe1(:,2), oeSet(:,2), 'AbsTol', 1e-12, ...
+                'eccentricity e not recovered');
+            testCase.verifyEqual(oe1(:,3:6), oeSet(:,3:6), 'AbsTol', 1e-9, ...
+                'angles [inc, raan, w, nu] not recovered');
+        end
+
         function testRv2oeVisVivaConsistency(testCase)
             % a returned by rv2oe must satisfy the vis-viva equation
             % xi = -mu/(2a) for an independent hand-built state.
