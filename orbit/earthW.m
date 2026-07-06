@@ -12,7 +12,7 @@ arguments
     lod (:,1) {mustBeNumeric}
 end
 
-w = 7.292115146706979 * 10^(-5) .* (1 - lod ./ 86400);
+w = 7.292115146706979 * 10^(-5) .* (1 - lod ./ 86400); % WE, WGS-84: must stay in sync with orbitConst().WE
 
 end
 
