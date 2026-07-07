@@ -7,7 +7,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20221110  y.yoshimura, y.yoshimula@gmail.com, y.yoshimura.a64@m.kyushu-u.ac.jp
-%[text] See also eAnomaly.
+%[text] See also meanAnomaly.
 function E = eAnomaly(e, f)
 % arguments
 %     e (:,1) {mustBeNumeric}

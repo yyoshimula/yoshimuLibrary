@@ -1,6 +1,6 @@
 %[text] # rotation matrix from ITRF to GCRF (CIO approcach of　IAU-2006/2000 reduction)
 %[text] `jd`:  julian day
-%[text] `leapJD`: obtained from `leapS.mlx`
+%[text] `EOP`: Earth orientation parameter struct from `readEOP.m` (must include EOP.dataAll, EOP.iau06, EOP.leapJD)
 %[text] ## note
 %[text] 位置座標の変換のみ．速度を変換する際は地球の自転速度を考慮した計算が必要
 %[text] ## requirement
@@ -9,7 +9,7 @@
 %[text] Vallado, D. A., & McClain, W. D. (2001). Fundamentals of Astrodynamics and Applications. Springer Science & Business Media. 4th edition, p.220
 %[text] ## revisions
 %[text] 20230612  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also gcrf2itrf, utc2tt.
+%[text] See also qITRF2gcrf, utc2tt.
 function dcm = itrf2gcrf(jd, EOP) %#codegen
 % arguments
 %     jd

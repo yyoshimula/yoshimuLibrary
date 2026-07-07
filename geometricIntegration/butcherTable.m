@@ -3,7 +3,7 @@
 %[text] `n`: the order of geometric integration method (NOT the number of stage)
 %[text] method: RK = Runge–Kutta method
 %[text]               CG = Crouch–Grossman method
-%[text] ## otuputs
+%[text] ## outputs
 %[text] `a, b, c: coefficients`
 %[text] ## note
 %[text] NA
@@ -11,7 +11,6 @@
 %[text] to be added
 %[text] ## revisions
 %[text] 20240109  y.yoshimura y.yoshimula@gmail.com
-%[text] See also dqrk, dqgi.
 function [a, b, c] = butcherTable(n, method)
 
 

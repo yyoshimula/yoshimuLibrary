@@ -1,6 +1,6 @@
 %[text] # calculating quaternions from direction cosine matrix (DCM)
 %[text] 回転行列からquaternionを計算
-%[text] ただしこの方法だとquaternionが不連続になるので注意．連続性も確保したい場合は dcm2qC.mlxを使う．
+%[text] ただしこの方法だとquaternionが不連続になるので注意．連続性も確保したい場合は dcm2qContinuous.mを使う．
 %[text] ## inputs
 %[text] `scalar:` specify the definition of the quaternion 
 %[text] `scalar == 0`

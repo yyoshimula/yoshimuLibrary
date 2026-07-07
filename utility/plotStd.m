@@ -2,8 +2,10 @@
 %[text] standard deviationも一緒にplot
 %[text] ## inputs
 %[text] `t`: value along x-axis, Nx1 vector
-%[text] `meanVal: mean value, Nx1 vector`
-%[text] `stdVal:` standard deviation, Nx1 vector
+%[text] `meanVal`: mean value, Nx1 vector
+%[text] `stdVal`: standard deviation, Nx1 vector
+%[text] `lineColor`: color of the mean line, text (default 'r')
+%[text] `regionColor`: color of the std region, text (default 'k')
 %[text] ## outputs
 %[text] NA (figure is plotted)
 %[text] ## note

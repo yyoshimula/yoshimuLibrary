@@ -8,7 +8,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20150101  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also km2AU, orbitConst.
+%[text] See also km2au, orbitConst.
 function km = au2km(AU, const)
 
 km = AU .* const.AU;

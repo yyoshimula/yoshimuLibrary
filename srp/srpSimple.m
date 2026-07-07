@@ -8,8 +8,8 @@
 %[text] ## output
 %[text] `sat.force`: SRP force at each facet expressed with body-fixed frame, N, nx3 matrix
 %[text] `sat.torque`: SRP torque at each facet expressed with body-fixed frame, Nm, nx3 matrix
-%[text] `srpCdOut`: total diffuse SRP force expressed with body-fixed frame, N, 1x3 matrix
-%[text] `srpCsOut`: total specular SRP force expressed with body-fixed frame, Nm, 1x3 matrix
+%[text] `srpCdOut`: total diffuse SRP force expressed with body-fixed frame, N, 1x3 vector
+%[text] `srpCsOut`: total specular SRP force expressed with body-fixed frame, N, 1x3 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 

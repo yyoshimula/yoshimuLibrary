@@ -5,7 +5,7 @@
 %[text] `p`: lobe directional vector, 1x3 vector 
 %[text] `lam`: sharpness, scalar 
 %[text] `mu`: amplitude, scalar 
-%[text] `G`: spherical Gaussian, Nx1 vector 
+%[text] `G`: spherical Gaussian, NxM matrix (same shape as x, y, z)
 %[text] Spherical Gaussian is defined as
 %[text] $\\mathcal{G}({\\bf x}, {\\bf p}, \\lambda, \\mu) = \\mu \\exp{(\\lambda({\\bf x}^T{\\bf p} - 1))}$
 %[text] ## note
@@ -14,7 +14,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20200911  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also sgMult, sg3.
+%[text] See also sgMix.
 function G = sg(x, y, z, p, lam, mu)
 p = p ./ norm(p);
 

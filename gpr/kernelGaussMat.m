@@ -1,6 +1,6 @@
 %[text] # Gaussian kernel matrix for each training data
 %[text] ## inputs
-%[text] `xTrain: training data`, dxn vector
+%[text] `xTrain`: training data, dxn matrix
 %[text] `hypPara`: hyper parameters for kernel
 %[text] `sigN`: standard deviation of additive noise, scalar
 %[text] ## outputs
@@ -11,7 +11,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20230614  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also gpCov.
+%[text] See also gprCov, kernelGauss.
 function K = kernelGaussMat(xTrain, hypPara, sigN)
 % arguments
 %     xTrain 

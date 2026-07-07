@@ -16,7 +16,7 @@
 %[text] NA
 %[text] ## references
 %[text] NA
-%[text] See also srpLps, readSC, orbitConst.
+%[text] See also readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
 % arguments (Input)
 %     sat
@@ -24,7 +24,7 @@ function [sat, srpCdOut, srpCsOut] = srpCT(sat, sunB, d, const, NDF, nMC)
 %     d (:,1) {mustBeNumeric}
 %     const
 %     NDF = 'Beckmann' % Gaussという文字列を入れた場合Gaussian NDFを使う
-%     nMC = 10^3;
+%     nMC = 10^4;
 % end
 % arguments (Output)
 %     sat

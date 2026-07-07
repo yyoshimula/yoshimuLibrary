@@ -1,6 +1,6 @@
 %[text] # calculating apparent magnitude of object with distance d \[m\]
-%[text] `fObs`: 
-%[text] `d:` distnace between object and observer, m, nFacet x 1
+%[text] `fobs`: total observed reflectance flux
+%[text] `d`: distance between object and observer, m
 %[text] ## note
 %[text] NA
 %[text] ## references

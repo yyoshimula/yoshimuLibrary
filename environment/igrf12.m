@@ -8,7 +8,8 @@ function b = igrf12(year, alt, lat, lon)
 %            lon: east longitude, rad
 %   Outputs: b: magnetic vector, 1x3 vector, nT, @NED coordinates
 %   related function files:
-%   note: use the mex file generated from igrfsyn12.c
+%   note: requires the compiled mex igrfsyn12 (built from igrfsyn12.c) on the
+%         MATLAB path; a prebuilt binary lives at examples/attitudeOrbit/igrfsyn12.mexmaci64
 %   cf:
 %   revisions;
 %   

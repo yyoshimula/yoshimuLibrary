@@ -5,6 +5,7 @@
 %[text] `i`: inclination, rad
 %[text] `Ome`: longitude of the ascending node, rad
 %[text] `w`: argument of the perihelion, rad
+%[text] `const`: constant parameters for orbit propagation
 %[text] ## outputs
 %[text] `iJ`: inclination at J2000.0, rad
 %[text] `wJ`: argument of the perihelion at J2000.0, rad
@@ -17,7 +18,7 @@
 %[text] Jean Meeus, "Astronomical Algorithms, 2nd ed.," pp.143-148. 
 %[text] ## revisions
 %[text] 2021020209  y.yoshimura
-%[text] See also teme2Mod, mod2J2000, mean2Osc.
+%[text] See also mod2J2000, mean2Osc.
 function [iJ, OmeJ, wJ] = teme2J2000(jd, i, Ome, w, const)
 
 %[text] ### TEME to TOD

@@ -1,6 +1,6 @@
-%[text] # converting arcsecond to radian
+%[text] # converting radian to arcsecond
 %[text] `angle`: angle to be converted, rad
-%[text] `rad`: angle converted, arcs
+%[text] `arcs`: angle converted, arcsec
 %[text] ## note
 %[text] NA
 %[text] ## references 

@@ -6,7 +6,7 @@
 %[text] `Cnm`, `Snm`: Earth's gravitational coefficients of EGM2008
 %[text] `const`: orbital constants
 %[text] ## output
-%[text] `a`: perturbing accelerations in ECEF frame (Cartesian coordinates), 1x3 vector, $\\rm km/s^2\n$
+%[text] `a`: perturbing accelerations in ECEF frame (Cartesian coordinates), 1x3 vector, km/s^2
 %[text] ## note
 %[text] ## references 
 %[text] David A. Vallado, "Fundamentals of Astrodynamics and Applications, 4th edition, pp.538–550.
@@ -18,7 +18,7 @@
 %[text] 
 %[text] % read orbital constant and EGM2008 coefficients
 %[text] const = orbitConst;
-%[text] [EGM.Cnm, EGM.Snm] = readEGM2008('EGM2008_to2190_TideFree.txt', EGM.GEODEG);
+%[text] EGM = readEGM2008(EGM, EGM.GEODEG); % fills EGM.Cnm and EGM.Snm
 %[text] acc = egm2008(rVec, EGM.GEODEG, EGM.Cnm, EGM.Snm, const); % at ECEF frame and Cartesian coordinate
 %[text] ```
 %[text] ## revisions

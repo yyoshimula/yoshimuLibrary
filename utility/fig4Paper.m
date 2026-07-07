@@ -1,5 +1,12 @@
 %[text] # setting and saving figure for conference or journal manuscript
 %[text] 論文用にfigureをいい感じに設定し，保存
+%[text] ## inputs
+%[text] `asis`: if 1, keep the current figure size; if 0, auto-resize to paper layout (default 1)
+%[text] `fig`: target figure handle (default gcf)
+%[text] `nFig`: figure number used in the output file name (default 1)
+%[text] `contentType`: exportgraphics ContentType, e.g., "vector" or "image" (default "vector")
+%[text] ## outputs
+%[text] NA (figure is exported to a PDF file)
 %[text] ## note
 %[text] NA
 %[text] ## references 
@@ -8,7 +15,7 @@
 %[text] 20240823  y.yoshimura, y.yoshimula@gmail.com, major update
 %[text] See also fig4Presen.
 function fig4Paper(asis, fig, nFig, contentType)
-% 第3引数はオプション（既定は "vector"）
+% 引数はすべてオプション（第4引数 contentType の既定は "vector"）
 if nargin < 1
     asis = 1;
     fig = gcf;

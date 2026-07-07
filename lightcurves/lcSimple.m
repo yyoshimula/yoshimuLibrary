@@ -5,10 +5,9 @@
 %[text] `obsB:` observer from satellite with body-fixed frame, Mx3 matrix
 %[text] thr: threshold for speuclar lobe, rad
 %[text] ## outputs
-%[text] fObs: total reflectance BRDF, nFacet x M vector
+%[text] sat: satellite configuration with total reflectance BRDF added as sat.fObs, nFacet x M vector
 %[text] cd: diffuse part of BRDF, nFacet x M vector
 %[text] cs: specular part of BRDF, nFacet x M vector
-%[text] D: normal distribution function of BRDF, nFacet x M vector
 %[text] ## note
 %[text] NA
 %[text] ## references

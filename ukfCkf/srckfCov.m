@@ -1,7 +1,7 @@
 %[text] # covariance using (spherical radial) sigma cubature points
 %[text] ## input
 %[text] `xEst:` state vector: 1xn vector
-%[text] `X`, sigma cubature points: 2n x n matrix 
+%[text] `X`, sigma cubature points: (2n+1) x n matrix
 %[text] `Q:` process noise matrix, n x n matrix
 %[text] ## output
 %[text] `Pout:`, a priori covariance: n x n matrix

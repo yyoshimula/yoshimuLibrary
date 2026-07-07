@@ -6,9 +6,9 @@
 %[text] where
 %[text] ${\\bf{p}}\_{m} = \\lambda\_{1}{\\bf{p}}\_{1}+\\lambda\_{2}{\\bf{p}}\_{2} \\\\\n\\lambda\_{m} = \\|{\\bf{p}}\_{m}\\| \\\\\n\\bar{{\\bf{p}}}\_{m} = \\frac{{\\bf{p}}\_{m}}{\\|{\\bf{p}}\_{m}\\|} \\\\\n\\mu\_{m} = \\mu\_{1}\\mu\_{2}e^{(\\lambda\_{m}-(\\lambda\_{1} + \\lambda\_{2}))}$
 %[text] ## inputs & outputs
-%[text] `p1, p2, p3:` lobe axes, nx3 vector
-%[text] `lam1, lam2, lam3:` sharpness, scalar,
-%[text] `mu1, mu2, mu3:` amplitudes of the SGs
+%[text] `p1, p2, p3:` lobe axes, nx3 matrix
+%[text] `lam1, lam2, lam3:` sharpness, nx1 vector
+%[text] `mu1, mu2, mu3:` amplitudes of the SGs, nx1 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 

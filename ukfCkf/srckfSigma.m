@@ -3,7 +3,7 @@
 %[text] P: covariance matrix, nxn matrix
 %[text] x, state vector, nx1 or 1xn vector 
 %[text] ## output
-%[text] `Xout:` cubature sigma points: 2n x n matrix 
+%[text] `Xout:` cubature sigma points: (2n+1) x n matrix
 %[text] ## note
 %[text] NA
 %[text] ## references 

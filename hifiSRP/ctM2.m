@@ -1,10 +1,10 @@
 %[text] # calculating remaining term $M$ in the Cook–Torrance model
 %[text] Cook–TorranceモデルのNDF項以外を計算
 %[text] `sat`: satellite configuration read with `readSC`
-%[text] `v:` reference vector, 1x3 vector
-%[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 vector
+%[text] `v:` reference vector, nFacet x 3 matrix
+%[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, nFacet x 3 matrix
 %[text] `M`: remaining term
-%[text] $M({\\bf v})=\\frac{G({\\bf v})F({\\bf v})}{4} $
+%[text] $M(v)=\frac{G(v)F(v)}{4}$
 %[text] ## note
 %[text] NA
 %[text] ## references 					

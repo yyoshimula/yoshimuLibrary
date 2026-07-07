@@ -1,10 +1,11 @@
+%[text] # wrapPi
+%[text] 角度 (rad) を半開区間 [-pi, pi) に正規化する（+pi は -pi に写る）
+%[text] ## inputs
+%[text] - lambda: 角度 [rad]（スカラー・ベクトル・行列可）
+%[text] ## outputs
+%[text] - lambda: [-pi, pi) に正規化した角度 [rad]
+%[text] See also mod
 function lambda = wrapPi(lambda)
-% WRAPPI Wrap angle in radians to the interval [-pi, pi)
-%
-%   lambdaWrapped = wrapPi(LAMBDA) wraps angles in LAMBDA, in radians,
-%   to the interval [-pi, pi).
-%
-%   See also mod.
 
 lambda = mod(lambda + pi, 2*pi) - pi;
 end

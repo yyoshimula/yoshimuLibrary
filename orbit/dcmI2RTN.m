@@ -1,5 +1,5 @@
 %[text] # DCM from inertial frame to RTN frame
-% Input: raan, inc, w, f
+% Input: raan, inc, w, nu
 % Output: R
 
 function R = dcmI2RTN(raan, inc, w, nu)

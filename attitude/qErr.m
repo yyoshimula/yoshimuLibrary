@@ -15,7 +15,7 @@
 %[text] Markley, F. L., and Crassidis, J. L., Fundamentals of Spacecraft Attitude Determination and Control, New York, NY: Springer, 2014. 
 %[text] ## revisions
 %[text] 20150101  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also qCon, qInv.
+%[text] See also qConj, qInv.
 function qe = qErr(scalar, q, qd)
 
 % q \otimes p = [ q0 * p0 - qv' * pv

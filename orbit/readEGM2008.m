@@ -1,12 +1,16 @@
 %[text] # reading EGM2008 coefficients
 %[text] EGM2008の係数読み込み
-%[text] `fName`: coefficient file name, string
+%[text] ## inputs
+%[text] `EGM`: struct to be filled with the read coefficients
 %[text] `deg`: degree to be read, scalar, int
-%[text] `varagin`: if 'normalized' is set, outputs are normalized coefficients
-%[text] `Clm`: coefficients, C, (deg+1) x (deg+1) matrix
-%[text] `Slm`: coefficients, S, (deg+1) x (deg+1) matrix
+%[text] `normalized`: if nonzero, outputs are normalized coefficients (default 0 = unnormalized)
+%[text] ## outputs
+%[text] `EGM`: input struct with fields
+%[text] `EGM.Cnm`: coefficients, C, (deg+1) x (deg+1) matrix
+%[text] `EGM.Snm`: coefficients, S, (deg+1) x (deg+1) matrix
 %[text] ## note
-%[text] 引数で'normalized'を指定したときだけnormalized coefficientsを出力
+%[text] 係数ファイル名 'EGM2008_to2190_TideFree.txt' は関数内でハードコードされている
+%[text] normalizedを0（既定）にしたときだけunnormalized coefficientsへ変換して出力
 %[text] egm2008.mではunnormalized coefficientsを使用する
 %[text] ## references 
 %[text] David A. Vallado, "Fundamentals of Astrodynamics and Applications, 4th edition, pp.538–550.

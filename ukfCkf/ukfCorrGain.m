@@ -1,12 +1,15 @@
 %[text] # Correlated covariances and Kalman gain
-%[text]  x\_est: state vector: nx1 vector
-%[text] X: sigma points: 2n+1 x n matrix 
-%[text] `yEst`, a priori estimated measurement vector: mx1 vector 
-%[text] `Y`, measurement simga points: 2n+1 x m matrix
-%[text] `wc`: weight for covariance, scalar or 1x2n+1 vector
-%[text] `R`, measurement noise matrix 
-%[text] `Pyy`: measurement covarince: mxm matrix 
+%[text] ## input
+%[text] xEst: state vector: nx1 vector
+%[text] X: sigma points: (2n+1) x n matrix
+%[text] `yEst`, a priori estimated measurement vector: mx1 vector
+%[text] `Y`, measurement simga points: (2n+1) x m matrix
+%[text] `wc`: weight for covariance, scalar or 1x(2n+1) vector
+%[text] `R`, measurement noise matrix
+%[text] ## output
+%[text] `Pyy`: measurement covarince: mxm matrix
 %[text] `Pxy`, correlated covariance: nxm matrix
+%[text] K: Kalman gain
 %[text] ## note
 %[text] NA
 %[text] ## references 

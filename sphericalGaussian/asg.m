@@ -6,17 +6,17 @@
 %[text] `lam`, bandwidth along x-axis, scalar
 %[text] `mu`, bandwidth along y-axis, scalar
 %[text] `c`, amplitude, scalar
-%[text] `asg`, anisotropic spherical Gaussian, Nx1 vector
+%[text] `aSG`, anisotropic spherical Gaussian, NxM matrix (same shape as vx, vy, vz)
 %[text] 
 %[text] Anisotropic spherical Gaussian is defined as
-%[text] $\\mathcal{G}({\\bf x}, {\\bf p}, \\lambda, \\mu) = \\mu \\exp{(\\lambda({\\bf x}^T{\\bf p} - 1))}$
+%[text] G(v; x, y, z, lam, mu, c) = c * max(0, v^T z) * exp(-lam (v^T x)^2 - mu (v^T y)^2)
 %[text] ## note
 %[text] NA
 %[text] ## references 
 %[text] NA
 %[text] ## revisions
 %[text] 20231004  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also sgMult, sg.
+%[text] See also sgMix, sg.
 function aSG = asg(vx, vy, vz, x, y, z, lam, mu, c)
 
 

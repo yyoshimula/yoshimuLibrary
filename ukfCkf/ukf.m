@@ -5,7 +5,7 @@ function [Pest, xEst] = ukf(f, h, Q, R, lam, P, x, y, wm, wc, wic)
 %    Inputs: f, system descrete dynamics: x(k+1) = f(x(k)), nx1 vector
 %            h, observation: y(k) = h(x(k)), mx1 vector
 %            Q, system noise: nxn matrix
-%            R, observation noise: mx1 vector
+%            R, observation noise covariance: mxm matrix
 %            lam, tuning parameter for UKF
 %            P, covariance matrix, nxn matrix
 %            x, state vector, nx1 vector
@@ -13,7 +13,7 @@ function [Pest, xEst] = ukf(f, h, Q, R, lam, P, x, y, wm, wc, wic)
 %   
 %   Outputs: P_est, estimated covariance matrix, nxn matrix
 %            x_est, estimated state, nx1 vector
-%   related function files: ukf_sigma, ukf_cov, ukf_corr, testUKF
+%   related function files: ukfSigma, ukfCov, ukfCorrGain
 %   note: 
 %   cf:
 %   revisions;
@@ -28,7 +28,7 @@ X = f(X');
 
 X = X';
 % a priroi estimation, 1xn vector
-xEst = sum(wim .* X, 1);
+xEst = sum(wm .* X, 1);
 
 % covariance
 P = ukfCov(xEst, X, wic, Q);

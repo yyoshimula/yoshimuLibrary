@@ -3,8 +3,8 @@
 %[text] TLE(Two line elements)を読み込み
 %[text] `tleName`: Two line elements file's name
 %[text] `cons`t: constant parameters for orbit propagation
-%[text] spiceFlag: on: if SPICE toolkit is used
-%[text]                  off (default): not used
+%[text] `tool`: which toolkit is used for the UTC-to-TT time conversion, char,
+%[text]                  one of {'yoshimuLibrary' (default), 'SPICE', 'MATLAB'}
 %[text] ## outputs
 %[text] `tle:` includes the following values
 %[text] `tle.satName`: satellite name

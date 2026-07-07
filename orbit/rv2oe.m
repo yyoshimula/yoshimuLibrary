@@ -1,12 +1,16 @@
-%[text] # position ${\\bf r}\n$ and velocity $\\bf v$ to orbital elements
+%[text] # position r and velocity v to orbital elements
+%[text] ## inputs
+%[text] `r`: position vector, nx3 matrix, km
+%[text] `v`: velocity vector, nx3 matrix, km/s
+%[text] `mu`: Earth's gravitational constant, scalar
+%[text] ## outputs
+%[text] `oe`: orbital elements, nx6 matrix [a, e, inc, raan, w, nu]
 %[text] `a`: semi-major axis, km
 %[text] `e`: eccentricity
 %[text] `inc`: inclination, rad
 %[text] `raan`: longitude of the ascending node, rad
 %[text] `w`: argument of perigee, rad
-%[text] `nu`: ture anomaly, rad
-%[text] `M`: mean anomaly at EPOCH, rad
-%[text] `mu`: Earth's gravitational constant, scalar
+%[text] `nu`: true anomaly, rad
 %[text] ## note
 %[text] NA
 %[text] ## references 

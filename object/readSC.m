@@ -1,16 +1,31 @@
 %[text] # Reading spacecraft shape data
 %[text] 衛星形状や表面特性の読み込み
+%[text] ## inputs
 %[text] `satName` : satellite object file name, .obj file
+%[text] ## outputs
 %[text] `sat`: 構造体satに各種データを格納
 %[text] `sat.vertices`: vertex position, (x, y, z), m, Nx3 matrix, 面を構成する点の座標
 %[text] `sat.normal`: normal vector, Nx3 matrix, 法線方向単位ベクトル, 外向きが正
 %[text] `sat.faces`: face indices, Nx3 matrix, 面を構成する座標のindex
-%[text] `sat.area`: face area, ${\\rm m^2}$, Nx1 vector, 面の面積
+%[text] `sat.area`: face area, m^2, Nx1 vector, 面の面積
 %[text] `sat.pos`: center of face, m, Nx3 matrix, 面の中心（平均）座標
+%[text] `sat.uu`: x-axis of local frame, Nx3 matrix
+%[text] `sat.uv`: y-axis of local frame, Nx3 matrix
+%[text] `sat.qlb`: quaternion from body-fixed frame to local frame, Nx4 matrix
 %[text] `sat.Ca`: coefficients for absorption, Nx1 vector, 吸収率 (MTL Red)
 %[text] `sat.Cd`: coefficients for diffusion, Nx1 vector, 拡散反射率 (MTL Green)
 %[text] `sat.Cs`: coefficients for specular reflection, Nx1 vector, 鏡面反射率 (MTL Blue)
+%[text] `sat.F0`: reflectivity default, Nx1 vector
+%[text] `sat.kappa`: Nx1 vector
+%[text] `sat.nu`: default value for Ashikhmin-Shirley model, Nx1 vector
+%[text] `sat.nv`: default value for Ashikhmin-Shirley model, Nx1 vector
+%[text] `sat.mCT`: default value for Cook-Torrance model, Nx1 vector
+%[text] `sat.fObs`: Nx1 vector
+%[text] `sat.MOI`: moment of inertia, 3x3 matrix (default value)
+%[text] `sat.m`: mass, kg (default value)
 %[text] `sat.sunlitFlag`: self shadow flag, (default)1: not shadowoed, 0: shadowed
+%[text] `sat.force`: Nx3 matrix
+%[text] `sat.torque`: Nx3 matrix
 %[text] ## note
 %[text] ## references
 %[text] NA

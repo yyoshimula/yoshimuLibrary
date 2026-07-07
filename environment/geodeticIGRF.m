@@ -15,10 +15,15 @@ function b = geodeticIGRF(jd, lat, lon, alt, coefs)
 %   (c) 2021 yasuhiro yoshimura
 %----------------------------------------------------------------------
 
-[year, month, day, hour, minute, second] = jd2gc(jd);
-time = datenum([year month day hour minute second]);
+[year, ~, ~, ~, ~, ~] = jd2gc(jd);
+% decimal year for IGRF coefficient interpolation
+decYear = year + (jd - gc2jd(year, 1, 1, 0, 0, 0)) ...
+                 ./ (gc2jd(year + 1, 1, 1, 0, 0, 0) - gc2jd(year, 1, 1, 0, 0, 0));
 
-% inuput arguments are scalar → use igrfs.m
-[bx, by, bz] = igrfs(time, rad2deg(lat), rad2deg(lon), alt, 'geodetic', coefs);
-b = [bx, by, bz];
+% NOTE (20260707): 旧実装は外部関数 igrfs.m（リポジトリ外・未同梱）に依存しており
+%   実行時に "Undefined function 'igrfs'" で失敗していた。リポジトリ内蔵の igrf12
+%   （igrfsyn12 mex + igrf12coeffs.txt）へ置き換え。lat/lon は rad のまま渡す
+%   （igrf12 が内部で deg 変換する）。引数 coefs は igrf12 が独自の IGRF-12 係数を
+%   用いるため使用しない（後方互換のため引数だけ残置）。
+b = igrf12(decYear, alt, lat, lon); % 1x3, nT, NED (northward, eastward, downward)
 end

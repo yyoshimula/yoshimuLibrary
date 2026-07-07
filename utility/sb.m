@@ -6,7 +6,6 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20220612  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also .
 function out = sb(symEq)
 
 out{:} = ['[$ ', latex(symEq), ']'];

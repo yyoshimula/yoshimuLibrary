@@ -6,18 +6,16 @@
 %[text] `d`: distance between satellite and Sun, m
 %[text] `const`: orbital constants
 %[text] `correctionPara`: correction parameters
-%[text] NDF: (optional) NDF distribution function, default: Beckamnn distribution
-%[text] `nMC`: (optional) number of random numbers for integration
 %[text] ## output
 %[text] `sat.force`: SRP force at each facet expressed with body-fixed frame, N, nx3 matrix
 %[text] `sat.torque`: SRP torque at each facet expressed with body-fixed frame, Nm, nx3 matrix
-%[text] `srpCdOut`: total diffuse part of SRP, N, 1x3 vector
-%[text] `srpCsOut`: total specular part of SRP, N, 1x3 vector
+%[text] `srpCdOut`: approximate diffuse part of SRP (diffuse term only), N, 1x3 vector
+%[text] `srpCsOut`: approximate specular part of SRP (total minus diffuse and impinged terms), N, 1x3 vector
 %[text] ## note
 %[text] NA
 %[text] ## references
 %[text] NA
-%[text] See also srpLps, readSC, orbitConst.
+%[text] See also readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCTinterp(sat, sunB, d, const, correctionPara)
 % arguments (Input)
 %     sat

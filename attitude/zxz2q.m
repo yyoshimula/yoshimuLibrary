@@ -7,9 +7,8 @@
 %[text] ${\\bf q} = \[q\_0,q\_1,q\_2,q\_3\]^T=\[\\cos(\\theta/2), {\\bf e}^T\\sin(\\theta/2)\]^T$
 %[text] `scalar == 4`
 %[text] ${\\bf q} = \[q\_1,q\_2,q\_3, q\_4\]^T=\[{\\bf e}^T\\sin(\\theta/2), \\cos(\\theta/2)\]^T$
+%[text] ## output
 %[text] `q`: quaternions, nx4 matrix
-%[text] `p`: quaternions, nx4 matrix 
-%[text] `output`: quaternions, nx4 matrix 
 %[text] ## note
 %[text] NA
 %[text] ## references 

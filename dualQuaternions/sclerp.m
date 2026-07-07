@@ -5,9 +5,16 @@
 %[text] ${\\bf q} = \[q\_0,q\_1,q\_2,q\_3\]^T=\[\\cos(\\theta/2), {\\bf e}^T\\sin(\\theta/2)\]^T$
 %[text] `scalar == 4`
 %[text] ${\\bf q} = \[q\_1,q\_2,q\_3, q\_4\]^T=\[{\\bf e}^T\\sin(\\theta/2), \\cos(\\theta/2)\]^T$
-%[text] `dq1`: starting dual quaternion, 1x8 
-%[text] `dq2`: ending dual quaternion, 1x8 
+%[text] `dq1`: starting dual quaternion, 1x8
+%[text] `dq2`: ending dual quaternion, 1x8
 %[text] dqt: interpolated dual quaternions, nx8
+%[text] ## note
+%[text] NA
+%[text] ## references
+%[text] NA
+%[text] ## revisions
+%[text] NA
+%[text] See also dqMult, dqInv, ctrlDq.
 function dqt = sclerp(t, scalar, dq1, dq2)
 % arguments
 %     t (:,1) {mustBeNumeric}

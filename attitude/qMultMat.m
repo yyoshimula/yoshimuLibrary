@@ -10,14 +10,15 @@
 %[text] `def == 1`
 %[text] ${\\bf q}\\otimes{\\bf p}= \\left\[\\begin{array}{cc}\n     q\_{4}\\bar{{\\bf{p}}}+p\_{4}\\bar{{\\bf{q}}} - \\bar{{\\bf{q}}}\\times\\bar{{\\bf{p}}}\\\\\nq\_{4}p\_{4}-\\bar{{\\bf{q}}}^{T}\\bar{{\\bf{p}}}\n\\end{array}\\right\]$
 %[text] `q`: quaternions, 1x4 matrix
-%[text] qMat: 4x4 matrix 
+%[text] ## output
+%[text] `qMat`: quaternion multiplication matrix, 4x4 matrix
 %[text] ## note
 %[text] NA
 %[text] ## references 
 %[text] Markley, F. L., and Crassidis, J. L., Fundamentals of Spacecraft Attitude Determination and Control, New York, NY: Springer, 2014. 
 %[text] ## revisions
 %[text] 20231219  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also qCon, qInv.
+%[text] See also qConj, qInv.
 function qMat = qMultMat(scalar, def, q)
 % arguments
 %     scalar (1,1) {mustBeMember(scalar, [0, 4])}

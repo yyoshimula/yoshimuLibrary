@@ -12,7 +12,7 @@
 %[text] Satellite orbits, pp.188 revisions;
 %[text] ## revisions
 %[text] 20210427  y.yoshimura
-%[text] See also teme2Mod, mod2J2000, obliquity, nutation.
+%[text] See also mod2J2000, obliquity, nutation.
 function [lon, lat, h] = geocentric2Geodetic(x, y, z, a, f)
 TOLERANCE = 1e-8;
 

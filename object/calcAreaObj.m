@@ -24,9 +24,9 @@ area = zeros(size(sat.faces, 1), 1);
 pos = zeros(size(sat.faces, 1), 3);
 
 for i = 1:size(sat.faces, 1)
-    if size(sat.faces(i,:), 2) == 3 | isnan(sat.faces(i,4)) % 3角メッシュ
+    if size(sat.faces, 2) == 3 || isnan(sat.faces(i,4)) % 3角メッシュ
         nPolygon = 3;
-    elseif size(sat.faces(i,:), 2) == 4 | ~isnan(sat.faces(i,4)) % 4角メッシュ
+    elseif size(sat.faces, 2) == 4 && ~isnan(sat.faces(i,4)) % 4角メッシュ
         nPolygon = 4;
     end
 
@@ -54,7 +54,11 @@ for i = 1:size(sat.faces, 1)
             sat.vertices(sat.faces(i,4),:); % nx3 matrix
 
         pos(i,:) = posSum ./ 4.0;
-        area(i,1) = vecnorm(crossA, 2, 2); % (norm of cross product)
+
+        % 平面四角形の面積 = 三角形(1,2,3) + 三角形(1,3,4)。長方形パネルでは
+        % 従来の |vA×vB| と一致し、非長方形の四角形でも正しい面積になる。
+        vC = sat.vertices(sat.faces(i,4),:) - sat.vertices(sat.faces(i,1),:); % v1->v4
+        area(i,1) = ( vecnorm(crossA, 2, 2) + vecnorm(cross(vB, vC), 2, 2) ) ./ 2;
 
     else
         error('polygon must be triangular or quad')

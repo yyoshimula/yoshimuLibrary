@@ -1,7 +1,7 @@
 %[text] # Moon's geocentric longitude, latitude, and distance w.r.t. referred to the mean ecliptic and equinox of date.
 %[text] ## inputs
 %[text] `jd`: Julian day, day, 
-%[text] ELPcoeffA, ELPcoeffB: ELP coefficients
+%[text] ELP: ELP coefficients, struct with fields ELP.a and ELP.b
 %[text] ## outputs
 %[text] lon: Moon's geocentric longitude, rad
 %[text] lat: Moon's geocentric latitude, rad
@@ -12,7 +12,7 @@
 %[text] Jean Meeus, "Astronomical Algorithms, 2nd edition", p. 337.
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also sun.
+%[text] See also moonLonLatR, readELP, moon.
 function [lon, lat, r] = moonELP(jd, ELP) %#codegen
 % arguments
 %     jd (:,1) {mustBeNumeric}

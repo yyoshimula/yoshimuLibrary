@@ -15,7 +15,7 @@
 %[text] Sullivan, Joshua, Generalized Angles-Only Navigation Architecture for Autonomous Distributed Space Systems, Journal of Guidance, Control, and Dynamics.
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also roe2losApprox.
+%[text] See also roe2mappedLOS.
 function [azi, ele] = oe2los(chiefOE, deputyOE, anomalyFlag, GE, chiefQbi)
 % arguments
 %     chiefOE (:,6) {mustBeNumeric}

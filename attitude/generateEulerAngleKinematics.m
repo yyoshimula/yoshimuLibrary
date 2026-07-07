@@ -4,7 +4,7 @@
 %[text] second: 2nd rotation axis, must be 1, 2, or 3
 %[text] third: 3rd rotation axis, must be 1, 2, or 3
 %[text] ## output
-%[text] dxdt: euler angle kinematics
+%[text] B: symbolic 3x3 matrix mapping body angular velocity to Euler angle rates (and its LaTeX form)
 %[text] ## note
 %[text] NA
 %[text] ## references 

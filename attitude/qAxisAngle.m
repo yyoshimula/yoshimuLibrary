@@ -13,7 +13,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20150101  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also qCon, qInv.
+%[text] See also qConj, qInv.
 function [eAxis, eAngle] = qAxisAngle(scalar, q)
 % arguments
 %     scalar (1,1) {mustBeMember(scalar, [0, 4])}

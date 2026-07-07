@@ -6,8 +6,10 @@
 %[text] ${\\bf q} = \[q\_0,q\_1,q\_2,q\_3\]^T=\[\\cos(\\theta/2), {\\bf e}^T\\sin(\\theta/2)\]^T$
 %[text] `scalar == 4`
 %[text] ${\\bf q} = \[q\_1,q\_2,q\_3, q\_4\]^T=\[{\\bf e}^T\\sin(\\theta/2), \\cos(\\theta/2)\]^T$
-%[text] R, rotation matrix, 3x3 matrix 
-%[text] `q`: quaternions, 1x4 vector 
+%[text] `q`: quaternions, 1x4 vector
+%[text] `w`: angular velocity, ${\bf \omega}$, 1x3 vector, rad/s
+%[text] ## output
+%[text] `qKine`: quaternion time derivative, ${\bf \dot{q}}$, 1x4 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 

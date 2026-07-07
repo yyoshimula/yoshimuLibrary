@@ -8,8 +8,8 @@
 %[text] ${\\bf q} = \[q\_1,q\_2,q\_3, q\_4\]^T=\[{\\bf e}^T\\sin(\\theta/2), \\cos(\\theta/2)\]^T$
 %[text] q: quaternion from epoch jd0 to jd1, nx4 matrix
 %[text] ## note
-%[text] NA
-%[text] ## references 
+%[text] Polar motion is not included.
+%[text] ## references
 %[text] NA
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com

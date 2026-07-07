@@ -1,5 +1,9 @@
 %[text] # julian century
-%[text] 
+%[text] Julian date to Julian centuries elapsed since J2000.0 (JD 2451545.0)
+%[text] ## inputs
+%[text] `jd`: Julian day, day
+%[text] ## outputs
+%[text] `T`: Julian centuries since J2000.0
 %[text] ## note
 %[text] ## references 
 %[text] ## revisions

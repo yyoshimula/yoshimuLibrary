@@ -22,7 +22,7 @@
 %[text] $D({\\bf{h}}) = ({\\bf{n}}^{T}{\\bf{h}})^{n\_u\\cos^{2}{\\phi\_{h}} + n\_{v}\\sin^{2}{\\phi\_{h}}}$
 %[text] ## references
 %[text] Ashikhmin, Michael, & Shirley, Peter. “An Anisotropic Phong BRDF Model.” Journal of graphics tools, vol. 5, no. 2, 2000, pp. 25-32.
-%[text] See also srpLps, readSC, orbitConst.
+%[text] See also readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpAS(sat, sunB, d, const, nMC)
 % arguments (Input)
 %     sat

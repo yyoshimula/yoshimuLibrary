@@ -2,8 +2,8 @@
 %[text] `t:` time at observations, 3x1 vector
 %[text] `azi, ele:` azimuth and elevation angles of the object at topocentric equatorial frame, 3x2 matrix
 %[text] `rObs:` observer position vector at inertial frame, 3x3 matrix
-%[text] `rRange`: initial guess range for the 8th order equations
 %[text] `mu`: Earth's gravitational constant, scalar
+%[text] `RE`: Earth's radius, scalar (used for convergence tolerance and initial range guess)
 %[text] ## note
 %[text] NA
 %[text] ## references 

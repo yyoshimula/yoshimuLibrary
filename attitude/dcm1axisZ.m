@@ -1,5 +1,5 @@
 %[text] # direction cosine matrix (DCM) about Z axis
-%[text] x軸周りの回転行列を計算
+%[text] z軸周りの回転行列を計算
 %[text] `phi`: rotation angle, rad, scalar
 %[text] R, rotation matrix, 3x3 matrix 
 %[text] ## note

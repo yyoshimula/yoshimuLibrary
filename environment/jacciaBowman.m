@@ -1,18 +1,18 @@
 %[text] # (wrapper) calculating atomospheric density using Jaccia–Bowman model 2008
 %[text] ## inputs
 %[text] `jd`: julian day, day
-%[text] `alp: right ascension`geocentricc longitude, rad
-%[text] `lat:` geocentric latitude, rad
-%[text] h`:` geodetic height, km
+%[text] `lon`: geocentric longitude, rad
+%[text] `lat`: geocentric latitude, rad
+%[text] `h`: geodetic height, km
 %[text] `const:` orbital constant
 %[text] `JB:` coefficients
 %[text] ## outputs
-%[text] `temp`: temperature, 
-%[text] `rho`: air density
+%[text] `temp`: temperature, K
+%[text] `rho`: air density, kg/m^3
 %[text] ## note
+%[text] Requires external routines not bundled in this library (Mahooti HPOP toolbox): JB2008, finddays, IERS, JPL_Eph_DE430, timediff, iauCal2jd, iauGmst06, Mjday_TDB. These must be on the MATLAB path.
+%[text] ## references
 %[text] NA
-%[text] ## references 
-%[text] ## NA
 %[text] ## revisions
 %[text] 20221009  y.yoshimura, y.yoshimula@gmail.com
 %[text] See also jd2mjd, jd2gc.

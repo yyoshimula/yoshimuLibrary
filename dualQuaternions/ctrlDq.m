@@ -1,11 +1,15 @@
-%[text] # control dual quaternions for $C^1$sclerp
-%[text] scalar: 0: quaternionのスカラ部q0としてq=\[q0 q1 q2 q3\]という定義
-%[text]             4: quaternionのスカラ部q4としてq=\[q1 q2 q3 q4\]という定義
-%[text] `dtp`: time step, s 
-%[text] `dq1, dq2`: dual quaternions intepolated from dq1 to dq2 (for each) 
-%[text] `w1, w2`: corresponding angular rates 
-%[text] `v1, v2`: corresponding translational velocities 
-%[text] `dqa`, dqb: control dual quaternions, 1x8 (for each)
+%[text] # control dual quaternions for $C^1$ sclerp
+%[text] ## inputs
+%[text] `dtp`: time step, s
+%[text] `dq1`: starting dual quaternion, 1x8
+%[text] `dq2`: ending dual quaternion, 1x8
+%[text] `w1`: angular rate at dq1, 1x3
+%[text] `v1`: translational velocity at dq1, 1x3
+%[text] `w2`: angular rate at dq2, 1x3
+%[text] `v2`: translational velocity at dq2, 1x3
+%[text] ## outputs
+%[text] `dqa`: control dual quaternion for the dq1 endpoint, 1x8
+%[text] `dqb`: control dual quaternion for the dq2 endpoint, 1x8
 %[text] ## note
 %[text] NA
 %[text] ## references 

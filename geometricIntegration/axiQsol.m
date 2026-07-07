@@ -23,7 +23,7 @@ y = [h0(:,1).*cos(alp).*sin(bet) + h0(:,2).*sin(alp).*sin(bet), ...
     h0(:,3).*cos(alp).*sin(bet) + sin(alp).*cos(bet), ...
     cos(alp).*cos(bet) - h0(:,3).*sin(alp).*sin(bet)];
 
-qOut = qMult_(4, 1, y, qIni);
+qOut = qMult(4, 1, y, qIni);
 
 
 end

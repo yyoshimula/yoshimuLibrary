@@ -1,17 +1,20 @@
 %[text] # calculating light curves using Ashikhmin–Shirley model
-%[text] `sat`: satellite configuration read with `readSC, N `facets
-%[text] `sunB: sun` vector from satellite, unit vector,  Mx3 matrix
-%[text] `obsB`, observer vector from satellite to observer, unit vetor, Mx3 matrix
-%[text] `sat: sat.fObs` is added, Nx1
-%[text] `cd:` diffuse part of light curves, NxM matrix
-%[text] `cs: `specular part of light curves, NxM matrix
+%[text] ## inputs
+%[text] `sat`: satellite configuration read with `readSC`, N facets
+%[text] `sunB`: sun vector from satellite, unit vector, Mx3 matrix
+%[text] `obsB`: observer vector from satellite to observer, unit vector, Mx3 matrix
+%[text] ## outputs
+%[text] `sat`: satellite configuration with reflectance added as sat.fObs, nFacet x M matrix
+%[text] `cd`: diffuse part of light curves, nFacet x M matrix
+%[text] `cs`: specular part of light curves, nFacet x M matrix
+%[text] `D`: normal distribution function of BRDF, nFacet x M matrix
 %[text] ## note
-%[text] body-fixed frameで計算．（→法線ベクトルは\[0, 0, 1\]とは限らない）
+%[text] body-fixed frameで計算．（→法線ベクトルは [0, 0, 1] とは限らない）
 %[text] ## references
 %[text] Ashikhmin, Michael, & Shirley, Peter. “An Anisotropic Phong BRDF Model.” Journal of graphics tools, vol. 5, no. 2, 2000, pp. 25-32.
 %[text] ## revisions
 %[text] 20200430  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also readSC, lcSimple, lcAS, lcCT, orbitConst.
+%[text] See also readSC, lcSimple, lcCT, orbitConst.
 function [sat, cd, cs, D] = lcAS(sat, sunB, obsB)
 
 sunB = sunB ./ vecnorm(sunB, 2, 2); %一応normalize, Mx3

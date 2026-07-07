@@ -1,20 +1,22 @@
 %[text] # mean value of Gaussian Process Regression
 %[text] ## inputs
-%[text] `xAst`: $\\bf x^\\ast\n$ test data, m x n matrix 
-%[text] `xTrain`: traning data, Nxn matrix 
-%[text] `yTrain`: traning output data, Nxm vector 
-%[text] `Kinv`: inverse matrix of the kernel matrix, NxN matrix 
+%[text] `xAst`: $\bf x^\ast$ test data, m x n matrix
+%[text] `xTrain`: traning data, Nxn matrix
+%[text] `xMean`: prior mean of the training outputs, Nxm vector
+%[text] `yTrain`: traning output data, Nxm vector
+%[text] `yMean`: prior mean of the test outputs, Mxm vector
+%[text] `L`: Cholesky factor of the kernel matrix (lower triangular), NxN matrix
 %[text] `hypPara`: hyper parameters for kernel
 %[text] ## outputs
-%[text] `yPred`: predicted mean value for test data $\\bf x^\\ast\n$, Mxn matrix
-%[text] logP: log marginal likelihood, $\\log{p({\\bf y}|X)}$
+%[text] `yPred`: predicted mean value for test data $\bf x^\ast$, Mxn matrix
+%[text] `logP`: log marginal likelihood, $\log{p({\bf y}|X)}$
 %[text] ## note
 %[text] NA
 %[text] ## references 
 %[text] NA
 %[text] ## revisions
 %[text] 20230614  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also gpCov.
+%[text] See also gprCov.
 function [yPred, logP] = gprMean(xAst, xTrain, xMean, yTrain, yMean, L, hypPara)
 % arguments
 %     xAst

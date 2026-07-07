@@ -1,10 +1,13 @@
 %[text] # converting Gregorian calendar date to Julian days
+%[text] ## inputs
 %[text] `year`: year, nx1 vector
-%[text] `month: month,` nx1 vector
-%[text] `hour`: hour`,` nx1 vector
-%[text] `minute`: minute`,` nx1 vector
-%[text] `second`: second`,` nx1 vector
-%[text] `jd`: Julian day`,` nx1 vector
+%[text] `month`: month, nx1 vector
+%[text] `day`: day, nx1 vector
+%[text] `hour`: hour, nx1 vector
+%[text] `minute`: minute, nx1 vector
+%[text] `second`: second, nx1 vector
+%[text] ## outputs
+%[text] `jd`: Julian day, nx1 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 

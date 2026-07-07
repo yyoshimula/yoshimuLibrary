@@ -13,7 +13,7 @@
 %[text] \[2\] Jean Meeus, "Astronomical Algorithms, 2nd Edition", pp.134-138
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also oe2roe, nutationQ, precession.
+%[text] See also oe2roe, nutationQ, precessionDCM, precessionQ.
 function [zeta, z, theta, eta, Pi_, p] = precession(jd0, jd1, const)
 % arguments
 %     jd0 (:,1) {mustBeNumeric}

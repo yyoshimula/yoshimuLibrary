@@ -17,7 +17,7 @@
 %[text] Jean Meeus, "Astronomical Algorithms, 2nd ed.," pp.143-148. 
 %[text] ## revisions
 %[text] 20210601  y.yoshimura
-%[text] See also teme2Mod, teme2J2000, orbitConst.
+%[text] See also teme2J2000, orbitConst.
 function [iJ, OmeJ, wJ] = mod2J2000(jd, i, Ome, w, const)
 % arguments
 %     jd (:,1) {mustBeNumeric}

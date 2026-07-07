@@ -1,5 +1,7 @@
 %[text] # calculate the Gregorian calendar date from the Julian date
+%[text] ## inputs
 %[text] `jd`: julian day, day
+%[text] ## outputs
 %[text] `year`
 %[text] `month`
 %[text] `day`
@@ -12,7 +14,7 @@
 %[text] `NA`
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also jd2fyear.
+%[text] See also gc2jd.
 function [year, month, day, hour, minute, second] = jd2gc(jd)
 
 fday   = jd + 0.5 - floor(jd + 0.5);

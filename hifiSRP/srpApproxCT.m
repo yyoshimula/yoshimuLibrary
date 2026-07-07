@@ -1,8 +1,8 @@
 %[text] # approximating specular term of SRP with Cook–Torrance model
 %[text] Cook–Torranceモデルを用いたSRP近似解析解
 %[text] `sat`: satellite configuration read with `readSC`
-%[text] `thetaN: angle between sun vector and facet's normal vector`, 1x3 vector
-%[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 vector
+%[text] `thetaN: angle between sun vector and facet's normal vector`, scalar (rad)
+%[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 vector (Nx3 allowed)
 %[text] `d`: distance between satellite and Sun, m
 %[text] `const`: constants for orbital propagation
 %[text] `srp`: approximated SRP with Cook–Torrance model **expressed with Sun-fixed frame**
@@ -12,7 +12,7 @@
 %[text] Analytic Approximation of High-Fidelity Solar Radiation Pressure.
 %[text] ## revisions
 %[text] 20200915  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also srpApproxCT.
+%[text] See also srpApproxCT2, ctM.
 function srp = srpApproxCT(sat, thetaN, sunB, d, const)
 arguments (Input)
     sat

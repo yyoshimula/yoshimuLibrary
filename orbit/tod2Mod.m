@@ -14,7 +14,7 @@
 %[text] Jean Meeus, "Astronomical Algorithms, 2nd ed.," pp.143-148. 
 %[text] ## revisions
 %[text] 20210601  y.yoshimura
-%[text] See also teme2Mod, mod2J2000, obliquity, nutation.
+%[text] See also mod2J2000, obliquity, nutation.
 function [iMod, OmeMod, wMod] = tod2Mod(jd, i, Ome, w, const)
 
 %[text] $\\Delta \\Psi, \\Delta\\epsilon$

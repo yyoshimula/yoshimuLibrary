@@ -45,7 +45,7 @@ for i = 1:size(phiR,1)
         % reference vec.
         v = [cos(phi) * sin(theta), sin(phi) * sin(theta), cos(theta)];
 
-        [~, ~, D(i,j)] = lcAS(sat, s, v);
+        [~, ~, ~, D(i,j)] = lcAS(sat, s, v);
         % [~, ~, ~, D(i,j)] = lcCT(sat, s, v);
 
     end

@@ -10,7 +10,7 @@
 %[text] ## revisions
 %[text] 20241125 四角facetに対応 y.yoshimura
 %[text] 20200811  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also selfShadow.
+%[text] See also calcRayIntersect.
 function sat = selfShadow(sat, sun) %#codegen
 
 sun = sun(:); % column vector
@@ -40,8 +40,8 @@ parfor i = 1:length(faces)
             flag = calcRayIntersect(sun', normal(j,:), vertJ, posI);
             tmpFlagI = tmpFlagI * flag; % OR演算っぽく
 
-            % 四角facetでは2回計算
-            if ~isnan(faces(1,4))
+            % 四角facetでは2回計算（面 j 自身が四角かどうかで判定する）
+            if size(faces,2) >= 4 && ~isnan(faces(j,4))
                 vertJ = [sat.vertices(faces(j,3),:)
                     sat.vertices(faces(j,4),:)
                     sat.vertices(faces(j,1),:)]; % 3x3, coordinate of j-th facet

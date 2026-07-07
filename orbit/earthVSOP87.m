@@ -1,6 +1,6 @@
 %[text] # Earth heliocentric longitude, latitude, and distance
-%[text] `jd`: Julian day, day, 
-%[text] const: orbital constant
+%[text] `jd`: Julian day, day,
+%[text] `earthVSOP`: VSOP87 coefficient table for the Earth (produced by vsopConst)
 %[text] lon: Earth's heliocentric longitude, rad, mx1 vector
 %[text] lat: Earth's heliocentric latitude, rad, mx1
 %[text] r: Earth's heliocentric distance,  AU, mx1

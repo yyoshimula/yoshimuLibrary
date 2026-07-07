@@ -1,19 +1,15 @@
 %[text] # calculating ray triangle intersection
-%[text] 読み込んだ衛星形状に対してself-shadowingを計算
+%[text] 単一の三角facetに対してray-triangle交差判定を行い，j番目のfacetがi番目のfacetに影を作るかを計算
+%[text] ## inputs
+%[text] `sun`: Sun directional vector, 1x3
+%[text] `nJ`: normal vector of the j-th (shadowing) facet, 1x3
+%[text] `vertJ`: vertices of the j-th (shadowing) facet, (x, y, z), m, 3x3 matrix (3頂点)
+%[text] `vertI`: position of the i-th (shadowed) facet, m, 1x3
+%[text] ## outputs
+%[text] `flag`: intersection flag, 1: not shadowed, 0: shadowed
 %[text] ## note
 %[text] calculate shadow if j-th face make the shadow on the i-th face
-%[text] $j\n$番目のfacetが$i\n$番目のfacetに影を作るかを判定
-%[text] `satName` : satellite object file name, .obj file
-%[text] `sat`: 構造体satに各種データを格納
-%[text] `sat.vertices`: vertex position, (x, y, z), m, Nx3 matrix, 面を構成する点の座標
-%[text] `sat.faces`: face indices, Nx3 matrix, 面を構成する座標のindex
-%[text] `sat.area`: face area, ${\\rm m^2}$, Nx1 vector, 面の面積
-%[text] `sat.pos`: center of face, m, Nx3 matrix, 面の中心（平均）座標
-%[text] `sat.Ca`: coefficients for absorption, Nx1 vector, 吸収率
-%[text] `sat.Cd`: coefficients for diffusion, Nx1 vector, 拡散反射率
-%[text] `sat.Cs`: coefficients for specular reflection, Nx1 vector, 鏡面反射率
-%[text] `sat.n`: normal vector, Nx3 matrix, 法線方向単位ベクトル, 外向きが正
-%[text] `sat.shadowFlag`: self shadow flag, (default)1: not shadowoed, 0: shadowed
+%[text] $j$番目のfacetが$i$番目のfacetに影を作るかを判定
 %[text] ## references
 %[text] NA
 %[text] ## revisions

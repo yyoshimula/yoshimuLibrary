@@ -7,7 +7,7 @@
 %[text] Jean Meeus, "Astronomical Algorithms, 2nd edition", p.87. Eq.(12.3) or (12.4)
 %[text] ## revisions
 %[text] 20160419  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also jd2GAST.
+%[text] See also gast.
 function GMST = gmst(jd)
 % arguments
 %     jd (:,1) {mustBeNumeric}    

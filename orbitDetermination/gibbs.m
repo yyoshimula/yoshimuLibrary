@@ -2,7 +2,7 @@
 %[text] `r1, r2, r3: geocentric position vectors at t1, t2, and t3`
 %[text]  `order must be t1 < t2 < t3`
 %[text] mu: Earth's gravitational constant, unit must be consistent with the position vectros
-%[text]         重力定数．位置ベクトルと単位を合わせる．e.g., 位置ベクトルがkmの場合，muは${\\rm km^3/s^2}$にする
+%[text]         重力定数．位置ベクトルと単位を合わせる．e.g., 位置ベクトルがkmの場合，muは km^3/s^2 にする
 %[text] ## note
 %[text] `r1, r2, r3, their order must be t1 < t2 < t3`
 %[text] `r1, r2, r3`は時系列順に並んでいる必要がある

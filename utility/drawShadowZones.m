@@ -1,3 +1,12 @@
+%[text] # draw shadow (eclipse) zones on the current axes
+%[text] sunlitFlag に応じて，xregion で eclipse 中の区間を陰影表示する
+%[text] ## inputs
+%[text] `t_`: time vector
+%[text] `sunlitFlag`: flag per time step, 1: sunlit, 0: shadow (eclipse)
+%[text] ## outputs
+%[text] NA (shaded regions are drawn on the current axes)
+%[text] ## note
+%[text] NA
 function drawShadowZones(t_, sunlitFlag)
 % t_: time vector
 % sunlitFlag = 1: sunlit, 0: shadow

@@ -1,12 +1,12 @@
 %[text] # Sun's gravitational force
-%[text] ## input 
-%[text] `jd`: Julian day, day, 
+%[text] ## inputs
+%[text] `jd`: Julian day, day,
 %[text] `rVec`: satellite position at inertial frame, km, nx3 vector
 %[text] `const`: orbital constants
 %[text] `earthVSOP`, earth VSOP87 constants
 %[text] `options`
 %[text]  `SPICE`: use SPICE, `on` or `off`
-%[text] ## `output`
+%[text] ## outputs
 %[text] `aSun`: Sun's gravitational force, km/s^2, nx3 vector
 %[text] `sunI`: Sun's position at inertial frame (GCRF), km, nx3 vector
 %[text] ## note

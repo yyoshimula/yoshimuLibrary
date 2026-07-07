@@ -1,6 +1,11 @@
 %[text] # setting and saving figure for conference or journal manuscript
 %[text] 論文用にfigureをいい感じに設定し，保存
 %[text] 表示されているfig全てを保存
+%[text] ## inputs
+%[text] `asis`: if 1, keep the current figure size; if 0, auto-resize to paper layout (default 0)
+%[text] `contentType`: exportgraphics ContentType passed to fig4Paper, e.g., 'vector' or 'image' (default 'vector')
+%[text] ## outputs
+%[text] NA (each visible figure is exported to a PDF file via fig4Paper)
 %[text] ## note
 %[text] NA
 %[text] ## references 
@@ -9,9 +14,11 @@
 %[text] 20240823  y.yoshimura, y.yoshimula@gmail.com, major update
 %[text] See also fig4Presen.
 function figs4Paper(asis, contentType)
+% 既定値は独立に設定する（旧実装の elseif では 0 引数時に contentType が未設定になっていた）
 if nargin < 1
     asis = 0;
-elseif nargin < 2
+end
+if nargin < 2
     contentType = 'vector';
 end
 

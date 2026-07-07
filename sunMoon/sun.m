@@ -2,7 +2,7 @@
 %[text] ## inputs
 %[text] `jd`: Julian date of UTC, day, nx1 vector
 %[text] const: orbital constants
-%[text] earthVSOP: earth VSOP coefficients
+%[text] earthVSOP: earth VSOP87 coefficients
 %[text] ## outputs
 %[text] `sunPos`: Sun position w.r.t. J2000.0 frame, km, nx3 matrix
 %[text] ## note
@@ -11,7 +11,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also sunLonLatR, earthVSOP, vsopConst.
+%[text] See also sunLonLatR, earthVSOP87, vsopConst.
 function sunPos = sun(jd, const, earthVSOP)
 % arguments
 %     jd (:,1) {mustBeNumeric}

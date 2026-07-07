@@ -1,19 +1,18 @@
 %[text] # covariance matrix of Gaussian Process Regression
 %[text] ## inputs
-%[text] `xAst`: $\\bf x^\\ast\n$ test data, m x n matrix 
-%[text] `xTrain`: traning data, dxn matrix 
-%[text] `yTrain`: traning output data, dx1 vector 
-%[text] `Kinv`: inverse matrix of the kernel matrix, dxd matrix 
+%[text] `xAst`: $\bf x^\ast$ test data, m x n matrix
+%[text] `xTrain`: traning data, dxn matrix
+%[text] `Kinv`: inverse matrix of the kernel matrix, dxd matrix
 %[text] `hypPara`: hyper parameters for kernel
 %[text] ## outputs
-%[text] `yPred`: predicted mean value for test data $\\bf x^\\ast\n$, mxn matrix
+%[text] `sigPred`: predicted variance for test data $\bf x^\ast$, mx1 vector
 %[text] ## note
 %[text] NA
 %[text] ## references 
 %[text] NA
 %[text] ## revisions
 %[text] 20230614  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also gpCov.
+%[text] See also gprMean.
 function sigPred = gprCov(xAst, xTrain, Kinv, hypPara)
 
 d = size(xTrain,1); % # of data

@@ -4,7 +4,7 @@
 %[text] `v:` reference vector, 1x3 or 3x1 vector
 %[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 or 3x1 vector
 %[text] `M`: remaining term
-%[text] $M({\\bf v})=\\frac{G({\\bf v})F({\\bf v})}{4} $
+%[text] $M(v)=\frac{G(v)F(v)}{4}$
 %[text] ## note
 %[text] `sat.normal` may be nFacet x 3 and `sat.F0` may be scalar or nFacet x 1.
 %[text] ## references

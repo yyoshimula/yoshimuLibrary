@@ -7,7 +7,6 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20250623  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also .
 function gFigs(nDisp)
 % gFigs  ― 既存の Figure を選んだディスプレイ上にグリッド配置する
 %
@@ -19,6 +18,11 @@ function gFigs(nDisp)
 % arguments
 %     nDisp (1,1) {mustBeInteger,mustBePositive} = 1
 % end
+
+% arguments ブロックはコメントアウトされているため既定値をここで補う
+if nargin < 1
+    nDisp = 1;
+end
 
 if nDisp == 0
     return

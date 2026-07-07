@@ -1,9 +1,9 @@
 %[text] # Correlated covariances and Kalman gain for (spherical radial) cubature Kalman filter
 %[text] ## input
 %[text] xEst: state vector: nx1 vector
-%[text] X: sigma cubature points: 2n x n matrix 
+%[text] X: sigma cubature points: (2n+1) x n matrix
 %[text] `yEst`, a priori estimated measurement vector: mx1 vector 
-%[text] `Y`, measurement simga cubature points: 2n x m matrix
+%[text] `Y`, measurement simga cubature points: (2n+1) x m matrix
 %[text] `wc`, weight for covariance: 2n+1 x 1 vector
 %[text] `R`, measurement noise matrix 
 %[text] ## output

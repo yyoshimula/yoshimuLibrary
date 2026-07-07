@@ -4,8 +4,8 @@
 %[text] `sunB:` sun vector from satellite to Sun expressed with body-fixed frame, 1x3 vector
 %[text] `d`: distance between satellite and Sun, m
 %[text] `const`: orbital constants
-%[text] `nMC`: number of random numbers for integration
-%[text] `varagin`: NDF distribution function, default: Beckamnn distribution, or Gauss distribution if specified
+%[text] `NDF`: (optional) NDF distribution function, default: Beckmann distribution, or Gauss distribution if specified
+%[text] `nMC`: (optional) number of random numbers for integration
 %[text] `sat.force`: SRP force at each facet expressed with body-fixed frame, N, nx3 matrix
 %[text] `sat.torque`: SRP torque at each facet expressed with body-fixed frame, Nm, nx3 matrix
 %[text] `srpCdOut`: diffuse part of SRP
@@ -16,7 +16,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20220201  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also srpLps, readSC, orbitConst.
+%[text] See also readSC, orbitConst.
 function [sat, srpCdOut, srpCsOut] = srpCTuni(sat, sunB, d, const, NDF, nMC)
 % arguments (Input)
 %     sat

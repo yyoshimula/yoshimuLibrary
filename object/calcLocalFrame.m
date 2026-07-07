@@ -1,15 +1,14 @@
 %[text] # calculating object facet's local frame and its quaternion from body-fixed frame to local frame
 %[text] 読み込んだ衛星形状のlocal frameを計算
+%[text] ## inputs
 %[text] `sat`: 構造体satに各種データを格納
-%[text] `sat.n`: normal vector, Nx3 matrix, 法線方向単位ベクトル, 外向きが正
-%[text] `sat.area`: face area, ${\\rm m^2}$, Nx1 vector, 面の面積
-%[text] `sat.pos`: center of face, m, Nx3 matrix, 面の中心（平均）座標
+%[text] `sat.normal`: normal vector, Nx3 matrix, 法線方向単位ベクトル, 外向きが正
 %[text] `sat.vertices`: vertex position, (x, y, z), m, Nx3 matrix, 面を構成する点の座標
 %[text] `sat.faces`: face indices, Nx3 matrix, 面を構成する座標のindex
-%[text] `sat.Ca`: coefficients for absorption, Nx1 vector, 吸収率
-%[text] `sat.Cd`: coefficients for diffusion, Nx1 vector, 拡散反射率
-%[text] `sat.Cs`: coefficients for specular reflection, Nx1 vector, 鏡面反射率
-%[text] `sat.shadowFlag`: self shadow flag, (default)1: not shadowoed, 0: shadowed
+%[text] ## outputs
+%[text] `uu`: x-axis of local frame w.r.t. body-fixed frame, Nx3 matrix
+%[text] `uv`: y-axis of local frame w.r.t. body-fixed frame, Nx3 matrix
+%[text] `qlb`: quaternion from body-fixed frame to local frame, Nx4 matrix
 %[text] ## note
 %[text] NA
 %[text] ## references

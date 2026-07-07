@@ -6,7 +6,6 @@
 %[text] `i`: inclination, rad
 %[text] `Ome`: arugment of ascending node, rad
 %[text] `w`: argument of perihelion, rad
-%[text] `f`: true anomaly, rad
 %[text] `M`: mean anomaly, rad
 %[text] `const`:  constant parameters for orbit propagation
 %[text] ## outputs

@@ -2,7 +2,7 @@
 %[text] ## inputs
 %[text] `oe`: orbital elements $a , e, i, \\Omega, w, f({\\rm or} \~M)$ (m or km, -, rad, rad, rad, rad)
 %[text] `flag`: 1:= true anomaly, 0:= mean anomaly 
-%[text] `GE`: gravitational constant of the Earth, m or km (unit must be unified with the position, velocity, and semi-major axis)
+%[text] `mu`: gravitational constant of the Earth, m or km (unit must be unified with the position, velocity, and semi-major axis)
 %[text] ## outputs
 %[text] `r`: position vector, nx3 vector, m or km 
 %[text] `v`: velocity vector, nx3 vector, m/s or km/s 
@@ -13,12 +13,12 @@
 %[text] ## revisions
 %[text] 20231204 y.yoshimura, GEを直接引数として設定
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
-%[text] See also roe2losApprox, trueAnomaly.
+%[text] See also roe2mappedLOS, trueAnomaly.
 function [r, v] = oe2rv(oe, flag, mu)
 % arguments
-%     oe (:,6) {mustBeNumeric}    
+%     oe (:,6) {mustBeNumeric}
 %     flag (1,1) {mustBeMember(flag, [0, 1])}
-%     GE (1,1) {mustBeNumeric}
+%     mu (1,1) {mustBeNumeric}
 % end
 %[text] ### orbital elements and constants
 small = 1.0e-10;

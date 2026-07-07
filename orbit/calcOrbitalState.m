@@ -1,3 +1,20 @@
+%[text] # Compute derived orbital state quantities from orbital elements
+%[text] 軌道要素から派生量（p, h, n, u, M, uM, r）と位置・速度ベクトルを計算
+%[text] ## inputs
+%[text] `oe`: struct with fields a, e, inc, raan, w, nu (semi-major axis, eccentricity, inclination, RAAN, argument of perigee, true anomaly)
+%[text] `mu`: gravitational constant (unit consistent with oe.a)
+%[text] ## outputs
+%[text] `oe`: input struct augmented with the following fields
+%[text] `oe.p`: semilatus rectum
+%[text] `oe.h`: orbital angular momentum
+%[text] `oe.n`: mean motion
+%[text] `oe.u`: true argument of latitude (mod 2*pi)
+%[text] `oe.M`: mean anomaly (mod 2*pi)
+%[text] `oe.uM`: mean argument of latitude (mod 2*pi)
+%[text] `oe.r`: radius
+%[text] `oe.rVec`: position vector
+%[text] `oe.vVec`: velocity vector
+%[text] See also oe2rv, meanAnomaly, gve.
 function oe = calcOrbitalState(oe, mu)
 % Calculate orbital parameters
 oe.p = oe.a * (1 - oe.e^2); % semilatus rectum
