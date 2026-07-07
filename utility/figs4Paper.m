@@ -26,6 +26,9 @@ end
 
 %% ❶ すべての可視 Figure を取得
 figs = findall(groot,'Type','figure','Visible','on');
+if isempty(figs)
+    return   % 可視 Figure が無ければ何もしない（空の GraphicsPlaceholder への .Tag アクセスを回避）
+end
 
 %% ❂ Live Script インライン Figure を除外
 isInlineLE = startsWith({figs.Tag},'TMWLiveEditor');  % ←最重要フィルタ
