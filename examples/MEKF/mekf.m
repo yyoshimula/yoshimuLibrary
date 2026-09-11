@@ -49,7 +49,8 @@ tmp = K * (y -  dAlp');
 xEst = tmp'; % 1x6
 
 %% reset
-qOut = qMult(4, 1, [xEst(1:3), 1], qEst);
+% dAlpha = 2*dq_v/dq_4 (rotation vector) -> dq ~ [dAlpha/2, 1]
+qOut = qMult(4, 1, [xEst(1:3) ./ 2, 1], qEst);
 qOut = qOut ./ norm(qOut);
 xOut = [0, 0, 0, xEst(4:6)];
 pOut = P;

@@ -29,7 +29,7 @@ sat.m = 100;
 aEarth = -const.GE ./ r.^3 .* rVec;
 %[text] ### $J\_2\n$
 dUdr = J2 .* mu ./ r.^2 .* 3 .* (const.RE ./ r).^2 ./ 2 .* (3 * sin(phi)^2 - 1);
-dUdphi = J2 .* mu ./ r .* (const.RE ./ r).^2 * 3 * sin(phi) * sqrt(1 - sin(phi)^2);
+dUdphi = -J2 .* mu ./ r .* (const.RE ./ r).^2 * 3 * sin(phi) * sqrt(1 - sin(phi)^2); % C20 = -J2 なので負号
 dUdlam = 0;
 
 aJ2x = (1 ./ r .* dUdr - z ./ r.^2 ./ sqrt(x.^2 + y.^2) .* dUdphi) .* x - y ./ (x.^2 + y.^2) .* dUdlam;

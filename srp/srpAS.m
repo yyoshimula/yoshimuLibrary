@@ -82,8 +82,11 @@ u1 = ind1 .* 4 .* u1 +  ind2 .* (4 * (u1 -0.25)) ...
     +  ind3 .* (4 * (u1 - 0.5)) + ind4 .* (4 * (u1 - 0.75));
 
 phiH = phiFun(u1, sat.nu, sat.nv);
-phiH = ind1 .* phiH  + ind2 .* (phiH + pi/2) ...
-    + ind3 .* (phiH + pi) + ind4 .* (phiH + 3/2*pi); %nFacet x nMC
+% p(phi) is symmetric about phi = pi/2, pi, 3pi/2, so the other quadrants are
+% mirror images of the first quadrant: pi-phi, pi+phi, 2pi-phi (shifting by
+% +pi/2 would swap the roles of nu and nv and is wrong unless nu == nv)
+phiH = ind1 .* phiH  + ind2 .* (pi - phiH) ...
+    + ind3 .* (pi + phiH) + ind4 .* (2*pi - phiH); %nFacet x nMC
 
 thetaH = acos(u2.^(1 ./ (sat.nu .* cos(phiH).^2 + sat.nv .* sin(phiH).^2 + 1)));  %nFacet x nMC
 
@@ -108,7 +111,10 @@ M = 1 ./ VH ./ max(NS, NV); % nFacet x nMC
 M(isinf(M)) = 0; % Inf項を消す
 
 % weight
-W = abs(SH) .* NV ./ NH .* M;
+% h is sampled with the AS pdf p_h = sqrt((nu+1)(nv+1))/(2pi) (n.h)^k, which is
+% already normalized on d(omega_h); the 1/(n.h) factor used for Beckmann
+% (srpCT, whose pdf is D(h)(n.h)) must NOT be applied here (cf. srpASuni)
+W = abs(SH) .* NV .* M;
 
 tmp = W .* F; % nxnMC
 
