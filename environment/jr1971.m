@@ -108,7 +108,7 @@ function result = jr1971(jd, phi_gd, lambda, h, F10, F10a, Kp)
     % -- Diurnal Variation -----------------------------------------------------
 
     dF10 = F10 - F10a;
-    Tc   = 379 + 3.24 * F10 + 1.3 * dF10;
+    Tc   = 379 + 3.24 * F10a + 1.3 * dF10; % 3.24 は 81 日平均に掛ける (Jacchia 1970 Eq. 14; SatelliteToolbox 702b621d で修正)
 
     eta   = abs(phi_gd - delta_s) / 2;
     theta = abs(phi_gd + delta_s) / 2;
