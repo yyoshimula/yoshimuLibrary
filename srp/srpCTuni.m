@@ -105,7 +105,7 @@ sunlitFlag = (NS > 0); % nx1 matrix, 1: sunlit, 0: shade
 % satellite has n facets
 temp = (sunB + srpCd + srpCs);
 sat.force = sunlitFlag .* coeff .* sat.area .* NS .* temp; % nx3 matrix
-sat.torque = cross(sat.pos, sat.force); % nx3 matrix
+sat.torque = cross(sat.pos, sat.force, 2); % nx3 matrix
 %[text] ## for output variables
 %[text] diffuse part of SRP and specular part of SRP
 tmp = coeff .* sat.area .* NS .* sunlitFlag .* srpCd; % nFacet x 3

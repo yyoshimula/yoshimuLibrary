@@ -13,7 +13,7 @@
 %[text] ## references
 %[text] NA
 %[text] ## revisions
-%[text] NA
+%[text] 20261001  y.yoshimura, fix: 1x8 row inputs failed (repmat(eAxis', nT, 1) made a 3x1 column)
 %[text] See also dqMult, dqInv, ctrlDq.
 function dqt = sclerp(t, scalar, dq1, dq2)
 % arguments
@@ -66,8 +66,8 @@ sinTthetaHalf = sin(tThetaHalf);
 
 % 事前に繰り返される値を計算
 tdHalf = t * d/2;
-eAxisRep = repmat(eAxis', nT, 1);
-pRep = repmat(p', nT, 1);
+eAxisRep = repmat(eAxis(:)', nT, 1); % eAxis is 1x3 for row inputs
+pRep = repmat(p(:)', nT, 1);
 
 % 三角関数項を事前計算
 sinTerm = sinTthetaHalf;

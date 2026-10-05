@@ -54,7 +54,7 @@ tmp = ns .* (sat.Ca + sat.Cd) .* sunB' ...
     + ns .* (Bf * sat.Cd + kappa .* sat.Ca ...
     + 2.0 .* sat.Cs .* ns) .* sat.normal; % nx3 matrix
 sat.force = sunlitFlag .* coeff .* sat.area .* tmp; % nx3 matrix
-sat.torque = cross(sat.pos, sat.force); % nx3 matrix
+sat.torque = cross(sat.pos, sat.force, 2); % nx3 matrix
 %[text] ## for output variables
 %[text] diffuse part of SRP and specular part of SRP
 tmp = coeff .* sat.area .* ns .* sunlitFlag .* srpCd; % nFacet x 3

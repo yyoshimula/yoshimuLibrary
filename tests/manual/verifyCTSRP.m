@@ -20,7 +20,7 @@ sat.rho = 0.5 .* ones(nFacet, 1);
 %[text] ## parameters
 const = orbitConst;
 d = au2km(1.0, const) * 10^3; % m, distance from sat to sun
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;

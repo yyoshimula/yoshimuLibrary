@@ -53,7 +53,10 @@ NS = sat.normal * sunB'; % nFacet x 1
 
 %[text] ## diffuse (analytic)
 cd1 = 28/23 .* sat.Cd ./ pi .* (1 - sat.F0) .* (1 - (1 - NS / 2).^5); % nFacet x 1
-srpCd = [0, 0, sum(cd1, 1) * 1573/2688 * pi];
+% each facet has its own coefficient, along its own normal:
+% int (1 - (1 - n.v/2)^5) (n.v) v dw = 1573/2688 * pi * n over the hemisphere
+% ([0, 0, sum(cd1) ...] was valid only for a single facet whose normal is +z)
+srpCd = cd1 .* (1573/2688 * pi) .* sat.normal; % nFacet x 3
 
 %[text] ## speuclar (numerical)
 %[text] $c\_{s} = \\frac{\\sqrt{\\left(n\_{u}+1\\right)\\left(n\_{v}+1\\right)}}{8\\pi} \\frac{F}{({\\bf{v}}^{T}{\\bf{h}}){\\rm max}({\\bf{n}}^{T}{\\bf{s}},{\\bf{n}}^{T}{\\bf{v}})} D({\\bf{h}})$
@@ -133,7 +136,7 @@ sunlitFlag = (NS > 0); % nFacetx1 matrix, 1: sunlit, 0: shade
 
 tmp = sunlitFlag .* (sunB + srpCd + srpCs); % nFacet x 3
 sat.force = coeff .* sat.area .* NS .* tmp; % nFacet x 3 matrix
-sat.torque = cross(sat.pos, sat.force); % nFacet x 3 matrix
+sat.torque = cross(sat.pos, sat.force, 2); % nFacet x 3 matrix
 %[text] ## for output variables
 %[text] diffuse part of SRP and specular part of SRP
 tmp = coeff .* sat.area .* NS .* sunlitFlag .* srpCd; % nFacet x 3

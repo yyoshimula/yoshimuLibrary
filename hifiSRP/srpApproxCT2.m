@@ -12,6 +12,7 @@
 %[text] Analytic Approximation of High-Fidelity Solar Radiation Pressure.
 %[text] ## revisions
 %[text] 20200915  y.yoshimura, y.yoshimula@gmail.com
+%[text] 20261001  y.yoshimura, fix: lam = 2 ./ mCT.^2 (was a matrix right division, NaN for several facets); km2AU -> km2au
 %[text] See also srpApproxCT, ctM2.
 function srp = srpApproxCT2(sat, thetaN, sunB, d, const)
 arguments (Input)
@@ -26,7 +27,7 @@ arguments (Output)
 end
 nFacet = size(sat.area,1);
 %[text] ### coefficient
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;
@@ -35,7 +36,7 @@ sat.normal = [zeros(nFacet,1), sin(thetaN), cos(thetaN)]; % normal vector, nFace
 %[text] ### perfect mirror-like reflecttion vector
 rRef = 2 * (sat.normal * sunB') .* sat.normal - sunB; % perfect specular direction, nFacet x 3 matrix
 M = ctM2(sat, rRef, sunB); % remaining term, nFacet x 1
-lam = 2 / sat.mCT.^2;
+lam = 2 ./ sat.mCT.^2; % per facet (2 / mCT.^2 was a matrix right division -> NaN)
 mu = 1;
 
 % sunlitFlag = (sat.normal * sunB' > 0); % nFacetx1 matrix, 1: sunlit, 0: shade

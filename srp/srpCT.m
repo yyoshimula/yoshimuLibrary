@@ -140,7 +140,7 @@ srpCs = qRotation(4, tmp, qInv(4, sat.qlb)); % transform back to the original bo
 sunlitFlag = (NS > 0); % nFacet x 1 matrix, 1: sunlit, 0: shade
 tmp = (sunB + srpCd + srpCs);
 sat.force = sunlitFlag .* coeff .* sat.area .* NS .* tmp; % nx3 matrix
-sat.torque = cross(sat.pos, sat.force); % nx3 matrix
+sat.torque = cross(sat.pos, sat.force, 2); % nx3 matrix
 %[text] ## for output variables
 %[text] diffuse part of SRP and specular part of SRP
 % Calculate the contribution of each facet to the solar radiation pressure coefficient

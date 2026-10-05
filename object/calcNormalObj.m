@@ -22,7 +22,7 @@ v1 = sat.vertices(sat.faces(:,2),:) - sat.vertices(sat.faces(:,1),:);
 v2 = sat.vertices(sat.faces(:,3),:) - sat.vertices(sat.faces(:,1),:);
 
 % 	/* 外積 cross productを求める */
-crossV = cross(v1, v2);
+crossV = cross(v1, v2, 2); % dim = 2 (row-wise also when there are exactly 3 faces)
 
 % 	/* 外積v2×v1の長さ|v2×v1|（= length）を求める */
 crossV_norm = vecnorm(crossV, 2, 2);

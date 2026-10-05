@@ -12,6 +12,7 @@
 %[text] Analytic Approximation of High-Fidelity Solar Radiation Pressure.
 %[text] ## revisions
 %[text] 20200915  y.yoshimura, y.yoshimula@gmail.com
+%[text] 20261001  y.yoshimura, fix: km2AU -> km2au (the function name is case-sensitive)
 %[text] See also srpApproxCT2, ctM.
 function srp = srpApproxCT(sat, thetaN, sunB, d, const)
 arguments (Input)
@@ -25,7 +26,7 @@ arguments (Output)
     srp
 end
 %[text] ### coefficient
-dAU = km2AU(d ./ 10^3, const); % AU
+dAU = km2au(d ./ 10^3, const); % AU
 S0 = const.S0; % Solar constant, W/m^2
 c = const.c; % light speed, m/s
 coeff = -S0 / c / dAU^2;

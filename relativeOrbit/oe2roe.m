@@ -12,6 +12,7 @@
 %[text] NA
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
+%[text] 20261005  y.yoshimura, fix: RAAN difference wrapped to \[-pi, pi) (chief and deputy RAAN on both sides of 0/2pi)
 %[text] See also roe2DeputyOE.
 function roe = oe2roe(chief, deputy, anomalyFlag)
 % arguments
@@ -52,12 +53,16 @@ raanD = deputy(:,4); % right ascension of the ascending node
 
 %[text] ## ROEs
 %[text] $\\delta \\alpha =(a\_d-a)/a \\\\\n\\delta \\lambda = (u\_d - u ) + (\\Omega\_d - \\Omega) \\cos{i} \\\\\n\\delta e\_x = e\_{xd} - e\_{x} \\\\\n\\delta e\_y = e\_{yd} - e\_{y} \\\\\n\\delta i\_x = i\_d - i \\\\\n\\delta i\_y = (\\Omega\_d - \\Omega) \\sin{i}\n$
+% RAAN difference wrapped to [-pi, pi): raanC and raanD are in [0, 2pi), so
+% their plain difference jumps by 2pi when the two straddle 0/2pi
+dRaan = wrapPi(raanD - raanC);
+
 deltaA = (aD - aC) ./ aC;
-deltaLambda = uD - uC + (raanD - raanC) .* cos(incC);
+deltaLambda = uD - uC + dRaan .* cos(incC);
 deltaEx = exD - exC;
 deltaEy = eyD - eyC;
 deltaIx = incD - incC;
-deltaIy = (raanD - raanC) .* sin(incC);
+deltaIy = dRaan .* sin(incC);
 
 deltaLambda = wrapPi(deltaLambda); % wrap angle ( [-\pi, \pi) に変換 )
 

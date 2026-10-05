@@ -12,6 +12,8 @@
 %[text] Di Mauro, G. 2019 Minimum-Fuel Control Strategy for Spacecraft Formation Reconfiguration via Finite-Time Maneuvers Journal of Guidance, Control, and Dynamics.
 %[text] ## revisions
 %[text] 20211027  y.yoshimura, y.yoshimula@gmail.com
+%[text] 20261001  y.yoshimura, fix: n x 6 inputs (a = aC .* dA + aC; equatorial test per row)
+%[text] 20261005  y.yoshimura, fix: mean anomaly when the deputy RAAN is wrapped at 2pi (the RAAN difference dRaan is used as it is)
 %[text] See also oe2roe.
 function deputyOE = roe2DeputyOE(roe, chiefOE, anomalyFlag)
 % arguments
@@ -45,19 +47,18 @@ mC = mod(mC, 2*pi);
 
 %[text] ## deputy (absolute) orbital elements
 %[text] $a\_{d} = a\\delta a + a \\\\\nu\_{d} = u + \\delta\\lambda - (\\Omega\_{d} - \\Omega)\\cos{i} \\\\\ne\_{d} = \\sqrt{(e\_{x}+\\delta e\_{x})^{2} + (e\_{y}+ \\delta e\_{y})^{2}} \\\\\ni\_{d} = i\_{c} + \\delta i\_{x} \\\\\n\\omega\_{d} = \\arctan{\\left(\\frac{e\_{y}+ \\delta e\_{y}}{e\_{x}+ \\delta e}\\right)} \\\\\n\\Omega\_{d} = \\Omega + \\frac{\\delta i\_{y}}{\\sin{i}}$
-a = aC * dA + aC; % km
+a = aC .* dA + aC; % km
 e = sqrt((dEx + eC .* cos(wC)).^2 + (dEy + eC .* sin(wC)).^2);
 
 inc = iC + dIx;
-if iC < eps
-    raan = raanC;
-else
-    raan = raanC + dIy ./ sin(iC);
-end
-raan = mod(raan, 2*pi);
+dRaan = dIy ./ sin(iC); % RAAN difference, Omega_d - Omega
+equatorial = iC < eps; % row by row (the scalar if tested the whole column)
+dRaan(equatorial) = 0;
+raan = mod(raanC + dRaan, 2*pi);
 w = atan2(dEy + eC .* sin(wC), dEx + eC .* cos(wC));
 w = mod(w, 2*pi);
-m = dLambda + wC + mC - (raan - raanC) .* cos(iC) - w;
+% use dRaan itself: (raan - raanC) jumps by 2*pi when raan is wrapped at 2*pi
+m = dLambda + wC + mC - dRaan .* cos(iC) - w;
 m = mod(m , 2*pi);
 
 if anomalyFlag == 1 % true anomaly

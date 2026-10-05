@@ -113,7 +113,7 @@ function result = jr1971(jd, phi_gd, lambda, h, F10, F10a, Kp)
     eta   = abs(phi_gd - delta_s) / 2;
     theta = abs(phi_gd + delta_s) / 2;
 
-    tau = wrapToPi(H + deg2rad(-37 + 6 * sin(H + deg2rad(43))));
+    tau = wrapPi(H + deg2rad(-37 + 6 * sin(H + deg2rad(43)))); % Mapping Toolbox の wrapToPi の代わり (+pi ちょうどでしか違わず cos(tau/2)^3 は同じ)
 
     Cv = cos(eta)^2.2;
     S  = sin(theta)^2.2;
@@ -239,7 +239,9 @@ function result = jr1971(jd, phi_gd, lambda, h, F10, F10a, Kp)
 
             % -- Density ---------------------------------------------------
             Mz  = jr1971_mean_molecular_mass(h, Aa);
-            rho = rho1 * drho_c * Mz * T1 / (M1 * Tz) * exp(k * (log_F1 + F2));
+            % 指数には 100-125 km (expk) と同じ係数 f が要る (alpha, beta は f を含まない)．
+            % f が無いと 90-100 km の密度がほぼ一定になり 100 km で約 6 倍の不連続を生じる
+            rho = rho1 * drho_c * Mz * T1 / (M1 * Tz) * exp(k * f * (log_F1 + F2));
 
             result = make_output( ...
                 1000*rho, Tz, Tinf, ...

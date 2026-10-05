@@ -36,7 +36,7 @@ for i = 1:n
     qlb(i,:) = dcm2q(4, dcm(:,:,i));
 end
 
-uv = cross(sat.normal, uu);
+uv = cross(sat.normal, uu, 2); % dim = 2: without it, cross works along the columns when there are exactly 3 facets
 
 
 end

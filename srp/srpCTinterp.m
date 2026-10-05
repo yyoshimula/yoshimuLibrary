@@ -51,7 +51,7 @@ fCorrected = (1 - deltaS .* sat.Cs) .* sunB + (2/3.*sat.Cd + 2 .* NS .* deltaN .
 %[text] ## total SRP
 sunlitFlag = double(NS > 0); % nFacet x 1 matrix, 1: sunlit, 0: shade
 sat.force = sunlitFlag .* coeff .* sat.area .* NS .* fCorrected; % nx3 matrix
-sat.torque = cross(sat.pos, sat.force); % nx3 matrix
+sat.torque = cross(sat.pos, sat.force, 2); % nx3 matrix
 
 %[text] ## for output variables
 % Total SRP force

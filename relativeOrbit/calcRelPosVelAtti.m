@@ -5,7 +5,7 @@ function [chief, deputy, rel] = calcRelPosVelAtti(chief, deputy, anomalyFlag, co
 [chief.rI, chief.vI] = oe2rv(chief.oe, anomalyFlag, const.GE); % km, km/s
 [deputy.rI, deputy.vI] = oe2rv(deputy.oe, anomalyFlag, const.GE); % km, km/s, position and vel. at inertial frame
 %[text] ### attitude w.r.t. RTN frame (o-frame)
-hVec = cross(chief.rI, chief.vI); % orbital angular momentum expressed in inertial frame, nx3
+hVec = cross(chief.rI, chief.vI, 2); % orbital angular momentum expressed in inertial frame, nx3
 Roi = triad(normRow(chief.rI), normRow(hVec), repmat([1, 0, 0], length(hVec), 1), repmat([0, 0, 1],length(hVec), 1)); % DCM from i-frame to RTN frame, 3x3xn matrix
 
 if isfield(chief, 'q') % if attitude is given
@@ -29,7 +29,7 @@ rel.rNonlinI = deputy.rI - chief.rI; % km, inertial frame
 rel.rNonlinRTN = qRotation(4, rel.rNonlinI, chief.qoi); % km, RTN frame
 rel.vNonlinI = deputy.vI - chief.vI; % km/s, inertial frame
 rel.vNonlinRTN = qRotation(4, rel.vNonlinI, chief.qoi); % km/s, RTN frame
-rel.vNonlinRTN = rel.vNonlinRTN - cross(repmat([0, 0, chief.n], size(rel.rNonlinI,1), 1), rel.rNonlinI);
+rel.vNonlinRTN = rel.vNonlinRTN - cross(repmat([0, 0, chief.n], size(rel.rNonlinI,1), 1), rel.rNonlinI, 2);
 
 % ROE
 rel.roe = oe2roe(chief.oe, deputy.oe, anomalyFlag);
